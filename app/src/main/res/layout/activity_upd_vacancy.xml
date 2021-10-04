@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UpdVacancyActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/spinnerbranch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:gravity="center_horizontal" />
+
+            <EditText
+                android:id="@+id/gopenedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="GOPENS"
+                android:inputType="number"/>
+
+            <EditText
+                android:id="@+id/gobcedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="GOBCS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/gscedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="GSCS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/gstedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="GSTS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/gvjedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="GVJS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/gnt1edtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="GNT1S"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/gnt2edtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="GNT2S"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/gnt3edtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="GNT3S"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/lopenedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="LOPENS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/lobcedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="LOBCS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/lstedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="LSCS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/lscedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="LSTS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/lvjedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="LVJS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/lnt1edtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="LNT1S"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/lnt2edtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="LNT2S"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/lnt3edtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="LNT3S"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/ewsedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="EWS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/pwdedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="PWDS"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/defedtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="DEFS"
+                android:inputType="number" />
+
+
+            <Button
+                android:id="@+id/savebutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="save"
+                app:backgroundTint="#009688" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

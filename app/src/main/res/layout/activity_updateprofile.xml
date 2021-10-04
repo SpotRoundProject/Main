@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".updateprofile">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="MissingClass">
+
+            <EditText
+                android:id="@+id/name1"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="108dp"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                tools:ignore="DuplicateIds" />
+
+            <EditText
+                android:id="@+id/name2"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="108dp"
+                android:ems="10"
+                android:hint="Date Of Birth"
+                android:inputType="date"
+                tools:ignore="DuplicateIds" />
+
+            <TextView
+                android:id="@+id/gender1"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Select Gender"
+                android:textSize="20sp"
+                tools:ignore="DuplicateIds" />
+
+            <Spinner
+                android:id="@+id/gender2"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:id="@+id/cast2"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Select Category"
+                android:textSize="20sp"
+                tools:ignore="DuplicateIds,InvalidId" />
+
+            <Spinner
+                android:id="@+id/caste1"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:id="@+id/ews"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Have you applied for EWS?"
+                android:textSize="20sp"
+                tools:ignore="DuplicateIds,InvalidId" />
+
+            <Spinner
+                android:id="@+id/yn1"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:id="@+id/pwd"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Person with Disability"
+                android:textSize="20sp"
+                tools:ignore="DuplicateIds,InvalidId" />
+
+            <Spinner
+                android:id="@+id/yn2"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                tools:ignore="DuplicateIds" />
+
+
+            <EditText
+                android:id="@+id/ssc"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:ems="10"
+                android:hint="SSC Percentage"
+                android:inputType="numberDecimal"
+                tools:ignore="InvalidId" />
+
+            <EditText
+                android:id="@+id/Hsc"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:ems="10"
+                android:hint="HSC Percentage"
+                android:inputType="numberDecimal"
+                tools:ignore="InvalidId" />
+
+
+            <EditText
+                android:id="@+id/pcm"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:hint="PCM  percentage"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/cetp"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:hint="Cet Percentile of  PCM"
+                android:inputType="numberDecimal"
+                tools:ignore="InvalidId" />
+
+            <EditText
+                android:id="@+id/smn"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pcm"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:hint="State Merit No"
+                android:inputType="number"
+                android:password="false"
+                tools:ignore="InvalidId" />
+
+            <TextView
+                android:id="@+id/home"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="From Shivaji University?"
+                android:textSize="20sp"
+                tools:ignore="DuplicateIds,InvalidId" />
+
+
+            <Spinner
+                android:id="@+id/yn4"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:id="@+id/orphan"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Have you applied for orphan?"
+                android:textSize="20sp"
+                tools:ignore="DuplicateIds,InvalidId" />
+
+            <Spinner
+                android:id="@+id/yn5"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="60dp"
+                tools:ignore="DuplicateIds" />
+
+            <TextView
+                android:id="@+id/defense"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Are you from Defence type?"
+                android:textSize="20sp"
+                tools:ignore="DuplicateIds,InvalidId" />
+
+            <Spinner
+                android:id="@+id/yn6"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                tools:ignore="DuplicateIds" />
+
+            <TextView
+                android:id="@+id/first"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="First Preference"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/firstp"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:id="@+id/second"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Second Preference"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/secondp"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:id="@+id/third"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Third Preference"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/thirdp"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:id="@+id/fourth"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Forth Preference"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/fourthp"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:id="@+id/fifth"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Fifth Preference"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/fifthp"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp" />
+
+            <TextView
+                android:id="@+id/sixth"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="sixth Preference"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/sixthp"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp" />
+
+
+            <Button
+                android:id="@+id/save1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/yn6"
+                android:layout_marginStart="130dp"
+                android:layout_marginLeft="130dp"
+                android:layout_marginTop="110dp"
+                android:text="save"
+                app:backgroundTint="#009688" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

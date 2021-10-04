@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Spotround</string>
+    <string-array name="name">
+        <item>Open</item>
+        <item>OBC</item>
+        <item>NT-C</item>
+        <item>NT-B</item>
+        <item>VJNT</item>
+        <item>NT-D</item>
+        <item>SC</item>
+        <item>ST</item>
+    </string-array>
+    <string-array name="yn">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="gender5">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="preference">
+        <item>Computer Science and Engineering</item>
+        <item>Information Technology</item>
+        <item>Electronics Engineering</item>
+        <item>Electrical Engineering</item>
+        <item>Mechanical Engineering</item>
+        <item>Civil Engineering</item>
+    </string-array>
+
+</resources>

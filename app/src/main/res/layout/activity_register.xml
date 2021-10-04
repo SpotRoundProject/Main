@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="MissingClass">
+
+            <EditText
+                android:id="@+id/applid"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="108dp"
+                android:ems="10"
+                android:hint="Application ID"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/phone"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:ems="10"
+                android:hint="Phone  No."
+                android:inputType="phone" />
+
+
+            <EditText
+                android:id="@+id/pymtemail"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:hint="Email" />
+
+            <EditText
+                android:id="@+id/pymtphone"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pymtemail"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:hint="Password"
+                android:password="true" />
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="281dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="Select Category"
+                android:textSize="20sp"
+                tools:ignore="DuplicateIds" />
+
+            <Spinner
+                android:id="@+id/caste"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="60dp" />
+            <TextView
+            android:id="@+id/textView2"
+            android:layout_width="281dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="60dp"
+            android:gravity="center"
+            android:text="Are you from Walchand?"
+            android:textSize="20sp"
+            tools:ignore="DuplicateIds" />
+
+
+            <Spinner
+                android:id="@+id/yn"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="60dp" />
+
+            <Button
+                android:id="@+id/StartActivitybtnRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pymtphone"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="130dp"
+                android:layout_marginLeft="130dp"
+                android:layout_marginTop="110dp"
+                android:text="register"
+                app:backgroundTint="#009688" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

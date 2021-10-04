@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "234753420664",
+    "project_id": "spotround",
+    "storage_bucket": "spotround.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234753420664:android:fc0ea3e494db77dd51ac8d",
+        "android_client_info": {
+          "package_name": "com.example.spotround"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234753420664-aps6n04kbie6cuo8djc702u35odqc6rh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLxqTy-Jt46QMO-T0kkpXK6EEN4S0Gjaw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234753420664-aps6n04kbie6cuo8djc702u35odqc6rh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
