@@ -13,9 +13,9 @@
         android:layout_height="39dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:background="@drawable/custom_input"
         android:hint="Email"
+        android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.866"
@@ -28,16 +28,14 @@
         android:layout_width="291dp"
         android:layout_height="39dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginTop="60dp"
         android:background="@drawable/custom_input"
         android:hint="Password"
-        android:password="true"
+        android:inputType="textWebPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.866"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginActivityEmail"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/LoginActivityEmail" />
 
     <Button
         android:id="@+id/LoginActivitybtnLogin"
@@ -95,7 +93,7 @@
         app:layout_constraintVertical_bias="0.383" />
 
     <Spinner
-        android:id="@+id/LoginActivitySpinner"
+        android:id="@+id/LoginActivityType"
         android:layout_width="150dp"
         android:layout_height="30dp"
         app:layout_constraintBottom_toBottomOf="parent"

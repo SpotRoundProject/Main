@@ -48,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
         ArrayAdapter<String>myname = new ArrayAdapter<String>(RegisterActivity.this, android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.yn));
         myname.setDropDownViewResource(android.R.layout.simple_spinner_item);
         binding.RegisterActivityYesNo.setAdapter(myname);
+        binding.RegisterActivityYesNo.setSelection(1);
 
 
         binding.StartActivitybtnRegister.setOnClickListener(new View.OnClickListener() {

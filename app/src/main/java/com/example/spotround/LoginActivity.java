@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
     FirebaseAuth auth;
+    FirebaseDatabase database;
     ActivityLoginBinding binding;
     ProgressDialog progressDialog;
 
@@ -37,10 +39,17 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setTitle("LogIn");
         progressDialog.setMessage("Signing in please wait");
+
+        ArrayAdapter<String> loginType = new ArrayAdapter<String>(LoginActivity.this, android.R.layout.
+                simple_list_item_1,getResources().getStringArray(R.array.LoginType));
+        loginType.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        binding.LoginActivityType.setAdapter(loginType);
+        binding.LoginActivityType.setSelection(0);
 
         binding.LoginActivitybtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,17 +68,79 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
-                            progressDialog.hide();
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             if(auth.getCurrentUser().isEmailVerified()) {
-                                Toast.makeText(LoginActivity.this,"Login Successfully",Toast.LENGTH_SHORT).show();
-                                //Log.d("User", dataSnapshot.getValue(User.class).toString());
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
+
+                                String type = binding.LoginActivityType.getSelectedItem().toString();
+                                String id = auth.getCurrentUser().getUid();
+
+                                if(type.equals("Admin")) {
+
+                                    database.getReference().child("Admin").orderByKey().equalTo(id).
+                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if(snapshot.getChildrenCount() == 1) {
+                                                Toast.makeText(LoginActivity.this,"Login Successfully",
+                                                        Toast.LENGTH_SHORT).show();
+
+                                                progressDialog.hide();
+                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                Intent intent = new Intent(LoginActivity.this, InstituteActivity.class);
+                                                startActivity(intent);
+                                            }
+                                            else {
+                                                progressDialog.hide();
+                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                Toast.makeText(LoginActivity.this, "No admin account with this credentials",
+                                                        Toast.LENGTH_SHORT).show();
+                                                auth.signOut();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                                else {
+                                    database.getReference().child("User").orderByKey().equalTo(id).
+                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if(snapshot.getChildrenCount() == 1) {
+                                                Toast.makeText(LoginActivity.this,"Login Successfully",
+                                                        Toast.LENGTH_SHORT).show();
+
+                                                progressDialog.hide();
+                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                            }
+                                            else {
+                                                progressDialog.hide();
+                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                Toast.makeText(LoginActivity.this, "No user account with this credentials",
+                                                        Toast.LENGTH_SHORT).show();
+                                                auth.signOut();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
                             }
                             else {
+                                progressDialog.hide();
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 Toast.makeText(LoginActivity.this, "Please verify your email address",
                                         Toast.LENGTH_LONG).show();
+                                auth.signOut();
                             }
                         }
                         else {
