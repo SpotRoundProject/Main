@@ -8,7 +8,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,97 +19,85 @@
             tools:ignore="MissingClass">
 
             <EditText
-                android:id="@+id/applid"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/RegisterActivityApplicationId"
+                android:layout_width="291dp"
+                android:layout_height="39dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="108dp"
+                android:background="@drawable/custom_input"
                 android:ems="10"
                 android:hint="Application ID"
                 android:inputType="textPersonName" />
 
             <EditText
-                android:id="@+id/name"
+                android:id="@+id/RegisterActivityName"
                 android:layout_width="281dp"
-                android:layout_height="wrap_content"
+                android:layout_height="39dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="60dp"
+                android:background="@drawable/custom_input"
                 android:ems="10"
                 android:hint="Name"
                 android:inputType="textPersonName" />
 
             <EditText
-                android:id="@+id/phone"
+                android:id="@+id/RegisterActivityPhoneNo"
                 android:layout_width="281dp"
-                android:layout_height="wrap_content"
+                android:layout_height="39dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="60dp"
+                android:background="@drawable/custom_input"
                 android:ems="10"
                 android:hint="Phone  No."
                 android:inputType="phone" />
 
 
             <EditText
-                android:id="@+id/pymtemail"
+                android:id="@+id/RegisterActivityEmail"
                 android:layout_width="281dp"
-                android:layout_height="wrap_content"
+                android:layout_height="39dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="50dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="60dp"
+                android:background="@drawable/custom_input"
                 android:hint="Email" />
 
             <EditText
-                android:id="@+id/pymtphone"
+                android:id="@+id/RegisterActivityPassword"
                 android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/pymtemail"
+                android:layout_height="39dp"
+                android:layout_below="@id/RegisterActivityEmail"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="50dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="60dp"
+                android:background="@drawable/custom_input"
                 android:hint="Password"
                 android:password="true" />
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="281dp"
-                android:layout_height="31dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="60dp"
-                android:gravity="center"
-                android:text="Select Category"
-                android:textSize="20sp"
-                tools:ignore="DuplicateIds" />
 
-            <Spinner
-                android:id="@+id/caste"
+            <TextView
+                android:id="@+id/textView2"
                 android:layout_width="281dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
                 android:layout_marginLeft="50dp"
-                android:layout_marginTop="60dp" />
-            <TextView
-            android:id="@+id/textView2"
-            android:layout_width="281dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="60dp"
-            android:gravity="center"
-            android:text="Are you from Walchand?"
-            android:textSize="20sp"
-            tools:ignore="DuplicateIds" />
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:inputType="textMultiLine"
+                android:text="Did you get seat in walchand through cap round?"
+                android:textSize="20sp"
+                tools:ignore="DuplicateIds" />
 
 
             <Spinner
-                android:id="@+id/yn"
+                android:id="@+id/RegisterActivityYesNo"
                 android:layout_width="281dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
@@ -119,7 +108,7 @@
                 android:id="@+id/StartActivitybtnRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pymtphone"
+                android:layout_below="@id/RegisterActivityPassword"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="130dp"

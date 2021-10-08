@@ -26,8 +26,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
         Checkout.preload(getApplicationContext());
-        pymtemail=findViewById(R.id.pymtemail);
-        pymtphone=findViewById(R.id.pymtphone);
+        pymtemail=findViewById(R.id.RegisterActivityEmail);
+        pymtphone=findViewById(R.id.RegisterActivityPassword);
         makepymtbtn=findViewById(R.id.StartActivitybtnLogin);
         makepymtbtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -7,7 +7,7 @@
     tools:context=".PaymentActivity">
 
     <EditText
-        android:id="@+id/pymtemail"
+        android:id="@+id/RegisterActivityEmail"
         android:layout_width="281dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -21,10 +21,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/pymtphone"
+        android:id="@+id/RegisterActivityPassword"
         android:layout_width="281dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pymtemail"
+        android:layout_below="@+id/RegisterActivityEmail"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="60dp"
@@ -34,13 +34,13 @@
         android:phoneNumber="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pymtemail" />
+        app:layout_constraintTop_toBottomOf="@+id/RegisterActivityEmail" />
 
     <Button
         android:id="@+id/StartActivitybtnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pymtphone"
+        android:layout_below="@id/RegisterActivityPassword"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="112dp"
@@ -49,7 +49,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pymtphone" />
+        app:layout_constraintTop_toBottomOf="@+id/RegisterActivityPassword" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

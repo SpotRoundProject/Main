@@ -18,7 +18,7 @@ public class StartActivity extends AppCompatActivity {
         binding = ActivityStartBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.StartActivitybtnRegister.setOnClickListener(v -> startActivity(new Intent(StartActivity.this , RegisterActivity.class)));
+        binding.StartActivitybtnRegister.setOnClickListener(v -> startActivity(new Intent(StartActivity.this , SignUpActivity.class)));
 
         binding.StartActivitybtnLogin.setOnClickListener(v -> startActivity(new Intent(StartActivity.this , LoginActivity.class)));
         

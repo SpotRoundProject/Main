@@ -13,22 +13,23 @@
 
     <Button
         android:id="@+id/StartActivitybtnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="55dp"
         android:layout_above="@+id/StartActivitybtnLogin"
         android:layout_marginTop="16dp"
         android:text="register"
-        app:backgroundTint="#009688"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:layout_editor_absoluteX="0dp" />
+        app:backgroundTint="#2481F3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/StartActivitybtnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="55dp"
         android:layout_marginTop="52dp"
         android:text="Login"
-        app:backgroundTint="#009688"
+        app:backgroundTint="#2481F3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/StartActivitybtnRegister" />

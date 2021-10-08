@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.spotround">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotround">
-
+        <activity android:name=".SignUpActivity"></activity>
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -22,17 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".StartActivity"
             android:label="Welcome to Spot Round" />
-
-
-
-
-
-        <activity android:name=".PaymentActivity"
-            android:label="Make Payment"/>
+        <activity
+            android:name=".PaymentActivity"
+            android:label="Make Payment" />
         <activity android:name=".ComputeResult" />
         <activity
             android:name=".UpdVacancyActivity"
@@ -42,19 +37,14 @@
             android:name=".InstituteActivity"
             android:label="Admin Dashboard" />
         <activity android:name=".Apply" />
-        <activity android:name=".updateprofile"
-           android:label="Apply for SpotRound"
-            android:parentActivityName=".InsideStudentlogin"/>
-        <activity android:name=".Mobveri" />
-        <activity android:name=".InsideStudentlogin"
-            android:label="Student Dashboard"
-            />
-
         <activity
-            android:name=".ILoginActivity"
-            android:label="Institute Login"
-            android:parentActivityName=".StartActivity" />
-        <activity android:name=".MainActivity" />
+            android:name=".updateprofile"
+            android:label="Apply for SpotRound"
+            android:parentActivityName=".InsideStudentlogin" />
+        <activity android:name=".Mobveri" />
+        <activity
+            android:name=".InsideStudentlogin"
+            android:label="Student Dashboard" />
         <activity
             android:name=".RegisterActivity"
             android:label="Register"
@@ -63,7 +53,6 @@
             android:name=".LoginActivity"
             android:label="Student Login"
             android:parentActivityName=".StartActivity" />
-
     </application>
 
 </manifest>
