@@ -96,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                 Toast.makeText(SignUpActivity.this, "Please check email " +
                                                         "for verification", Toast.LENGTH_SHORT).show();
                                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                //startActivity(new Intent(SignUpActivity.this,LoginActivity.class));
+                                                startActivity(new Intent(SignUpActivity.this,LoginActivity.class));
                                             }
                                             else {
                                                 Toast.makeText(SignUpActivity.this, task.getException().getMessage()
@@ -105,14 +105,19 @@ public class SignUpActivity extends AppCompatActivity {
                                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                             }
                                         }
+
                                     });
+                                    binding.SignUpActivityEmail.setText("");
+                                    binding.SignUpActivityPassword.setText("");
                                 }
                                 else
                                 {
                                     Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                     progressDialog.hide();
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    binding.SignUpActivityPassword.setText("");
                                 }
+
                             }
                         });
             }
@@ -126,12 +131,12 @@ public class SignUpActivity extends AppCompatActivity {
                     if(!flag) {
                         binding.SignUpActivityPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                         binding.SignUpActivityPassword.setCompoundDrawablesWithIntrinsicBounds(0,0,
-                                R.drawable.ic_show_password,0);
+                                R.drawable.ic_hide_password,0);
                     }
                     else {
                         binding.SignUpActivityPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
                         binding.SignUpActivityPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-                                R.drawable.ic_hide_password, 0);
+                                R.drawable.ic_show_password, 0);
                     }
                     flag = !flag;
                     return true;
@@ -182,5 +187,4 @@ public class SignUpActivity extends AppCompatActivity {
         }
         return  true;
     }
-
 }
