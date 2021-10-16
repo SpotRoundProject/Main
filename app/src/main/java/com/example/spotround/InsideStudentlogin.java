@@ -11,6 +11,7 @@ public class InsideStudentlogin extends AppCompatActivity {
     private Button profile;
     private Button apply;
     private Button result;
+    Button  see;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,7 @@ public class InsideStudentlogin extends AppCompatActivity {
         profile=findViewById(R.id.profile);
         //apply=findViewById(R.id.Apply);
         result=findViewById(R.id.result);
+        see=findViewById(R.id.see1);
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,6 +31,12 @@ public class InsideStudentlogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),ComputeResult.class));
+            }
+        });
+        see.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),ShowVacancy.class));
             }
         });
 
