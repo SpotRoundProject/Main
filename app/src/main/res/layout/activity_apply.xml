@@ -5,133 +5,189 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Apply">
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:orientation="vertical"
-            tools:ignore="MissingClass">
-            <EditText
-                android:id="@+id/RegisterActivityName"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="60dp"
-                android:ems="10"
-                android:hint="Name"
-                android:inputType="textPersonName" />
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/RegisterActivityApplicationId"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="60dp"
-                android:ems="10"
-                android:hint="Application ID"
-                android:inputType="textPersonName" />
-            <TextView
-            android:id="@+id/gender"
-            android:layout_width="281dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="60dp"
-            android:gravity="center"
-            android:text="Select Gender"
-            android:textSize="20sp"
-            tools:ignore="DuplicateIds" />
-            <Spinner
-                android:id="@+id/gender1"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="60dp"/>
-
-
-
-            <EditText
-                android:id="@+id/RegisterActivityPhoneNo"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="60dp"
-                android:ems="10"
-                android:hint="Phone  No."
-                android:inputType="phone" />
-
-
-            <EditText
-                android:id="@+id/RegisterActivityEmail"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="60dp"
-                android:hint="Email" />
-
-            <EditText
-                android:id="@+id/RegisterActivityPassword"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/RegisterActivityEmail"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="60dp"
-                android:hint="Password"
-                android:password="true" />
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="281dp"
-                android:layout_height="31dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="60dp"
-                android:gravity="center"
-                android:text="Select Category"
-                android:textSize="20sp"
-                tools:ignore="DuplicateIds" />
-
-            <Spinner
-                android:id="@+id/caste"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="60dp" />
-
-            <Spinner
-                android:id="@+id/RegisterActivityYesNo"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="60dp" />
-
-            <Button
-                android:id="@+id/StartActivitybtnRegister"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/RegisterActivityPassword"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="130dp"
-                android:layout_marginLeft="130dp"
-                android:layout_marginTop="110dp"
-                android:text="register"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ApplyActivityName"
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Application ID">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ApplyActivityApplicationId"
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="CET Rank">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ApplyActivityCETRank"
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Phone No">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ApplyActivityPhoneNo"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:inputType="phone"
+                        android:maxLength="10" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/ApplyActivitybtnSendOTP"
+                    android:layout_width="96dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="Send OTP"
+                    app:backgroundTint="#009688" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="OTP">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ApplyActivityOTP"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:inputType="number"
+                        android:maxLength="6" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/ApplyActivitybtnVerifyOTP"
+                    android:layout_width="93dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="Verify"
+                    app:backgroundTint="#009688" />
+
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Password">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/AplyActivityPassword"
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:inputType="" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/ApplyActivitybtnRegisterbtnPayment"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Make Payment"
+                android:textSize="22sp"
+                android:textStyle="normal"
+                app:backgroundTint="#009688" />
+
+            <Button
+                android:id="@+id/ApplyActivitybtnRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Register"
                 app:backgroundTint="#009688" />
 
         </LinearLayout>

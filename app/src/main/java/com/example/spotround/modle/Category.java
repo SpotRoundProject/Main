@@ -1,4 +1,4 @@
-package com.example.spotround;
+package com.example.spotround.modle;
 public class Category {
     String gopens, gobcs, gscs, gsts, gvjs, gnt1s, gnt2s, gnt3s, lopens, lobcs, lscs, lsts, lvjs, lnt1s, lnt2s, lnt3s, ewss, pwds, defs;
     public Category(String gopens, String gobcs, String gscs, String gsts, String gvjs, String gnt1s, String gnt2s, String gnt3s, String lopens, String lobcs, String lscs, String lsts, String lvjs, String lnt1s, String lnt2s, String lnt3s, String ewss, String pwds, String defs) {

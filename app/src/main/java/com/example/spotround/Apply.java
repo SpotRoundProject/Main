@@ -4,11 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class Apply extends AppCompatActivity {
+import com.example.spotround.databinding.ActivityApplyBinding;
 
+public class Apply extends AppCompatActivity {
+    ActivityApplyBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_apply);
+        binding = ActivityApplyBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+
     }
 }
