@@ -20,7 +20,7 @@ public class InsideStudentlogin extends AppCompatActivity {
         profile=findViewById(R.id.profile);
         //apply=findViewById(R.id.Apply);
         result=findViewById(R.id.result);
-        see=findViewById(R.id.see1);
+        see=findViewById(R.id.button2);
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

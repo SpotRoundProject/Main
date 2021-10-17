@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                             if(auth.getCurrentUser().isEmailVerified()) {
                                 Toast.makeText(LoginActivity.this,"Login Successfully",Toast.LENGTH_SHORT).show();
                                 //Log.d("User", dataSnapshot.getValue(User.class).toString());
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                Intent intent = new Intent(LoginActivity.this,InsideStudentlogin.class);
                                 startActivity(intent);
                             }
                             else {
