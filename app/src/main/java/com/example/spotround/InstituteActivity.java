@@ -1,26 +1,43 @@
 package com.example.spotround;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.spotround.modle.StudentInfo;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
-import java.util.*;
+
 import java.io.File;
-import java.io.IOException;
+import java.util.*;
 
 public class InstituteActivity extends AppCompatActivity {
     private Button update, candidate, result;
-    FirebaseFirestore store;
+    private FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+    private DocumentReference reference;
+    int SELECT_PDF = 200;
+    Dialog dialog;
+    private static final int STORAGE_PERMISSION_CODE = 101;
+    private static boolean read_permission_flag = false;
 
     public InstituteActivity() {
     }
@@ -32,43 +49,78 @@ public class InstituteActivity extends AppCompatActivity {
         update = findViewById(R.id.updvacanbutton);
         candidate = findViewById(R.id.viewcandbutton);
         result = findViewById(R.id.viewresultbutton);
-        store = FirebaseFirestore.getInstance();
-        update.setOnClickListener(new View.OnClickListener() {
+
+        /*update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(InstituteActivity.this, UpdVacancyActivity.class));
             }
-        });
+        });*/
         result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                update();
+                checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
+                if(!read_permission_flag)
+                    Toast.makeText(InstituteActivity.this, "Can't access storage", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("application/pdf");
+                startActivityForResult(Intent.createChooser(intent, "Select Pdf"), SELECT_PDF);
             }
         });
 
     }
 
-    private void update() {
-        try {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-            File file = new File("pdf.txt");
-            PdfReader reader = new PdfReader(String.valueOf(file));
+        if (resultCode == RESULT_OK && requestCode == SELECT_PDF) {
+            Uri selectedPdfUri = data.getData();
+            if (null != selectedPdfUri) {
+                String fileName = data.getData().getPath();
+                fileName = fileName.substring(fileName.lastIndexOf(":") + 1);
+                fileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName;
+                dialog = new Dialog(InstituteActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setTitle("Uploading "+ fileName);
+                dialog.setContentView(R.layout.progress_bar_dialog);
+                dialog.show();
+                Window window = dialog.getWindow();
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                update(fileName);
+            }
+            else {
+                Log.w("InstituteActivity", "Pdf not selected");
+            }
+            dialog.dismiss();
+        }
+    }
+
+    private void update(String fileName) {
+        final ProgressBar text = dialog.findViewById(R.id.IdProgressBar);
+        final TextView text2 = dialog.findViewById(R.id.IdProgressPercentage);
+        try {
+            PdfReader reader = new PdfReader(fileName);
 
             int n = reader.getNumberOfPages();
 
             for (int i = 0; i < 1; i++) {
                 //extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1) + "\n";
                 // to extract the PDF content from the different pages
-                StudentInfo studentInfo = main(PdfTextExtractor.getTextFromPage(reader, i + 1));
-                if(studentInfo != null) {
-
-                }
+                main(PdfTextExtractor.getTextFromPage(reader, i + 1));
+                int progress = (int)(100.0 * (i+1) / (i+1));
+                Log.d("InstituteActivity","Uploading: " + progress + "%");
+                text.setProgress(progress);
+                text2.setText(String.valueOf(progress));
+                if(progress == 100)
+                    dialog.dismiss();
             }
-
             reader.close();
         } catch (Exception e) {
             // for handling error while extracting the text file.
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d("Errorrrrrrrrr", e.getMessage());
         }
     }
 
@@ -91,7 +143,7 @@ public class InstituteActivity extends AppCompatActivity {
         }
     }
 
-    StudentInfo main(String line) {
+    void main(String line) {
         StringBuilder cover = new StringBuilder();
         Scanner scn = new Scanner(line);
         while (scn.hasNextLine()) {
@@ -170,7 +222,8 @@ public class InstituteActivity extends AppCompatActivity {
                         Log.d("Chemistry Percentile : ", word1[c + 6]);
                         Log.d("HSC : ", word1[c + 9]);
                         Log.d("SSC : ", word1[c + 10] + "\n");
-                        return studentInfo;
+                        reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank());
+                        reference.set(studentInfo);
                     }
                             //System.out.println("\n"+cover);
                 } else {
@@ -178,18 +231,18 @@ public class InstituteActivity extends AppCompatActivity {
                     Log.d("Application ID : ", word[1]);
                     int c1 = 2;
                     int g1 = 0;
-                    String name = "";
+                    StringBuilder name = new StringBuilder();
                     while (g1 == 0) {
                         if (check1(word[c1])) {
                             g1 = 1;
                         } else
-                            name = name + word[c1] + " ";
+                            name.append(word[c1]).append(" ");
                         c1++;
                     }
 
-                    StudentInfo studentInfo = new StudentInfo(word[0], word[1], name, word[c1 + 1], word[c1 + 2],
+                    StudentInfo studentInfo = new StudentInfo(word[0], word[1], name.toString(), word[c1 + 1], word[c1 + 2],
                             word[c1 + 3], word[c1 + 4], word[c1 + 5], word[c1 + 6], word[c1 + 10], word[c1 + 11]);
-                    Log.d("Name : ", name);
+                    Log.d("Name : ", name.toString());
                     Log.d("Caste : ", word[c1 + 1]);
                     Log.d("Gender : ", word[c1 + 2]);
                     Log.d("PCM Percentile : ", word[c1 + 3]);
@@ -199,10 +252,42 @@ public class InstituteActivity extends AppCompatActivity {
                     Log.d("HSC : ", word[c1 + 10]);
                     Log.d("SSC : ", word[c1 + 11] + "\n");
                     //System.out.println("\n"+line);
-                    return studentInfo;
+
+                    reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank());
+                    reference.set(studentInfo);
                 }
             }
         }
-        return null;
+    }
+
+    public void checkPermission(String permission, int requestCode) {
+        if(ContextCompat.checkSelfPermission(InstituteActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(InstituteActivity.this, new String[] { permission }, requestCode);
+        }
+        else {
+            Toast.makeText(InstituteActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            setFlag(true);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == STORAGE_PERMISSION_CODE) {
+            if(grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                setFlag(true);
+            }
+            else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                setFlag(false);
+            }
+        }
+    }
+
+    void setFlag(boolean state) {
+        read_permission_flag = state;
     }
 }
