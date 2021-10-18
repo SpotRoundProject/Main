@@ -29,7 +29,7 @@ public class Mobveri extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mobveri2);
         verify=findViewById(R.id.verify);
-            phone=findViewById(R.id.RegisterActivityPhoneNo);
+            //phone=findViewById(R.id.RegisterActivityPhoneNo);
             String phoneno=phone.getText().toString();
         verify.setOnClickListener(new View.OnClickListener() {
             @Override

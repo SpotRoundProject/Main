@@ -167,11 +167,6 @@ public class Apply extends AppCompatActivity {
             return false;
         }
 
-        if(binding.ApplyActivityPassword.getText().toString().isEmpty()) {
-            binding.ApplyActivityName.setError("Password should not empty");
-            return false;
-        }
-
         return true;
     }
 

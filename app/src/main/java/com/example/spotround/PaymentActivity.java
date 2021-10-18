@@ -74,7 +74,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
     @Override
     public void onPaymentSuccess(String s) {
         Toast.makeText(this, "Payment Successful & Payment ID is "+s, Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(getApplicationContext(),InsideStudentlogin.class));
+        //startActivity(new Intent(getApplicationContext(),InsideStudentlogin.class));
         finish();
     }
 
