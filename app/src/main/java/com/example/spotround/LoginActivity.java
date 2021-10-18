@@ -73,26 +73,22 @@ public class LoginActivity extends AppCompatActivity {
                                             addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            progressDialog.hide();
+                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                             if(snapshot.getChildrenCount() == 1) {
                                                 Toast.makeText(LoginActivity.this,"Login Successfully",
                                                         Toast.LENGTH_SHORT).show();
 
-                                                progressDialog.hide();
-                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
                                                 Intent intent = new Intent(LoginActivity.this, InstituteActivity.class);
                                                 startActivity(intent);
                                                 binding.LoginActivityEmail.setText("");
-                                                binding.LoginActivityPassword.setText("");
                                             }
                                             else {
-                                                progressDialog.hide();
-                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 Toast.makeText(LoginActivity.this, "No admin account with this credentials",
                                                         Toast.LENGTH_SHORT).show();
                                                 auth.signOut();
-                                                binding.LoginActivityPassword.setText("");
                                             }
+                                            binding.LoginActivityPassword.setText("");
                                         }
 
                                         @Override
@@ -106,21 +102,20 @@ public class LoginActivity extends AppCompatActivity {
                                             addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            progressDialog.hide();
+                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                             if(snapshot.getChildrenCount() == 1) {
-                                                Toast.makeText(LoginActivity.this,"Login Successfully",
+                                                Toast.makeText(LoginActivity.this,"Login Successful",
                                                         Toast.LENGTH_SHORT).show();
 
-                                                progressDialog.hide();
-                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                startActivity(intent);
                                                 binding.LoginActivityPassword.setText("");
                                                 binding.LoginActivityEmail.setText("");
+                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                startActivity(intent);
+
                                             }
                                             else {
-                                                progressDialog.hide();
-                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 Toast.makeText(LoginActivity.this, "No user account with this credentials",
                                                         Toast.LENGTH_SHORT).show();
                                                 auth.signOut();

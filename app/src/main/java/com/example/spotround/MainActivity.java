@@ -1,6 +1,7 @@
 package com.example.spotround;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.AppLaunchChecker;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,8 +23,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         auth = FirebaseAuth.getInstance();
-        if(auth.getCurrentUser() == null)
+        if(auth.getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        finish();
+            finish();
+        }
+
+        binding.MainActivityApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Apply.class);
+                startActivity(intent);
+            }
+        });
     }
 }

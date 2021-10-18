@@ -12,6 +12,7 @@ import java.util.TimeZone;
 public class DateTime {
     static int hr, min, sec, year, month, date;
     static LocalDate dateTime;
+    static {initilize();}
     static void initilize() {
         SNTPClient.getDate(TimeZone.getTimeZone("Asia/Colombo"), new SNTPClient.Listener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
