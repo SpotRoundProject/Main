@@ -24,8 +24,10 @@ import android.widget.Toast;
 import com.example.spotround.modle.StudentInfo;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
+import com.tom_roush.pdfbox.pdmodel.PDDocument;
+import com.tom_roush.pdfbox.text.PDFTextStripper;
+import com.tom_roush.pdfbox.text.PDFTextStripperByArea;
 
 import java.io.File;
 import java.util.*;
@@ -88,7 +90,7 @@ public class InstituteActivity extends AppCompatActivity {
                 dialog.show();
                 Window window = dialog.getWindow();
                 window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                update(fileName);
+                update(fileName,1);
             }
             else {
                 Log.w("InstituteActivity", "Pdf not selected");
@@ -97,32 +99,74 @@ public class InstituteActivity extends AppCompatActivity {
         }
     }
 
-    private void update(String fileName) {
+    private void update(String fileName, int a) {
+        PDFBoxResourceLoader.init(getApplicationContext());
         final ProgressBar text = dialog.findViewById(R.id.IdProgressBar);
         final TextView text2 = dialog.findViewById(R.id.IdProgressPercentage);
+        int n = 1;
+        PDDocument document;
         try {
-            PdfReader reader = new PdfReader(fileName);
+            document = PDDocument.load(new File(fileName));
+            document.getClass();
+            if(!document.isEncrypted()) {
+                PDFTextStripperByArea stripper = new PDFTextStripperByArea();
+                stripper.setSortByPosition(true);
+                PDFTextStripper Tstripper = new PDFTextStripper();
+                int count = document.getPages().getCount();
 
-            int n = reader.getNumberOfPages();
-
-            for (int i = 0; i < 1; i++) {
-                //extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1) + "\n";
-                // to extract the PDF content from the different pages
-                main(PdfTextExtractor.getTextFromPage(reader, i + 1));
-                int progress = (int)(100.0 * (i+1) / (i+1));
-                Log.d("InstituteActivity","Uploading: " + progress + "%");
-                text.setProgress(progress);
-                text2.setText(String.valueOf(progress));
-                if(progress == 100)
-                    dialog.dismiss();
+                for(int i=2; i<=2; i++) {
+                    Tstripper.setStartPage(i);
+                    Tstripper.setEndPage(i);
+                    String str = Tstripper.getText(document);
+                    main(str);
+                    int progress = (int)(100.0 * (i) / n);
+                    Log.d("InstituteActivity","Uploading: " + progress + "%");
+                    text.setProgress(progress);
+                    text2.setText(String.valueOf(progress));
+                }
+                dialog.dismiss();
             }
-            reader.close();
-        } catch (Exception e) {
-            // for handling error while extracting the text file.
+        }
+        catch (Exception e) {
+            Log.d("Exception", e.getMessage());
+        }
+    }
+
+    /*private void update(String fileName) {
+        final ProgressBar text = dialog.findViewById(R.id.IdProgressBar);
+        final TextView text2 = dialog.findViewById(R.id.IdProgressPercentage);
+        PdfReader reader = null;
+        int n = 1;
+        try {
+            reader = new PdfReader(fileName);
+
+            n = reader.getNumberOfPages();
+        }
+        catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             Log.d("Errorrrrrrrrr", e.getMessage());
         }
-    }
+
+        for (int i = 1; i < 2; i++) {
+            //extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1) + "\n";
+            // to extract the PDF content from the different pages
+            String line = null;
+            try {
+                line = PdfTextExtractor.getTextFromPage(reader, i + 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //Log.d("Line", line);
+            main(line);
+            int progress = (int)(100.0 * (i+1) / n);
+            Log.d("InstituteActivity","Uploading: " + progress + "%");
+            text.setProgress(progress);
+            text2.setText(String.valueOf(progress));
+        }
+        dialog.dismiss();
+        assert reader != null;
+        reader.close();
+    }*/
 
 
     boolean check(String s) {
@@ -214,21 +258,21 @@ public class InstituteActivity extends AppCompatActivity {
                         StudentInfo studentInfo = new StudentInfo(word1[0], word1[1], name.toString(), word1[c + 1],
                                 word1[c + 2], word1[c + 3], word1[c + 4], word1[c + 5], word1[c + 6], word1[c + 9], word1[c + 10]);
                         Log.d("Name : ", name.toString());
-                        Log.d("Caste : ", word1[c + 1]);
+                        /*Log.d("Caste : ", word1[c + 1]);
                         Log.d("Gender : ", word1[c + 2]);
                         Log.d("PCM Percentile : ", word1[c + 3]);
                         Log.d("Math Percentile : ", word1[c + 4]);
                         Log.d("Physics Percentile : ", word1[c + 5]);
                         Log.d("Chemistry Percentile : ", word1[c + 6]);
                         Log.d("HSC : ", word1[c + 9]);
-                        Log.d("SSC : ", word1[c + 10] + "\n");
+                        Log.d("SSC : ", word1[c + 10] + "\n");*/
                         reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank());
                         reference.set(studentInfo);
                     }
                             //System.out.println("\n"+cover);
                 } else {
                     Log.d("Rank : ", word[0]);
-                    Log.d("Application ID : ", word[1]);
+                    //Log.d("Application ID : ", word[1]);
                     int c1 = 2;
                     int g1 = 0;
                     StringBuilder name = new StringBuilder();
@@ -243,14 +287,14 @@ public class InstituteActivity extends AppCompatActivity {
                     StudentInfo studentInfo = new StudentInfo(word[0], word[1], name.toString(), word[c1 + 1], word[c1 + 2],
                             word[c1 + 3], word[c1 + 4], word[c1 + 5], word[c1 + 6], word[c1 + 10], word[c1 + 11]);
                     Log.d("Name : ", name.toString());
-                    Log.d("Caste : ", word[c1 + 1]);
-                    Log.d("Gender : ", word[c1 + 2]);
-                    Log.d("PCM Percentile : ", word[c1 + 3]);
-                    Log.d("Math Percentile : ", word[c1 + 4]);
-                    Log.d("Physics Percentile : ", word[c1 + 5]);
-                    Log.d("Chemistry Percentile : ", word[c1 + 6]);
-                    Log.d("HSC : ", word[c1 + 10]);
-                    Log.d("SSC : ", word[c1 + 11] + "\n");
+                    //Log.d("Caste : ", word[c1 + 1]);
+                    //Log.d("Gender : ", word[c1 + 2]);
+                    //Log.d("PCM Percentile : ", word[c1 + 3]);
+                    //Log.d("Math Percentile : ", word[c1 + 4]);
+                    //Log.d("Physics Percentile : ", word[c1 + 5]);
+                    //Log.d("Chemistry Percentile : ", word[c1 + 6]);
+                    //Log.d("HSC : ", word[c1 + 10]);
+                    //Log.d("SSC : ", word[c1 + 11] + "\n");
                     //System.out.println("\n"+line);
 
                     reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank());

@@ -153,28 +153,44 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
-                    android:id="@+id/ApplyActivitybtnVerifyOTP"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="93dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="Verify"
-                    app:backgroundTint="#009688" />
+                    android:layout_gravity="center">
 
+                    <Button
+                        android:id="@+id/ApplyActivitybtnVerifyOTP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Verify"
+                        app:backgroundTint="#009688"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar2"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:background="#009688"
+                        android:clickable="false"
+                        android:indeterminate="true"
+                        android:keepScreenOn="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:theme="@style/progressBarWhite"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-
-            <!--<TextView
-                android:id="@+id/textView3"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Do you got seat in X College through Cap round ?"
-                android:textSize="18sp"
-                android:textStyle="bold" />-->
 
             <Switch
                 android:id="@+id/ApplyActivityCapSeat"
@@ -185,7 +201,8 @@
                 android:layout_marginBottom="10dp"
                 android:text="Do you got seat in X College through Cap round ?"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <Button
                 android:id="@+id/ApplyActivitybtnPayment"
