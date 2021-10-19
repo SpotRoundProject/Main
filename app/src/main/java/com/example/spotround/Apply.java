@@ -2,6 +2,7 @@ package com.example.spotround;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -48,6 +49,7 @@ public class Apply extends AppCompatActivity {
     private String phoneNo, otp, mVerificationId;
     private LoginCredentials loginCredentials;
     ProgressDialog progressDialog;
+    static  int sec = 120;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class Apply extends AppCompatActivity {
         uid = auth.getCurrentUser().getUid();
         Log.d("Uid1..................",uid);
 
+        binding.progressBar2.setVisibility(View.GONE);
         progressDialog = new ProgressDialog(Apply.this);
         progressDialog.setTitle("LogIn");
         progressDialog.setMessage("Signing in please wait");
@@ -117,7 +120,11 @@ public class Apply extends AppCompatActivity {
                 if(phoneNo.length() == 10) {
                     phoneNo = "+91" + phoneNo;
                     Log.d("phoneNO",phoneNo);
-                    sendVerificationCOde(phoneNo);
+                    countDownTimer();
+                    binding.ApplyActivityOTP.setFocusable(true);
+                    binding.ApplyActivityOTP.setText("");
+                    binding.ApplyActivityPhoneNo.setFocusable(false);
+                    sendVerificationCode(phoneNo);
                 }
                 else {
                     binding.ApplyActivityPhoneNo.setError("Should not empty");
@@ -130,6 +137,11 @@ public class Apply extends AppCompatActivity {
             public void onClick(View v) {
                 otp = binding.ApplyActivityOTP.getText().toString();
                 if(otp.length() == 6) {
+                    binding.ApplyActivityOTP.setFocusable(false);
+                    binding.ApplyActivitybtnVerifyOTP.setVisibility(View.GONE);
+                    binding.progressBar2.setVisibility(View.VISIBLE);
+                    binding.progressBar2.setClickable(false);
+                    binding.ApplyActivityPhoneNo.setFocusable(false);
                     verifyCode(otp);
                 }
                 else
@@ -138,7 +150,7 @@ public class Apply extends AppCompatActivity {
         });
     }
 
-    private void sendVerificationCOde(String phoneNo) {
+    private void sendVerificationCode(String phoneNo) {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(auth)
                         .setPhoneNumber(phoneNo)            // Phone number to verify
@@ -192,6 +204,11 @@ public class Apply extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()) {
                     application = documentSnapshot.toObject(Application.class);
+                    binding.ApplyActivitybtnRegister.setEnabled(false);
+                    if(!application.isPayment())
+                        startActivity(new Intent(Apply.this, PaymentActivity.class));
+                    //else
+                        //startActivity(new Intent(Apply.this, SetPreference.class));
                 }
                 else {
                     application = null;
@@ -253,9 +270,13 @@ public class Apply extends AppCompatActivity {
             //     detect the incoming verification SMS and perform verification without
             //     user action.
             Log.d("Apply", "onVerificationCompleted:" + credential);
-
-            signInWithPhoneAuthCredential(credential);
+            binding.ApplyActivityOTP.setText(credential.getSmsCode());
             binding.ApplyActivitybtnVerifyOTP.setEnabled(false);
+            binding.ApplyActivitybtnVerifyOTP.setVisibility(View.GONE);
+            binding.progressBar2.setVisibility(View.VISIBLE);
+            binding.ApplyActivityOTP.setEnabled(false);
+            signInWithPhoneAuthCredential(credential);
+
         }
 
         @Override
@@ -266,11 +287,16 @@ public class Apply extends AppCompatActivity {
 
             if (e instanceof FirebaseAuthInvalidCredentialsException) {
                 // Invalid request
+                Toast.makeText(Apply.this, "Invalid phone No", Toast.LENGTH_SHORT).show();
             } else if (e instanceof FirebaseTooManyRequestsException) {
                 // The SMS quota for the project has been exceeded
+                Toast.makeText(Apply.this, "Try again tomorrow", Toast.LENGTH_SHORT).show();
             }
 
             // Show a message and update the UI
+            binding.ApplyActivityOTP.setFocusable(false);
+            binding.ApplyActivityOTP.setText("");
+            binding.ApplyActivityPhoneNo.setFocusable(true);
         }
 
         @Override
@@ -284,6 +310,7 @@ public class Apply extends AppCompatActivity {
 
             // Save verification ID and resending token so we can use them later
             mVerificationId = verificationId;
+            Toast.makeText(Apply.this, "OTP send", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -295,9 +322,40 @@ public class Apply extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
                             Log.d("Apply", "registered successfully");
+                            binding.ApplyActivitybtnVerifyOTP.setText("Verified");
+                            binding.progressBar2.setVisibility(View.GONE);
+                            binding.ApplyActivitybtnVerifyOTP.setVisibility(View.VISIBLE);
+                            binding.ApplyActivityPhoneNo.setFocusable(true);
+                            
                             Toast.makeText(Apply.this, "registered successfully", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
+
+    void countDownTimer() {
+        binding.ApplyActivitybtnSendOTP.setEnabled(false);
+        binding.ApplyActivityPhoneNo.setFocusable(false);
+        binding.ApplyActivitybtnSendOTP.setText("2:00");
+        sec = 120;
+        CountDownTimer timer = new CountDownTimer(120000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                changeTime();
+            }
+
+            @Override
+            public void onFinish() {
+                binding.ApplyActivitybtnSendOTP.setEnabled(true);
+                binding.ApplyActivitybtnSendOTP.setText("Resend");
+                binding.ApplyActivityPhoneNo.setFocusable(true);
+            }
+        }.start();
+    }
+
+    void changeTime() {
+        sec -= 1;
+        String time = sec + " sec";
+        binding.ApplyActivitybtnSendOTP.setText(time);
+    }
+
 }
