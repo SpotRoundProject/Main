@@ -82,9 +82,10 @@ public class UpdVacancyActivity extends AppCompatActivity implements AdapterView
                     String ewss=ews.getText().toString().trim();
                     String pwds=pwd.getText().toString().trim();
                     String defs=def.getText().toString().trim();
+
                     Category obj=new Category(gopens,gobcs,gscs,gsts,gvj1,gnt1s,gnt2s,gnt3s,lopens,lobcs,lscs,lsts,lvjs,lnt1s,lnt2s,lnt3s,ewss,pwds,defs);
                     node.child(br).setValue(obj);
-                    DocumentReference dref= FirebaseFirestore.getInstance().collection("Vacancy").document(br);
+                    DocumentReference dref= FirebaseFirestore.getInstance().collection("Vacancy").document("Round").collection("Round 1").document(br);
                     dref.set(obj);
                     //Toast.makeText(UpdVacancyActivity.this,gopens,Toast.LENGTH_LONG).show();
                     Toast.makeText(UpdVacancyActivity.this, "Vacancy updated successfully", Toast.LENGTH_SHORT).show();

@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotround">
-        <activity android:name=".SignUpActivity"/>
+        <activity android:name=".ShowVacancy2"></activity>
+        <activity android:name=".ShowVacancy" />
+        <activity android:name=".SignUpActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -27,7 +29,7 @@
             android:label="Welcome to Spot Round" />
         <activity
             android:name=".MainActivity"
-            android:label="Welcome"/>
+            android:label="Welcome" />
         <activity
             android:name=".PaymentActivity"
             android:label="Make Payment" />
@@ -40,18 +42,6 @@
             android:name=".InstituteActivity"
             android:label="Admin Dashboard" />
         <activity android:name=".Apply" />
-        <activity
-            android:name=".updateprofile"
-            android:label="Apply for SpotRound"
-            android:parentActivityName=".InsideStudentlogin" />
-        <activity android:name=".Mobveri" />
-        <activity
-            android:name=".InsideStudentlogin"
-            android:label="Student Dashboard" />
-        <activity
-            android:name=".RegisterActivity"
-            android:label="Register"
-            android:parentActivityName=".StartActivity" />
         <activity
             android:name=".LoginActivity"
             android:label="Student Login"
