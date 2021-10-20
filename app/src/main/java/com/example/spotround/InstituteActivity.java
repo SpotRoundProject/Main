@@ -31,6 +31,8 @@ import com.tom_roush.pdfbox.text.PDFTextStripperByArea;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class InstituteActivity extends AppCompatActivity {
     private Button update, candidate, result;
@@ -40,6 +42,10 @@ public class InstituteActivity extends AppCompatActivity {
     Dialog dialog;
     private static final int STORAGE_PERMISSION_CODE = 101;
     private static boolean read_permission_flag = false;
+    ProgressBar text;
+    TextView text2;
+
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public InstituteActivity() {
     }
@@ -52,6 +58,13 @@ public class InstituteActivity extends AppCompatActivity {
         candidate = findViewById(R.id.viewcandbutton);
         result = findViewById(R.id.viewresultbutton);
 
+        dialog = new Dialog(InstituteActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.progress_bar_dialog);
+
+        text = dialog.findViewById(R.id.IdProgressBar);
+        text2 = dialog.findViewById(R.id.IdProgressPercentage);;
         /*update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +84,8 @@ public class InstituteActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -82,91 +97,77 @@ public class InstituteActivity extends AppCompatActivity {
                 String fileName = data.getData().getPath();
                 fileName = fileName.substring(fileName.lastIndexOf(":") + 1);
                 fileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName;
-                dialog = new Dialog(InstituteActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setCancelable(false);
-                dialog.setTitle("Uploading "+ fileName);
-                dialog.setContentView(R.layout.progress_bar_dialog);
-                dialog.show();
+
                 Window window = dialog.getWindow();
                 window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                dialog.setTitle("Uploading "+ fileName);
+                dialog.show();
                 update(fileName,1);
             }
             else {
                 Log.w("InstituteActivity", "Pdf not selected");
             }
-            dialog.dismiss();
         }
     }
 
     private void update(String fileName, int a) {
-        PDFBoxResourceLoader.init(getApplicationContext());
-        final ProgressBar text = dialog.findViewById(R.id.IdProgressBar);
-        final TextView text2 = dialog.findViewById(R.id.IdProgressPercentage);
-        int n = 1;
-        PDDocument document;
-        try {
-            document = PDDocument.load(new File(fileName));
-            document.getClass();
-            if(!document.isEncrypted()) {
-                PDFTextStripperByArea stripper = new PDFTextStripperByArea();
-                stripper.setSortByPosition(true);
-                PDFTextStripper Tstripper = new PDFTextStripper();
-                int count = document.getPages().getCount();
 
-                for(int i=2; i<=2; i++) {
-                    Tstripper.setStartPage(i);
-                    Tstripper.setEndPage(i);
-                    String str = Tstripper.getText(document);
-                    main(str);
-                    int progress = (int)(100.0 * (i) / n);
-                    Log.d("InstituteActivity","Uploading: " + progress + "%");
-                    text.setProgress(progress);
-                    text2.setText(String.valueOf(progress));
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                PDFBoxResourceLoader.init(getApplicationContext());
+                PDDocument document;
+
+                try {
+                    document = PDDocument.load(new File(fileName));
+                    document.getClass();
+                    if(!document.isEncrypted()) {
+                        PDFTextStripperByArea stripper = new PDFTextStripperByArea();
+                        stripper.setSortByPosition(true);
+                        PDFTextStripper Tstripper = new PDFTextStripper();
+                        int count = document.getPages().getCount();
+                        setMaxCount(count);
+                        for(int i = 1; i <= count; i++) {
+                            Tstripper.setStartPage(i);
+                            Tstripper.setEndPage(i);
+                            String str = Tstripper.getText(document);
+                            String a = str.substring(0, 522);
+                            str = str.substring(521);
+                            int index = str.indexOf("Published on");
+                            str = str.substring(0, index);
+                            main(str);
+                            //Log.d("InstituteActivity","Uploading: " + progress + "%");
+                            setProgress(i, count);
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    Log.d("Exception", e.getMessage());
                 }
                 dialog.dismiss();
             }
-        }
-        catch (Exception e) {
-            Log.d("Exception", e.getMessage());
-        }
+        });
+
     }
 
-    /*private void update(String fileName) {
-        final ProgressBar text = dialog.findViewById(R.id.IdProgressBar);
-        final TextView text2 = dialog.findViewById(R.id.IdProgressPercentage);
-        PdfReader reader = null;
-        int n = 1;
-        try {
-            reader = new PdfReader(fileName);
-
-            n = reader.getNumberOfPages();
-        }
-        catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.d("Errorrrrrrrrr", e.getMessage());
-        }
-
-        for (int i = 1; i < 2; i++) {
-            //extractedText = extractedText + PdfTextExtractor.getTextFromPage(reader, i + 1) + "\n";
-            // to extract the PDF content from the different pages
-            String line = null;
-            try {
-                line = PdfTextExtractor.getTextFromPage(reader, i + 1);
-            } catch (IOException e) {
-                e.printStackTrace();
+    void setMaxCount(int count) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                text.setMax(count);
             }
-            //Log.d("Line", line);
-            main(line);
-            int progress = (int)(100.0 * (i+1) / n);
-            Log.d("InstituteActivity","Uploading: " + progress + "%");
-            text.setProgress(progress);
-            text2.setText(String.valueOf(progress));
-        }
-        dialog.dismiss();
-        assert reader != null;
-        reader.close();
-    }*/
+        });
+    }
+
+    void setProgress(int i, int count) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                text.setProgress(i);
+                text2.setText(i + "/" + count);
+            }
+        });
+    }
 
 
     boolean check(String s) {
@@ -192,7 +193,16 @@ public class InstituteActivity extends AppCompatActivity {
         Scanner scn = new Scanner(line);
         while (scn.hasNextLine()) {
             line = scn.nextLine();
-            if (line.contains(" $")) {
+
+            line = line.replace(" $", "");
+            line = line.replace("NT 1 (NT-B)","NT-B");
+            line = line.replace("NT 2 (NT-C)","NT-C");
+            line = line.replace("NT 3 (NT-D)","NT-D");
+            line = line.replace("DJ/VJ","VJNT");
+            line = line.replace(" Yes","");
+            line = line.replace(" PWD","");
+            line = line.replace(" DEF","");
+            /*if (line.contains(" $")) {
                  line = line.replace(" $", "");
             }
             if (line.contains("NT 1 (NT-B)")) {
@@ -215,8 +225,8 @@ public class InstituteActivity extends AppCompatActivity {
             }
             if (line.contains(" DEF")) {
                 line = line.replace(" DEF", "");
-            }
-            if (line.contains("State Common Entrance Test Cell, Government of Maharashtra")
+            }*/
+            /*if (line.contains("State Common Entrance Test Cell, Government of Maharashtra")
                     || line.contains("Published on 07/07/2019")
                     || line.contains("First Year Under Graduate Technical Courses in Engineering and Technology Admissions 2019-20 -")
                     || line.contains("Final Merit List  Maharashtra State Candidates")
@@ -229,7 +239,7 @@ public class InstituteActivity extends AppCompatActivity {
                 if (line.contains("2063/2072")) {
                     break;
                 }
-            } else {
+            } else {*/
                 String[] word = line.split(" ");
                 if (word.length == 2 && line.contains("EN19")) {
                     cover = new StringBuilder(line);
@@ -244,8 +254,13 @@ public class InstituteActivity extends AppCompatActivity {
                     if (line.contains("MHT-CET")) {
                         String[] word1 = cover.toString().split(" ");
                         int c = 2;
-                        Log.d("Rank : ", word1[0]);
-                        Log.d("Application ID : ", word1[1]);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d("Rank : ", word1[0]);
+                            }
+                        });
+
                         int g = 0;
                         StringBuilder name = new StringBuilder();
                         while (g == 0) {
@@ -257,22 +272,19 @@ public class InstituteActivity extends AppCompatActivity {
                         }
                         StudentInfo studentInfo = new StudentInfo(word1[0], word1[1], name.toString(), word1[c + 1],
                                 word1[c + 2], word1[c + 3], word1[c + 4], word1[c + 5], word1[c + 6], word1[c + 9], word1[c + 10]);
-                        Log.d("Name : ", name.toString());
-                        /*Log.d("Caste : ", word1[c + 1]);
-                        Log.d("Gender : ", word1[c + 2]);
-                        Log.d("PCM Percentile : ", word1[c + 3]);
-                        Log.d("Math Percentile : ", word1[c + 4]);
-                        Log.d("Physics Percentile : ", word1[c + 5]);
-                        Log.d("Chemistry Percentile : ", word1[c + 6]);
-                        Log.d("HSC : ", word1[c + 9]);
-                        Log.d("SSC : ", word1[c + 10] + "\n");*/
+                        //Log.d("Name : ", name.toString());
+
                         reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank());
                         reference.set(studentInfo);
                     }
-                            //System.out.println("\n"+cover);
+
                 } else {
-                    Log.d("Rank : ", word[0]);
-                    //Log.d("Application ID : ", word[1]);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("Rank : ", word[0]);
+                        }
+                    });
                     int c1 = 2;
                     int g1 = 0;
                     StringBuilder name = new StringBuilder();
@@ -286,21 +298,12 @@ public class InstituteActivity extends AppCompatActivity {
 
                     StudentInfo studentInfo = new StudentInfo(word[0], word[1], name.toString(), word[c1 + 1], word[c1 + 2],
                             word[c1 + 3], word[c1 + 4], word[c1 + 5], word[c1 + 6], word[c1 + 10], word[c1 + 11]);
-                    Log.d("Name : ", name.toString());
-                    //Log.d("Caste : ", word[c1 + 1]);
-                    //Log.d("Gender : ", word[c1 + 2]);
-                    //Log.d("PCM Percentile : ", word[c1 + 3]);
-                    //Log.d("Math Percentile : ", word[c1 + 4]);
-                    //Log.d("Physics Percentile : ", word[c1 + 5]);
-                    //Log.d("Chemistry Percentile : ", word[c1 + 6]);
-                    //Log.d("HSC : ", word[c1 + 10]);
-                    //Log.d("SSC : ", word[c1 + 11] + "\n");
-                    //System.out.println("\n"+line);
+                    //Log.d("Name : ", name.toString());
 
                     reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank());
                     reference.set(studentInfo);
                 }
-            }
+            //}
         }
     }
 

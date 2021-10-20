@@ -72,4 +72,17 @@ public class Application {
     public void setSelfDec(boolean selfDec) {
         this.selfDec = selfDec;
     }
+
+    @Override
+    public String toString() {
+        return "Application{" +
+                "name='" + name + '\'' +
+                ", applicationId='" + applicationId + '\'' +
+                ", rank='" + rank + '\'' +
+                ", phoneNo='" + phoneNo + '\'' +
+                ", payment=" + payment +
+                ", selfDec=" + selfDec +
+                ", clgSeat=" + clgSeat +
+                '}';
+    }
 }

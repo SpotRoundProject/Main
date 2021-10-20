@@ -109,4 +109,21 @@ public class StudentInfo {
     public void setSsc(String ssc) {
         this.ssc = ssc;
     }
+
+    @Override
+    public String toString() {
+        return "StudentInfo{" +
+                "rank='" + rank + '\'' +
+                ", applicationId='" + applicationId + '\'' +
+                ", name='" + name + '\'' +
+                ", caste='" + caste + '\'' +
+                ", gender='" + gender + '\'' +
+                ", PCMPercentile='" + PCMPercentile + '\'' +
+                ", mathPercentile='" + mathPercentile + '\'' +
+                ", physicsPercentile='" + physicsPercentile + '\'' +
+                ", chemPercentile='" + chemPercentile + '\'' +
+                ", hsc='" + hsc + '\'' +
+                ", ssc='" + ssc + '\'' +
+                '}';
+    }
 }

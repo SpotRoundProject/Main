@@ -43,7 +43,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:hint="Name">
+                android:hint="Full Name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ApplyActivityName"
@@ -202,33 +202,39 @@
                 android:text="Do you got seat in X College through Cap round ?"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:theme="@style/Switch"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-            <Button
-                android:id="@+id/ApplyActivitybtnPayment"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="Make Payment"
-                android:textSize="22sp"
-                android:textStyle="normal"
-                app:backgroundTint="#009688" />
 
             <CheckBox
                 android:id="@+id/ApplyActivityCheckBox"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Self Decleration" />
+                android:text="Self Decleration"
+                android:theme="@style/CheckBox" />
 
             <Button
                 android:id="@+id/ApplyActivitybtnRegister"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Register"
+                app:backgroundTint="#009688" />
+
+            <Button
+                android:id="@+id/ApplyActivitybtnPayment"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Register"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Make Payment"
+                android:textSize="22sp"
+                android:textStyle="normal"
                 app:backgroundTint="#009688" />
 
         </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.spotround;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.spotround.databinding.ActivityApplyBinding;
 import com.example.spotround.modle.Application;
 import com.example.spotround.modle.LoginCredentials;
+import com.example.spotround.modle.StudentInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -34,6 +36,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Apply extends AppCompatActivity {
@@ -48,8 +52,9 @@ public class Apply extends AppCompatActivity {
     private Application application;
     private String phoneNo, otp, mVerificationId;
     private LoginCredentials loginCredentials;
-    ProgressDialog progressDialog;
-    static  int sec = 120;
+    private ProgressDialog progressDialog;
+    int sec = 120;
+    private StudentInfo info = new StudentInfo();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +113,15 @@ public class Apply extends AppCompatActivity {
                         binding.ApplyActivityPhoneNo.getText().toString(),binding.ApplyActivityCapSeat.isChecked(),
                         flagPaymentDone,binding.ApplyActivityCheckBox.isChecked());
 
-                reference = fireStore.collection("Application").document(uid);
-                reference.set(application);
+                if(verifyInformation(application)) {
+                    reference = fireStore.collection("Application").document(uid);
+                    reference.set(application);
+                    binding.ApplyActivitybtnRegister.setText("Registered");
+                    binding.ApplyActivitybtnRegister.setEnabled(false);
+                }
+                else {
+                    Toast.makeText(Apply.this, "Information not correct", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -124,6 +136,7 @@ public class Apply extends AppCompatActivity {
                     binding.ApplyActivityOTP.setFocusable(true);
                     binding.ApplyActivityOTP.setText("");
                     binding.ApplyActivityPhoneNo.setFocusable(false);
+                    binding.ApplyActivitybtnVerifyOTP.setEnabled(false);
                     sendVerificationCode(phoneNo);
                 }
                 else {
@@ -154,7 +167,7 @@ public class Apply extends AppCompatActivity {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(auth)
                         .setPhoneNumber(phoneNo)            // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                        .setTimeout(120L, TimeUnit.SECONDS) // Timeout and unit
                         .setActivity(Apply.this)                 // Activity (for callback binding)
                         .setCallbacks(mCallbacks)           // OnVerificationStateChangedCallbacks
                         .build();
@@ -204,11 +217,12 @@ public class Apply extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()) {
                     application = documentSnapshot.toObject(Application.class);
+                    Log.d("OnStart", application.toString());
                     binding.ApplyActivitybtnRegister.setEnabled(false);
                     if(!application.isPayment())
                         startActivity(new Intent(Apply.this, PaymentActivity.class));
-                    //else
-                        //startActivity(new Intent(Apply.this, SetPreference.class));
+                    else
+                        startActivity(new Intent(Apply.this, SetPreference.class));
                 }
                 else {
                     application = null;
@@ -311,6 +325,7 @@ public class Apply extends AppCompatActivity {
             // Save verification ID and resending token so we can use them later
             mVerificationId = verificationId;
             Toast.makeText(Apply.this, "OTP send", Toast.LENGTH_SHORT).show();
+            binding.ApplyActivitybtnVerifyOTP.setEnabled(true);
         }
     };
 
@@ -326,6 +341,7 @@ public class Apply extends AppCompatActivity {
                             binding.progressBar2.setVisibility(View.GONE);
                             binding.ApplyActivitybtnVerifyOTP.setVisibility(View.VISIBLE);
                             binding.ApplyActivityPhoneNo.setFocusable(true);
+                            flagPhoneNoVerified = true;
                             
                             Toast.makeText(Apply.this, "registered successfully", Toast.LENGTH_SHORT).show();
                         }
@@ -358,4 +374,40 @@ public class Apply extends AppCompatActivity {
         binding.ApplyActivitybtnSendOTP.setText(time);
     }
 
+    boolean verifyInformation(Application application) {
+        reference = fireStore.collection("StudentInfo").document(application.getRank());
+        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()) {
+                    info = documentSnapshot.toObject(StudentInfo.class);
+                    Log.d("StudentInfo", documentSnapshot.getId() + info.toString());
+                }
+                else {
+                    Toast.makeText(Apply.this, "Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+            if (!binding.ApplyActivityCETRank.getText().toString().equals(info.getRank())) {
+                Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
+                binding.ApplyActivityCETRank.setError("Invalid Rank");
+                return false;
+            }
+            if (!binding.ApplyActivityApplicationId.getText().toString().equals(info.getApplicationId())) {
+                Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
+                binding.ApplyActivityCETRank.setError("Invalid Application ID");
+                return false;
+            }
+            String name = binding.ApplyActivityName.getText().toString().toLowerCase();
+            List<String> nameList = Arrays.asList(name.split(" "));
+            for (String test : nameList) {
+                if (!application.getName().toLowerCase().contains(test)) {
+                    Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
+                    binding.ApplyActivityCETRank.setError("Invalid Name");
+                    return false;
+                }
+            }
+            return true;
+    }
 }
