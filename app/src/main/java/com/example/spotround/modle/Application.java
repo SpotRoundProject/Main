@@ -1,6 +1,8 @@
 package com.example.spotround.modle;
 
-public class Application {
+import java.io.Serializable;
+
+public class Application implements Serializable {
     private String name, applicationId, rank, phoneNo;
     private boolean payment, selfDec, clgSeat;
 

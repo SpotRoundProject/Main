@@ -7,33 +7,40 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.spotround.databinding.ActivityPaymentBinding;
+import com.example.spotround.modle.Application;
+import com.google.firebase.auth.FirebaseAuth;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
 public class PaymentActivity extends AppCompatActivity implements PaymentResultListener {
-    EditText pymtemail;
-    EditText pymtphone;
-    Button makepymtbtn;
-    String paymentemail,paymentphone;
+    ActivityPaymentBinding binding;
+    String paymentEmail, paymentPhoneNo;
+    Application application;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        binding = ActivityPaymentBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         Checkout.preload(getApplicationContext());
-        pymtemail=findViewById(R.id.RegisterActivityEmail);
-        pymtphone=findViewById(R.id.RegisterActivityPassword);
-        makepymtbtn=findViewById(R.id.StartActivitybtnLogin);
-        makepymtbtn.setOnClickListener(new View.OnClickListener() {
+
+        application = (Application) getIntent().getSerializableExtra("Application");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        binding.Email.setText(auth.getCurrentUser().getEmail());
+        binding.phoneNo.setText(application.getPhoneNo());
+
+        binding.makePayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                paymentemail=pymtemail.getText().toString().trim();
-                paymentphone=pymtphone.getText().toString().trim();
+                paymentEmail = binding.Email.getText().toString();
+                paymentPhoneNo = binding.phoneNo.getText().toString();
                 makePayment();
             }
         });
@@ -57,8 +64,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
             options.put("theme.color", "#3399cc");
             options.put("currency", "INR");
             options.put("amount", "50000");//pass amount in currency subunits
-            options.put("prefill.email", paymentemail);
-            options.put("prefill.contact",paymentphone);
+            options.put("prefill.email", paymentEmail);
+            options.put("prefill.contact", paymentPhoneNo);
             JSONObject retryObj = new JSONObject();
             retryObj.put("enabled", true);
             retryObj.put("max_count", 4);
@@ -75,6 +82,11 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
     public void onPaymentSuccess(String s) {
         Toast.makeText(this, "Payment Successful & Payment ID is "+s, Toast.LENGTH_SHORT).show();
         //startActivity(new Intent(getApplicationContext(),InsideStudentlogin.class));
+        //send email
+        application.setPayment(true);
+        Intent intent = new Intent(PaymentActivity.this, SetPreference.class);
+        intent.putExtra("Application", application);
+        startActivity(intent);
         finish();
     }
 

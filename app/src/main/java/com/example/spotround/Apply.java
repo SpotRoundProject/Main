@@ -54,7 +54,7 @@ public class Apply extends AppCompatActivity {
     private LoginCredentials loginCredentials;
     private ProgressDialog progressDialog;
     int sec = 120;
-    private StudentInfo info = new StudentInfo();
+    private StudentInfo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +118,9 @@ public class Apply extends AppCompatActivity {
                     reference.set(application);
                     binding.ApplyActivitybtnRegister.setText("Registered");
                     binding.ApplyActivitybtnRegister.setEnabled(false);
+                    binding.ApplyActivityName.setError(null);
+                    binding.ApplyActivityCETRank.setError(null);
+                    binding.ApplyActivityApplicationId.setError(null);
                 }
                 else {
                     Toast.makeText(Apply.this, "Information not correct", Toast.LENGTH_LONG).show();
@@ -159,6 +162,21 @@ public class Apply extends AppCompatActivity {
                 }
                 else
                     binding.ApplyActivityOTP.setError("Must br 6 digit");
+            }
+        });
+
+        binding.ApplyActivitybtnPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.ApplyActivitybtnRegister.getTag().toString().equals("Registered")) {
+                    Intent intent = new Intent(Apply.this, PaymentActivity.class);
+                    intent.putExtra("Application", application);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    Toast.makeText(Apply.this, "Please Register First", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -205,35 +223,6 @@ public class Apply extends AppCompatActivity {
 
     boolean isChecked() {
         return binding.ApplyActivityCheckBox.isChecked();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        reference = fireStore.collection("Application").document(uid);
-        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()) {
-                    application = documentSnapshot.toObject(Application.class);
-                    Log.d("OnStart", application.toString());
-                    binding.ApplyActivitybtnRegister.setEnabled(false);
-                    if(!application.isPayment())
-                        startActivity(new Intent(Apply.this, PaymentActivity.class));
-                    else
-                        startActivity(new Intent(Apply.this, SetPreference.class));
-                }
-                else {
-                    application = null;
-                    Toast.makeText(Apply.this, "Register", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        if(!isPaymentDone() && application != null) {
-            Toast.makeText(Apply.this, "Pay the fees to proceed", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void verifyCode(String code) {
@@ -379,16 +368,15 @@ public class Apply extends AppCompatActivity {
         reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()) {
+                if (documentSnapshot.exists()) {
                     info = documentSnapshot.toObject(StudentInfo.class);
                     Log.d("StudentInfo", documentSnapshot.getId() + info.toString());
-                }
-                else {
-                    Toast.makeText(Apply.this, "Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Apply.this, "Record Not Found", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
+        if (info != null) {
             if (!binding.ApplyActivityCETRank.getText().toString().equals(info.getRank())) {
                 Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
                 binding.ApplyActivityCETRank.setError("Invalid Rank");
@@ -399,8 +387,8 @@ public class Apply extends AppCompatActivity {
                 binding.ApplyActivityCETRank.setError("Invalid Application ID");
                 return false;
             }
-            String name = binding.ApplyActivityName.getText().toString().toLowerCase();
-            List<String> nameList = Arrays.asList(name.split(" "));
+            String name = binding.ApplyActivityName.getText().toString();
+            String[] nameList = name.toLowerCase().split(" ");
             for (String test : nameList) {
                 if (!application.getName().toLowerCase().contains(test)) {
                     Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
@@ -409,5 +397,7 @@ public class Apply extends AppCompatActivity {
                 }
             }
             return true;
+        }
+        return false;
     }
 }
