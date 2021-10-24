@@ -46,17 +46,7 @@ public class MainActivity extends AppCompatActivity {
         binding.MainActivityApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(application == null) {
-                    Intent intent = new Intent(MainActivity.this, Apply.class);
-                    startActivity(intent);
-                }
-                if(!application.isPayment()) {
-                    Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
-                    intent.putExtra("Application", application);
-                    startActivity(intent);
-                }
-                else
-                    startActivity(new Intent(MainActivity.this, SetPreference.class));
+                getData();
             }
         });
         binding.SeatsIcon.setOnClickListener(new View.OnClickListener() {
@@ -68,25 +58,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        executorService.execute(new Runnable() {
+    void getData() {
+        reference = fireStore.collection("Application").document(uid);
+        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void run() {
-                reference = fireStore.collection("Application").document(uid);
-                reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()) {
-                            application = documentSnapshot.toObject(Application.class);
-                            Log.d("OnStart", application.toString());
-                        }
-                        else {
-                            Toast.makeText(MainActivity.this, "Register", Toast.LENGTH_SHORT).show();
-                        }
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()) {
+                    application = documentSnapshot.toObject(Application.class);
+
+                    Log.d("OnStart", application.toString());
+                    if(!application.isPayment()) {
+                        Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
+                        intent.putExtra("Application", application);
+                        startActivity(intent);
                     }
-                });
+                    else
+                        startActivity(new Intent(MainActivity.this, SetPreference.class));
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Register", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, Apply.class);
+                    startActivity(intent);
+                }
             }
         });
     }

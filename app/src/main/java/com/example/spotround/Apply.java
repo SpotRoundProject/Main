@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -140,6 +141,7 @@ public class Apply extends AppCompatActivity {
                     binding.ApplyActivityOTP.setText("");
                     binding.ApplyActivityPhoneNo.setFocusable(false);
                     binding.ApplyActivitybtnVerifyOTP.setEnabled(false);
+                    //onEditorAction(EditorInfo.IME_ACTION_DONE);
                     sendVerificationCode(phoneNo);
                 }
                 else {
@@ -168,7 +170,7 @@ public class Apply extends AppCompatActivity {
         binding.ApplyActivitybtnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (binding.ApplyActivitybtnRegister.getTag().toString().equals("Registered")) {
+                if (binding.ApplyActivitybtnRegister.getText().toString().equals("Registered")) {
                     Intent intent = new Intent(Apply.this, PaymentActivity.class);
                     intent.putExtra("Application", application);
                     startActivity(intent);
@@ -228,11 +230,16 @@ public class Apply extends AppCompatActivity {
     private void verifyCode(String code) {
         // below line is used for getting getting
         // credentials from our verification id and code.
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
+        try {
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
 
-        // after getting credential we are
-        // calling sign in method.
-        signInWithPhoneAuthCredential(credential);
+            // after getting credential we are
+            // calling sign in method.
+            signInWithPhoneAuthCredential(credential);
+        }
+        catch (Exception e){
+            Log.d("Apply", e.getMessage());
+        }
 
     }
 
@@ -377,11 +384,6 @@ public class Apply extends AppCompatActivity {
             }
         });
         if (info != null) {
-            if (!binding.ApplyActivityCETRank.getText().toString().equals(info.getRank())) {
-                Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
-                binding.ApplyActivityCETRank.setError("Invalid Rank");
-                return false;
-            }
             if (!binding.ApplyActivityApplicationId.getText().toString().equals(info.getApplicationId())) {
                 Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
                 binding.ApplyActivityCETRank.setError("Invalid Application ID");

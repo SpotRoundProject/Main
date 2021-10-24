@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.example.spotround.databinding.ActivityPaymentBinding;
 import com.example.spotround.modle.Application;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -81,11 +83,16 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
     @Override
     public void onPaymentSuccess(String s) {
         Toast.makeText(this, "Payment Successful & Payment ID is "+s, Toast.LENGTH_SHORT).show();
-        //startActivity(new Intent(getApplicationContext(),InsideStudentlogin.class));
+        //startActivity(new Intent(getApplicationContext(),InsideStudentLogin.class));
         //send email
+        FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference reference = fireStore.collection("Application").document(uid);
+
         application.setPayment(true);
+        reference.set(application);
+
         Intent intent = new Intent(PaymentActivity.this, SetPreference.class);
-        intent.putExtra("Application", application);
         startActivity(intent);
         finish();
     }
