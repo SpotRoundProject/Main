@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#005BA4"
+    android:background="#FFFFFF"
+    android:backgroundTint="#1762E4"
     tools:context=".SignUpActivity">
 
 
@@ -46,11 +47,9 @@
                 android:layout_width="300dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:background="#FFFFFF"
                 android:inputType="textEmailAddress"
                 android:padding="10dp" />
 
-            <requestFocus />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +67,6 @@
                 android:layout_width="300dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:background="#FFFFFF"
                 android:drawableRight="@drawable/ic_hide_password"
                 android:inputType="textPassword"
                 android:padding="10dp" />

@@ -43,9 +43,9 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setTitle("LogIn");
         progressDialog.setMessage("Signing in please wait");
 
-        ArrayAdapter<String> loginType = new ArrayAdapter<>(LoginActivity.this, android.R.layout.
-                simple_list_item_1, getResources().getStringArray(R.array.LoginType));
-        loginType.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        ArrayAdapter loginType = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.LoginType));
+        loginType.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         binding.LoginActivityType.setAdapter(loginType);
         binding.LoginActivityType.setSelection(0);
 

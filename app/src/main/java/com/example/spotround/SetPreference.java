@@ -23,8 +23,6 @@ import java.util.concurrent.Executors;
 public class SetPreference extends AppCompatActivity {
     ActivitySetPreferenceBinding binding;
     String uid;
-    boolean [] selected = {false, false, false, false, false, false};
-    int [] lastSelected = {0, 0, 0, 0, 0, 0};
     FirebaseFirestore fireStore;
     DocumentReference reference;
     FirebaseAuth auth;
