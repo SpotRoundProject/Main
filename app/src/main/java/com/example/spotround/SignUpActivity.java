@@ -89,7 +89,6 @@ public class SignUpActivity extends AppCompatActivity {
                                             if(task.isSuccessful()) {
                                                 LoginCredentials user = new LoginCredentials(binding.SignUpActivityEmail.getText().toString(),
                                                         binding.SignUpActivityPassword.getText().toString());
-
                                                 database.getReference().child("User").child(uid).setValue(user);
                                                 progressDialog.hide();
 
