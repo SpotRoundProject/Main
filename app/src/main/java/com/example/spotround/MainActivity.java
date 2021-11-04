@@ -1,9 +1,11 @@
 package com.example.spotround;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     String uid;
     Application application = null;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Checking Information");
 
         fireStore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -46,14 +52,30 @@ public class MainActivity extends AppCompatActivity {
         binding.MainActivityApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 getData();
             }
         });
+
         binding.SeatsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ShowVacancy2.class);
                 startActivity(intent);
+            }
+        });
+
+        binding.logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -80,7 +102,15 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, Apply.class);
                     startActivity(intent);
                 }
+                progressDialog.hide();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        progressDialog.dismiss();
     }
 }

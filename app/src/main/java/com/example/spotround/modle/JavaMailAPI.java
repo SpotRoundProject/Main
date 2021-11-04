@@ -1,9 +1,12 @@
 package com.example.spotround.modle;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
 import java.util.Properties;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -11,8 +14,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import io.grpc.okhttp.internal.Util;
 
 public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
 
@@ -24,7 +25,7 @@ public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
     //Need INTERNET permission
 
     //Variables
-    private Context mContext;
+    private final Context mContext;
     private Session mSession;
 
     private String mEmail;

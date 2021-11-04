@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 
 import com.example.spotround.databinding.ActivitySplashBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashActivity extends AppCompatActivity {
     ActivitySplashBinding binding;
@@ -23,7 +24,11 @@ public class SplashActivity extends AppCompatActivity {
         binding.SplashActivityLogo.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.mainlogoanimation));
         binding.SplashActivitySublogo.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.sublogoanimation));
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(getApplicationContext(),StartActivity.class));
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            if(auth.getCurrentUser() != null)
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            else
+                startActivity(new Intent(getApplicationContext(),StartActivity.class));
             finish();
         }, 3000);
     }

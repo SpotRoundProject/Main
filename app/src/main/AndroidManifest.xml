@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotround">
-        <activity android:name=".SetPreference"></activity>
+        <activity android:name=".ScheduleActivity"></activity>
+        <activity android:name=".SetPreference" />
         <activity android:name=".ShowVacancy2" />
         <activity android:name=".ShowVacancy" />
         <activity android:name=".SignUpActivity" />

@@ -192,4 +192,10 @@ public class ShowVacancy extends AppCompatActivity {
         showv("Electrical Engineering");
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

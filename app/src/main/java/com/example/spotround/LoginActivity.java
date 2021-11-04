@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -82,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(LoginActivity.this, InstituteActivity.class);
                                                 startActivity(intent);
                                                 binding.LoginActivityEmail.setText("");
+                                                finish();
                                             }
                                             else {
                                                 Toast.makeText(LoginActivity.this, "No admin account with this credentials",
@@ -113,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 binding.LoginActivityEmail.setText("");
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                 startActivity(intent);
+                                                finish();
 
                                             }
                                             else {
@@ -192,7 +195,21 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(LoginActivity.this, StartActivity.class));
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        progressDialog.dismiss();
     }
 }

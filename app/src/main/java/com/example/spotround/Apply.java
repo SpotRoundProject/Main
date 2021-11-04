@@ -402,4 +402,16 @@ public class Apply extends AppCompatActivity {
         }
         return false;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        progressDialog.dismiss();
+    }
 }

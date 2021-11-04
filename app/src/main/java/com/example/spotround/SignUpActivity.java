@@ -96,6 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                         "for verification", Toast.LENGTH_SHORT).show();
                                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 startActivity(new Intent(SignUpActivity.this,LoginActivity.class));
+                                                finish();
                                             }
                                             else {
                                                 Toast.makeText(SignUpActivity.this, task.getException().getMessage()
@@ -185,5 +186,18 @@ public class SignUpActivity extends AppCompatActivity {
             return  false;
         }
         return  true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(SignUpActivity.this, StartActivity.class));
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        progressDialog.dismiss();
     }
 }
