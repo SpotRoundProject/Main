@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivityScheduleBinding;
@@ -33,6 +34,15 @@ public class ScheduleActivity extends AppCompatActivity {
 
         fireStore = FirebaseFirestore.getInstance();
 
+        progressDialog = new ProgressDialog(ScheduleActivity.this);
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Fetching Data");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -43,6 +53,7 @@ public class ScheduleActivity extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(documentSnapshot.exists()) {
                             schedule = documentSnapshot.toObject(Schedule.class);
+                            binding.date.setText(schedule.getDate());
                             binding.applicationFillingStart.setText(schedule.getApplicationFillingStart());
                             binding.applicationFillingEnd.setText(schedule.getApplicationFillingEnd());
                             binding.round1Start.setText(schedule.getRound1Start());
@@ -58,9 +69,18 @@ public class ScheduleActivity extends AppCompatActivity {
                         else {
                             Toast.makeText(ScheduleActivity.this, "No Data", Toast.LENGTH_LONG).show();
                         }
+                        progressDialog.hide();
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     }
                 });
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        progressDialog.dismiss();
     }
 }

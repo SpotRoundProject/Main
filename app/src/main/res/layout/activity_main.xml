@@ -165,7 +165,7 @@
 
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/log_out"
+            android:id="@+id/Schedule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_rowWeight="1"
@@ -191,7 +191,7 @@
                     android:id="@+id/faqIcon"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:contentDescription="Log out" />
+                    android:contentDescription="Schedule" />
                     <!--android:src="@drawable/logout />"-->
 
                 <TextView
@@ -199,13 +199,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
-                    android:contentDescription="Log Out"
-                    android:text="Log Out"
+                    android:contentDescription="Schedule"
+                    android:text="Schedule"
                     android:textColor="#0353F4"
                     android:textSize="17sp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </GridLayout>
+
+    <ImageButton
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_more_vert_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -210,7 +210,9 @@
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Self Decleration"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="I understand that if I do not meet the notified eligibility requirements, I will be disqualified and my admission/ any allotment made shall stands cancelled"
                 android:theme="@style/CheckBox" />
 
             <Button

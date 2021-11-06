@@ -1,11 +1,12 @@
 package com.example.spotround.modle;
 
 public class Schedule {
-    private String applicationFillingStart, applicationFillingEnd, round1Start, round1End, R1Result, round2Start, round2End, R2Result, round3Start, round3End, R3Result;
+    private String date,applicationFillingStart, applicationFillingEnd, round1Start, round1End, R1Result, round2Start, round2End, R2Result, round3Start, round3End, R3Result;
 
     public Schedule(){}
 
-    public Schedule(String applicationFillingStart, String applicationFillingEnd, String round1Start, String round1End, String r1Result, String round2Start, String round2End, String r2Result, String round3Start, String round3End, String r3Result) {
+    public Schedule(String date,String applicationFillingStart, String applicationFillingEnd, String round1Start, String round1End, String r1Result, String round2Start, String round2End, String r2Result, String round3Start, String round3End, String r3Result) {
+        this.date = "Date: " + date;
         this.applicationFillingStart = applicationFillingStart;
         this.applicationFillingEnd = applicationFillingEnd;
         this.round1Start = round1Start;
@@ -17,6 +18,14 @@ public class Schedule {
         this.round3Start = round3Start;
         this.round3End = round3End;
         R3Result = r3Result;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getApplicationFillingStart() {

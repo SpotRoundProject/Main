@@ -74,15 +74,6 @@ public class Apply extends AppCompatActivity {
         progressDialog.setTitle("LogIn");
         progressDialog.setMessage("Signing in please wait");
 
-        progressDialog.show();
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-        progressDialog.hide();
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
         database.getReference().child("User").child(uid).orderByKey().
                 addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -97,14 +88,27 @@ public class Apply extends AppCompatActivity {
         binding.ApplyActivitybtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!checkInformation()) return;
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if(!checkInformation()){
+                    progressDialog.hide();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    return;
+                }
                 if(!isPhoneNoVerified()) {
                     Toast.makeText(Apply.this, "Please verify phone no", Toast.LENGTH_SHORT).show();
+                    progressDialog.hide();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     return;
                 }
                 if(!isChecked()) {
                     Toast.makeText(Apply.this, "Check the box proceed", Toast.LENGTH_SHORT).show();
                     binding.ApplyActivityCheckBox.setError("Click here");
+                    progressDialog.hide();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     return;
                 }
 
@@ -126,6 +130,8 @@ public class Apply extends AppCompatActivity {
                 else {
                     Toast.makeText(Apply.this, "Information not correct", Toast.LENGTH_LONG).show();
                 }
+                progressDialog.hide();
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
 

@@ -21,37 +21,48 @@
 
     <Button
         android:id="@+id/updvacanbutton"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="104dp"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="80dp"
         android:text="Update Vacancy"
         app:backgroundTint="#009688"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admindashboard" />
 
     <Button
         android:id="@+id/viewcandbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="45dp"
         android:text="View Candidates"
         app:backgroundTint="#009688"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/updvacanbutton" />
 
     <Button
         android:id="@+id/viewresultbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="45dp"
         android:text="View Result"
         app:backgroundTint="#009688"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewcandbutton" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="45dp"
+        android:backgroundTint="#009688"
+        android:text="Generate Result"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewresultbutton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
