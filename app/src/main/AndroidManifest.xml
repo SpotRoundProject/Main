@@ -15,6 +15,10 @@
         android:theme="@style/Theme.Spotround">
         <activity android:name=".CandidateList"></activity>
         <activity android:name=".ResultActivity" />
+        <activity
+            android:name=".UpdateVacancy"
+            android:exported="false" />
+        <activity android:name=".ResultActivity" />
         <activity android:name=".ScheduleActivity" />
         <activity android:name=".SetPreference" />
         <activity android:name=".ShowVacancy2" />
