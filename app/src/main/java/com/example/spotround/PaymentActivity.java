@@ -96,6 +96,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
         reference.set(application);
 
         Intent intent = new Intent(PaymentActivity.this, SetPreference.class);
+        intent.putExtra("Application", application);
         startActivity(intent);
         finish();
     }

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivitySetPreferenceBinding;
 import com.example.spotround.databinding.ProgressBarDialogBinding;
+import com.example.spotround.modle.Application;
 import com.example.spotround.modle.Preference;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +34,7 @@ public class SetPreference extends AppCompatActivity {
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     Preference pre = null;
     ProgressDialog progressDialog;
+    Application application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class SetPreference extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         progressDialog = new ProgressDialog(SetPreference.this);
+
+        application = (Application)getIntent().getSerializableExtra("Application");
 
         fireStore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -76,7 +80,7 @@ public class SetPreference extends AppCompatActivity {
                     Preference preference = new Preference(binding.Preference1.getSelectedItem().toString(),
                             binding.Preference2.getSelectedItem().toString(), binding.Preference3.getSelectedItem().toString(),
                             binding.Preference4.getSelectedItem().toString(), binding.Preference5.getSelectedItem().toString(),
-                            binding.Preference6.getSelectedItem().toString());
+                            binding.Preference6.getSelectedItem().toString(), false,"", "");
                     reference.set(preference);
                 }
 

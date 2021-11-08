@@ -7,21 +7,27 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.spotround.databinding.ActivityCandidateListBinding;
+import com.example.spotround.databinding.ActivityInstituteBinding;
 import com.example.spotround.modle.StudentInfo;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
@@ -35,28 +41,26 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class InstituteActivity extends AppCompatActivity {
-    private Button update, candidate, result;
     private FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
     private DocumentReference reference;
+    FirebaseAuth auth;
     int SELECT_PDF = 200;
     Dialog dialog;
     private static final int STORAGE_PERMISSION_CODE = 101;
     private static boolean read_permission_flag = false;
     ProgressBar text;
     TextView text2;
+    ActivityInstituteBinding binding;
+    PopupMenu popupMenu;
 
     ExecutorService executorService = Executors.newSingleThreadExecutor();
-
-    public InstituteActivity() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_institute);
-        update = findViewById(R.id.updvacanbutton);
-        candidate = findViewById(R.id.viewcandbutton);
-        result = findViewById(R.id.viewresultbutton);
+        binding = ActivityInstituteBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
 
         dialog = new Dialog(InstituteActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -64,14 +68,32 @@ public class InstituteActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.progress_bar_dialog);
 
         text = dialog.findViewById(R.id.IdProgressBar);
-        text2 = dialog.findViewById(R.id.IdProgressPercentage);;
-        /*update.setOnClickListener(new View.OnClickListener() {
+        text2 = dialog.findViewById(R.id.IdProgressPercentage);
+        auth = FirebaseAuth.getInstance();
+
+        popupMenu = new PopupMenu(InstituteActivity.this, binding.menu);
+
+        // Inflating popup menu from popup_menu.xml file
+        popupMenu.getMenuInflater().inflate(R.menu.mainactivitymenu, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(InstituteActivity.this, UpdVacancyActivity.class));
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                // Toast message on menu item clicked
+                String item  = (String) menuItem.getTitle();
+                switch (item) {
+                    case "Help" :
+                        Toast.makeText(InstituteActivity.this, "You Clicked help", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "Logout" :
+                        logout();
+                        finish();
+                        break;
+                }
+                return true;
             }
-        });*/
-        result.setOnClickListener(new View.OnClickListener() {
+        });
+
+        binding.upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
@@ -84,8 +106,12 @@ public class InstituteActivity extends AppCompatActivity {
             }
         });
 
-
-
+        binding.viewCandidates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InstituteActivity.this, CandidateList.class));
+            }
+        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -336,5 +362,21 @@ public class InstituteActivity extends AppCompatActivity {
 
     void setFlag(boolean state) {
         read_permission_flag = state;
+    }
+
+    void logout() {
+        ProgressDialog dialog = new ProgressDialog(InstituteActivity.this);
+        dialog.setTitle("Logout");
+        dialog.setMessage("Logging out of your account");
+        dialog.show();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        auth.signOut();
+        dialog.dismiss();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        Intent intent = new Intent(InstituteActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }

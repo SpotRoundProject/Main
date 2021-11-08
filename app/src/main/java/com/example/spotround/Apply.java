@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -56,6 +57,9 @@ public class Apply extends AppCompatActivity {
     private ProgressDialog progressDialog;
     int sec = 120;
     private StudentInfo info;
+    String [] sCode = {"Select seat code","Computer Science and Engineering","Information Technology","Mechanical Engineering","Electronics Engineering","Electrical Engineering","Civil Engineering"};
+    String [] sType = {"Select seat Type", "gopen", "lopen", "gobc", "lobc", "gnt1", "lnt1", "gnt2", "lnt2", "gnt3", "lnt3", "gvj", "lvj", "gst", "lst", "gsc", "lsc"};
+    ArrayAdapter adapter1, adapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +72,21 @@ public class Apply extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         uid = auth.getCurrentUser().getUid();
         Log.d("Uid1..................",uid);
+        binding.seatType.setVisibility(View.GONE);
+        binding.seatCode.setVisibility(View.GONE);
 
         binding.progressBar2.setVisibility(View.GONE);
         progressDialog = new ProgressDialog(Apply.this);
-        progressDialog.setTitle("LogIn");
-        progressDialog.setMessage("Signing in please wait");
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Verifying Application");
+
+        adapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,sCode);
+        adapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        binding.seatCode.setAdapter(adapter1);
+
+        adapter2 = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,sType);
+        adapter2.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        binding.seatType.setAdapter(adapter1);
 
         database.getReference().child("User").child(uid).orderByKey().
                 addListenerForSingleValueEvent(new ValueEventListener() {
@@ -111,12 +125,18 @@ public class Apply extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     return;
                 }
+                long rank = Long.parseLong(binding.ApplyActivityCETRank.getText().toString());
 
                 application = new Application(binding.ApplyActivityName.getText().toString(),
                         binding.ApplyActivityApplicationId.getText().toString(),
-                        binding.ApplyActivityCETRank.getText().toString(),
-                        binding.ApplyActivityPhoneNo.getText().toString(),binding.ApplyActivityCapSeat.isChecked(),
+                        rank, binding.ApplyActivityPhoneNo.getText().toString(),"", "",
+                        binding.ApplyActivityCapSeat.isChecked(),
                         flagPaymentDone,binding.ApplyActivityCheckBox.isChecked());
+
+                if(binding.ApplyActivityCapSeat.isChecked()) {
+                    application.setSeatCode(binding.seatCode.getSelectedItem().toString());
+                    application.setSeatType(binding.seatType.getSelectedItem().toString());
+                }
 
                 if(verifyInformation(application)) {
                     reference = fireStore.collection("Application").document(uid);
@@ -184,6 +204,20 @@ public class Apply extends AppCompatActivity {
                 }
                 else {
                     Toast.makeText(Apply.this, "Please Register First", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        binding.ApplyActivityCapSeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.ApplyActivityCapSeat.isChecked()) {
+                    binding.seatType.setVisibility(View.VISIBLE);
+                    binding.seatCode.setVisibility(View.VISIBLE);
+                }
+                else {
+                    binding.seatType.setVisibility(View.GONE);
+                    binding.seatCode.setVisibility(View.GONE);
                 }
             }
         });
@@ -377,7 +411,7 @@ public class Apply extends AppCompatActivity {
     }
 
     boolean verifyInformation(Application application) {
-        reference = fireStore.collection("StudentInfo").document(application.getRank());
+        reference = fireStore.collection("StudentInfo").document(application.getRank() + "");
         reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -404,6 +438,8 @@ public class Apply extends AppCompatActivity {
                     return false;
                 }
             }
+            if(application.getSeatCode().equals("Select seat code") || application.getSeatType().equals("Select seat Type"))
+                return false;
             return true;
         }
         return false;

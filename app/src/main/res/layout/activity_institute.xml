@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InstituteActivity">
+    <ImageButton
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_baseline_more_vert_24"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/admindashboard"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
     <TextView
         android:id="@+id/admindashboard"
         style="@style/Widget.AppCompat.TextView"
@@ -19,50 +30,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/updvacanbutton"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="80dp"
-        android:text="Update Vacancy"
-        app:backgroundTint="#009688"
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/admindashboard" />
+        app:layout_constraintTop_toBottomOf="@+id/admindashboard">
 
-    <Button
-        android:id="@+id/viewcandbutton"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="45dp"
-        android:text="View Candidates"
-        app:backgroundTint="#009688"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updvacanbutton" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/viewresultbutton"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="45dp"
-        android:text="View Result"
-        app:backgroundTint="#009688"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewcandbutton" />
+            <Button
+                android:id="@+id/updateVacency"
+                android:layout_width="300dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:text="Update Vacancy"
+                app:backgroundTint="#009688" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="45dp"
-        android:backgroundTint="#009688"
-        android:text="Generate Result"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewresultbutton" />
+            <Button
+                android:id="@+id/viewCandidates"
+                android:layout_width="300dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="45dp"
+                android:text="View Candidates"
+                app:backgroundTint="#009688" />
+
+            <Button
+                android:id="@+id/setSchedule"
+                android:layout_width="300dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="45dp"
+                android:text="Set Schedule"
+                app:backgroundTint="#009688" />
+
+            <Button
+                android:id="@+id/generateResult"
+                android:layout_width="300dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="45dp"
+                android:backgroundTint="#009688"
+                android:text="Generate Result" />
+
+            <Button
+                android:id="@+id/upload"
+                android:layout_width="300dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="45dp"
+                android:backgroundTint="#009688"
+                android:text="Upload File" />
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

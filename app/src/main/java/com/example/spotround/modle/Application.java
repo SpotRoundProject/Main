@@ -3,12 +3,13 @@ package com.example.spotround.modle;
 import java.io.Serializable;
 
 public class Application implements Serializable {
-    private String name, applicationId, rank, phoneNo;
+    private String name, applicationId, phoneNo, seatType, seatCode;
     private boolean payment, selfDec, clgSeat;
+    long rank;
 
     public Application() {}
 
-    public Application(String name, String applicationId, String rank, String phoneNo,
+    public Application(String name, String applicationId, long rank, String phoneNo,
                        boolean clgSeat, boolean payment, boolean selfDec) {
         this.name = name;
         this.applicationId = applicationId;
@@ -17,6 +18,35 @@ public class Application implements Serializable {
         this.clgSeat = clgSeat;
         this.payment = payment;
         this.selfDec = selfDec;
+    }
+
+    public Application(String name, String applicationId, long rank, String phoneNo, String seatType,
+                       String seatCode, boolean payment, boolean selfDec, boolean clgSeat) {
+        this.name = name;
+        this.applicationId = applicationId;
+        this.rank = rank;
+        this.phoneNo = phoneNo;
+        this.seatType = seatType;
+        this.seatCode = seatCode;
+        this.payment = payment;
+        this.selfDec = selfDec;
+        this.clgSeat = clgSeat;
+    }
+
+    public String getSeatType() {
+        return seatType;
+    }
+
+    public void setSeatType(String seatType) {
+        this.seatType = seatType;
+    }
+
+    public String getSeatCode() {
+        return seatCode;
+    }
+
+    public void setSeatCode(String seatCode) {
+        this.seatCode = seatCode;
     }
 
     public String getName() {
@@ -35,11 +65,11 @@ public class Application implements Serializable {
         this.applicationId = applicationId;
     }
 
-    public String getRank() {
+    public long getRank() {
         return rank;
     }
 
-    public void setRank(String rank) {
+    public void setRank(long rank) {
         this.rank = rank;
     }
 

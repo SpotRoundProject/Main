@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     String uid;
     Application application = null;
     ProgressDialog progressDialog;
+    PopupMenu popupMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,36 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         }
+
+        popupMenu = new PopupMenu(MainActivity.this, binding.menu);
+
+        // Inflating popup menu from popup_menu.xml file
+        popupMenu.getMenuInflater().inflate(R.menu.mainactivitymenu, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                // Toast message on menu item clicked
+                String item  = (String) menuItem.getTitle();
+                switch (item) {
+                    case "Help" :
+                        Toast.makeText(MainActivity.this, "You Clicked help", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "Logout" :
+                        logout();
+                        finish();
+                        break;
+                }
+                return true;
+            }
+        });
+
+        binding.menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Clicked menu", Toast.LENGTH_LONG).show();
+                popupMenu.show();
+            }
+        });
 
         binding.MainActivityApply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,8 +133,11 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("Application", application);
                         startActivity(intent);
                     }
-                    else
-                        startActivity(new Intent(MainActivity.this, SetPreference.class));
+                    else {
+                        Intent intent = new Intent(MainActivity.this, SetPreference.class);
+                        intent.putExtra("Application", application);
+                        startActivity(intent);
+                    }
                 }
                 else {
                     Toast.makeText(MainActivity.this, "Register", Toast.LENGTH_SHORT).show();
@@ -114,47 +148,12 @@ public class MainActivity extends AppCompatActivity {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
-        binding.menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this, binding.menu);
-
-                // Inflating popup menu from popup_menu.xml file
-                popupMenu.getMenuInflater().inflate(R.menu.mainactivitymenu, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        // Toast message on menu item clicked
-                        String item  = (String) menuItem.getTitle();
-                        switch (item) {
-                            case "Help" :
-                                Toast.makeText(MainActivity.this, "You Clicked help", Toast.LENGTH_SHORT).show();
-                                break;
-                            case "Logout" :
-                                logout();
-                                finish();
-                                break;
-                        }
-                        return true;
-                    }
-                });
-                // Showing the popup menu
-                popupMenu.show();
-            }
-        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         progressDialog.dismiss();
-    }
-
-    public void showPopup(View v) {
-        PopupMenu popup = new PopupMenu(this, v);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.mainactivitymenu, popup.getMenu());
-        popup.show();
     }
 
     void logout() {
@@ -168,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         auth.signOut();
         progressDialog.dismiss();
+        dialog.dismiss();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);

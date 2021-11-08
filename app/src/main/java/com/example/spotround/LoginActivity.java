@@ -1,10 +1,15 @@
 package com.example.spotround;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -30,12 +35,17 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseDatabase database;
     ActivityLoginBinding binding;
     ProgressDialog progressDialog;
+    boolean flag = false;
+    private SharedPreferences prefs = null;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        prefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
 
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -80,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 Toast.makeText(LoginActivity.this,"Login Successfully",
                                                         Toast.LENGTH_SHORT).show();
 
+                                                prefs.edit().putBoolean("mode", false).apply();
                                                 Intent intent = new Intent(LoginActivity.this, InstituteActivity.class);
                                                 startActivity(intent);
                                                 binding.LoginActivityEmail.setText("");
@@ -113,6 +124,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                                 binding.LoginActivityPassword.setText("");
                                                 binding.LoginActivityEmail.setText("");
+
+                                                prefs.edit().putBoolean("mode", true).apply();
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                 startActivity(intent);
                                                 finish();
@@ -150,6 +163,28 @@ public class LoginActivity extends AppCompatActivity {
                             binding.LoginActivityPassword.setText("");
                         }
                     });
+        });
+
+        binding.LoginActivityPassword.setOnTouchListener((v, event) -> {
+            final int DRAWABLE_RIGHT = 2;
+            if(event.getAction() == MotionEvent.ACTION_UP) {
+                if(event.getRawX() >= (binding.LoginActivityPassword.getRight() -
+                        binding.LoginActivityPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())){
+                    if(!flag) {
+                        binding.LoginActivityPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        binding.LoginActivityPassword.setCompoundDrawablesWithIntrinsicBounds(0,0,
+                                R.drawable.ic_hide_password,0);
+                    }
+                    else {
+                        binding.LoginActivityPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        binding.LoginActivityPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+                                R.drawable.ic_show_password, 0);
+                    }
+                    flag = !flag;
+                    return true;
+                }
+            }
+            return false;
         });
 
         binding.LoginActivityForgotPassword.setOnClickListener(new View.OnClickListener() {

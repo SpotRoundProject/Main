@@ -205,6 +205,19 @@
                 android:theme="@style/Switch"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
+            <Spinner
+                android:id="@+id/seatType"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                />
+
+            <Spinner
+                android:id="@+id/seatCode"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"/>
+
             <CheckBox
                 android:id="@+id/ApplyActivityCheckBox"
                 android:layout_width="350dp"
