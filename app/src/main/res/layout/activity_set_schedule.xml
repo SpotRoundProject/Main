@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#55ACDC"
+    tools:context=".setSchedule">
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="100dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".MainActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_weight="0"
+            android:text="Schedule"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="35sp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_weight="0"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:text="Date: DD/MM/YYYY"
+            android:textAlignment="center"
+            android:textSize="25sp" />
+
+        <TableRow
+            android:background="#0079D6"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Event"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Start Time"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Close Time"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:background="#DAE8FC"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Application Filling"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/applicationFillingStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00 AM"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/applicationFillingEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00 AM"
+                android:textSize="15sp" />
+        </TableRow>
+
+        <TableRow
+            android:background="#DAE8FC"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Round 1"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/round1Start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00 AM"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/round1End"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00 AM"
+                android:textSize="15sp" />
+        </TableRow>
+
+        <TableRow
+            android:background="#DAE8FC"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Round 1 Result "
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/R1Result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00 AM"
+                android:textSize="15dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:background="#0079D6"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="break"
+                android:textAlignment="center"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <TableRow
+            android:background="#DAE8FC"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Application Round 2"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/round2Start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00 AM"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/round2End"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00 PM"
+                android:textSize="15sp" />
+        </TableRow>
+
+        <TableRow
+            android:background="#DAE8FC"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Result of round 2"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/R2Result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00   PM"
+                android:textSize="15sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:background="#0079D6"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="break"
+                android:textAlignment="center"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <TableRow
+            android:background="#DAE8FC"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Application Round 3"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/round3Start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00 PM"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/round3End"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00  PM"
+                android:textSize="15sp" />
+        </TableRow>
+
+        <TableRow
+            android:background="#DAE8FC"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Result Of  Round 3"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/R3Result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00 PM"
+                android:textSize="15sp" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:id="@+id/updatebutton"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#0079D6"
+        android:text="Update"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
