@@ -186,7 +186,7 @@ public class ShowVacancy2 extends AppCompatActivity
                 String rounds=sr.getSelectedItem().toString();
                 if(branchs.equals("Select Branch")||rounds.equals("Select Round"))
                 {
-                    Toast.makeText(ShowVacancy2.this,"Please select valid Branch and Round Number.",Toast.LENGTH_LONG);
+                    Toast.makeText(ShowVacancy2.this,"Please select valid Branch and Round Number.",Toast.LENGTH_LONG).show();
                 }
                 else
                 {
