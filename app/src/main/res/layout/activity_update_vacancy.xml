@@ -18,427 +18,6 @@
         app:layout_constraintVertical_bias="0.174"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <EditText
-        android:id="@+id/text33"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.863" />
-
-    <EditText
-        android:id="@+id/text32"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.401"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.863" />
-
-    <EditText
-        android:id="@+id/text31"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text="-"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.863" />
-
-    <TextView
-        android:id="@+id/text30"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:background="@drawable/textviewborder"
-        android:text="LSC"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.813" />
-
-    <TextView
-        android:id="@+id/text27"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="GSC"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.813"
-        android:background="@drawable/textviewborder"/>
-
-    <TextView
-        android:id="@+id/text28"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="LST"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.401"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.813"
-        android:background="@drawable/textviewborder"/>
-
-    <EditText
-        android:id="@+id/text29"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.863" />
-
-    <TextView
-        android:id="@+id/text34"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="GST"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.813" />
-
-    <EditText
-        android:id="@+id/text26"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.724" />
-
-    <EditText
-        android:id="@+id/text25"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.724" />
-
-    <EditText
-        android:id="@+id/text24"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.401"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.724" />
-
-    <EditText
-        android:id="@+id/text23"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.724" />
-
-    <TextView
-        android:id="@+id/text22"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="LVJ"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintVertical_bias="0.673" />
-
-    <TextView
-        android:id="@+id/text21"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="GVJ"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.673" />
-
-    <TextView
-        android:id="@+id/text19"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="GNT3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintVertical_bias="0.673" />
-
-    <TextView
-        android:id="@+id/text20"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:background="@drawable/textviewborder"
-        android:text="LNT3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.401"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.673" />
-
-    <EditText
-        android:id="@+id/text18"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.583" />
-
-    <EditText
-        android:id="@+id/text17"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text=""
-        android:background="@drawable/textviewborder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.583" />
-
-    <EditText
-        android:id="@+id/text16"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.401"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.583" />
-
-    <TextView
-        android:id="@+id/text15"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:background="@drawable/textviewborder"
-        android:text="GNT1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.533" />
-
-    <TextView
-        android:id="@+id/text14"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="LNT2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintVertical_bias="0.533" />
-
-    <TextView
-        android:id="@+id/text13"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="GNT2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintVertical_bias="0.533" />
-
-    <EditText
-        android:id="@+id/text11"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text=""
-        android:background="@drawable/textviewborder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.583" />
-
-    <TextView
-        android:id="@+id/text12"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="LNT1"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.401"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.533" />
-
-    <EditText
-        android:id="@+id/text10"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.441" />
-
-    <EditText
-        android:id="@+id/text9"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.441" />
-
-    <TextView
-        android:id="@+id/text5"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="LOBC"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.962"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39" />
-
-
-    <EditText
-        android:id="@+id/text3"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text=""
-        android:background="@drawable/textviewborder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.441" />
-
-    <TextView
-        android:id="@+id/text7"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:text="GOPEN"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39"
-        android:gravity="center"
-        android:background="@drawable/textviewborder" />
-
-    <EditText
-        android:id="@+id/text8"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:background="@drawable/textviewborder"
-        android:gravity="center"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.401"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.441" />
-
     <Spinner
         android:id="@+id/spinner2"
         android:layout_width="300dp"
@@ -451,44 +30,360 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.063" />
 
-    <TextView
-        android:id="@+id/text6"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="LOPEN"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.401"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintVertical_bias="0.39" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner">
 
-    <TextView
-        android:id="@+id/text4"
-        android:layout_width="90dp"
-        android:layout_height="35dp"
-        android:gravity="center"
-        android:text="GOBC"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.682"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text6"
-        android:background="@drawable/textviewborder"
-        app:layout_constraintVertical_bias="0.0" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text7"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="GOPEN" />
+
+                <TextView
+                    android:id="@+id/text6"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="LOPEN" />
+
+                <TextView
+                    android:id="@+id/text4"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="GOBC" />
+
+                <TextView
+                    android:id="@+id/text5"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="LOBC" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/text3"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text8"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text9"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text10"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text15"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="GNT1" />
+
+                <TextView
+                    android:id="@+id/text12"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="LNT1" />
+
+                <TextView
+                    android:id="@+id/text13"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="GNT2" />
+
+                <TextView
+                    android:id="@+id/text14"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="LNT2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/text11"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text16"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text17"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text18"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text19"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="GNT3" />
+
+                <TextView
+                    android:id="@+id/text20"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="LNT3" />
+
+                <TextView
+                    android:id="@+id/text21"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="GVJ" />
+
+                <TextView
+                    android:id="@+id/text22"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="LVJ" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/text23"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text24"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text25"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text26"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text34"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="GST" />
+
+                <TextView
+                    android:id="@+id/text28"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="LST" />
+
+                <TextView
+                    android:id="@+id/text27"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="GSC" />
+
+                <TextView
+                    android:id="@+id/text30"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="LSC" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/text31"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text32"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text33"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+
+                <EditText
+                    android:id="@+id/text29"
+                    android:layout_width="90dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/textviewborder"
+                    android:gravity="center"
+                    android:text="-" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/bs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#0F9E2E"
+        android:text="Save"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="0.885" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
