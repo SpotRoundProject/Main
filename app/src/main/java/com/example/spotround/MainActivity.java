@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         binding.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Clicked menu", Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, "Clicked menu", Toast.LENGTH_LONG).show();
                 popupMenu.show();
             }
         });
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         binding.SeatsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,UpdVacancyActivity.class);
+                Intent intent = new Intent(MainActivity.this,ShowVacancy2.class);
                 startActivity(intent);
             }
         });

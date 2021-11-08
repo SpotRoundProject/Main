@@ -93,7 +93,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text8"
@@ -101,7 +101,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text9"
@@ -109,7 +109,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text10"
@@ -117,7 +117,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
             </LinearLayout>
         </LinearLayout>
 
@@ -176,7 +176,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text16"
@@ -184,7 +184,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text17"
@@ -192,7 +192,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text18"
@@ -200,7 +200,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
             </LinearLayout>
         </LinearLayout>
 
@@ -259,7 +259,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text24"
@@ -267,7 +267,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text25"
@@ -275,7 +275,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text26"
@@ -283,7 +283,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
             </LinearLayout>
         </LinearLayout>
 
@@ -342,7 +342,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text32"
@@ -350,7 +350,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text33"
@@ -358,7 +358,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
 
                 <EditText
                     android:id="@+id/text29"
@@ -366,7 +366,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
-                    android:text="-" />
+                    android:text="0" />
             </LinearLayout>
         </LinearLayout>
 

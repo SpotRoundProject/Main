@@ -112,6 +112,20 @@ public class InstituteActivity extends AppCompatActivity {
                 startActivity(new Intent(InstituteActivity.this, CandidateList.class));
             }
         });
+
+        binding.menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public  void onClick(View v) {
+                popupMenu.show();
+            }
+        });
+
+        binding.updateVacency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InstituteActivity.this, UpdateVacancy.class));
+            }
+        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -173,7 +187,6 @@ public class InstituteActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
     }
 
     void setMaxCount(int count) {

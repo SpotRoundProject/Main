@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.spotround.databinding.ActivityUpdateVacancyBinding;
 import com.example.spotround.modle.NewCategory;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,7 +22,8 @@ public class UpdateVacancy extends AppCompatActivity {
     Spinner sb;
     Spinner sr;
     Button bs;
-    public void showme(String b,String r) {
+    ActivityUpdateVacancyBinding binding;
+    public void showMe(String b,String r) {
         EditText tgopen = findViewById(R.id.text3);
         EditText tlopen = findViewById(R.id.text8);
         EditText tgobc = findViewById(R.id.text9);
@@ -86,16 +88,18 @@ public class UpdateVacancy extends AppCompatActivity {
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityUpdateVacancyBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         String [] sbranch={"Select Branch","Computer Science and Engineering","Information Technology","Mechanical Engineering","Electronics Engineering","Electrical Engineering","Civil Engineering"};
         String [] sround={"Select Round","Round 1","Round 2","Round 3"};
         sb=findViewById(R.id.spinner2);
         bs=findViewById(R.id.bs);
-        ArrayAdapter ac=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,sbranch);
+        ArrayAdapter ac = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,sbranch);
         ac.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         sb.setAdapter(ac);
         sr=findViewById(R.id.spinner);
-        ArrayAdapter ar=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,sround);
+        ArrayAdapter ar = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,sround);
         ar.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         sr.setAdapter(ar);
         bs.setOnClickListener(new View.OnClickListener() {
@@ -109,11 +113,16 @@ public class UpdateVacancy extends AppCompatActivity {
                 }
                 else
                 {
-                    showme(branchs,rounds);
+                    showMe(branchs,rounds);
 
                 }
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
