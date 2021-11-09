@@ -86,7 +86,7 @@ public class Apply extends AppCompatActivity {
 
         adapter2 = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,sType);
         adapter2.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        binding.seatType.setAdapter(adapter1);
+        binding.seatType.setAdapter(adapter2);
 
         database.getReference().child("User").child(uid).orderByKey().
                 addListenerForSingleValueEvent(new ValueEventListener() {
@@ -128,14 +128,22 @@ public class Apply extends AppCompatActivity {
                 long rank = Long.parseLong(binding.ApplyActivityCETRank.getText().toString());
 
                 application = new Application(binding.ApplyActivityName.getText().toString(),
-                        binding.ApplyActivityApplicationId.getText().toString(),
-                        rank, binding.ApplyActivityPhoneNo.getText().toString(),"", "",
-                        binding.ApplyActivityCapSeat.isChecked(),
-                        flagPaymentDone,binding.ApplyActivityCheckBox.isChecked());
+                        binding.ApplyActivityApplicationId.getText().toString(), rank,
+                        binding.ApplyActivityPhoneNo.getText().toString(),"","", flagPaymentDone,
+                        binding.ApplyActivityCheckBox.isChecked(),binding.ApplyActivityCapSeat.isChecked());
 
                 if(binding.ApplyActivityCapSeat.isChecked()) {
-                    application.setSeatCode(binding.seatCode.getSelectedItem().toString());
-                    application.setSeatType(binding.seatType.getSelectedItem().toString());
+                    if(!binding.seatCode.getSelectedItem().toString().equals("Select seat code") &&
+                    !binding.seatType.getSelectedItem().toString().equals("Select seat Type")) {
+                        application.setSeatCode(binding.seatCode.getSelectedItem().toString());
+                        application.setSeatType(binding.seatType.getSelectedItem().toString());
+                    }
+                    else {
+                        Toast.makeText(Apply.this, "Select seat type and code", Toast.LENGTH_LONG).show();
+                        progressDialog.hide();
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        return;
+                    }
                 }
 
                 if(verifyInformation(application)) {
@@ -167,12 +175,11 @@ public class Apply extends AppCompatActivity {
                     binding.ApplyActivityOTP.setText("");
                     binding.ApplyActivityPhoneNo.setFocusable(false);
                     binding.ApplyActivitybtnVerifyOTP.setEnabled(false);
-                    //onEditorAction(EditorInfo.IME_ACTION_DONE);
                     sendVerificationCode(phoneNo);
                 }
                 else {
                     binding.ApplyActivityPhoneNo.setError("Should not empty");
-                }//YbeykAwXPBh54VkGalTwdiylN3b2 IoFTOwi6CvgkjqN8cyFmtdb2YwY2 real
+                }
             }
         });
 

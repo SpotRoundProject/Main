@@ -84,7 +84,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
 
     @Override
     public void onPaymentSuccess(String s) {
-        Toast.makeText(this, "Payment Successful & Payment ID is " + s, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Payment Successful & Payment ID is " + s, Toast.LENGTH_LONG).show();
         //startActivity(new Intent(getApplicationContext(),InsideStudentLogin.class));
         sendMail();
         //send email
@@ -103,7 +103,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
 
     @Override
     public void onPaymentError(int i, String s) {
-        Toast.makeText(this, "Payment failed due to" + s, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Payment failed due to" + s, Toast.LENGTH_LONG).show();
     }
 
 

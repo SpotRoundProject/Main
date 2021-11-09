@@ -23,67 +23,6 @@ public class UpdateVacancy extends AppCompatActivity {
     Spinner sr;
     Button bs;
     ActivityUpdateVacancyBinding binding;
-    public void showMe(String b,String r) {
-        EditText tgopen = findViewById(R.id.text3);
-        EditText tlopen = findViewById(R.id.text8);
-        EditText tgobc = findViewById(R.id.text9);
-        EditText tlobc = findViewById(R.id.text10);
-        EditText tgnt1 = findViewById(R.id.text11);
-        EditText tlnt1 = findViewById(R.id.text16);
-        EditText tgnt2 = findViewById(R.id.text17);
-        EditText tlnt2 = findViewById(R.id.text18);
-        EditText tgnt3 = findViewById(R.id.text23);
-        EditText tlnt3 = findViewById(R.id.text24);
-        EditText tgvj = findViewById(R.id.text25);
-        EditText tlvj = findViewById(R.id.text26);
-        EditText tgst = findViewById(R.id.text31);
-        EditText tlst = findViewById(R.id.text32);
-        EditText tgsc = findViewById(R.id.text33);
-        EditText tlsc = findViewById(R.id.text29);
-        String gopens=tgopen.getText().toString().trim();
-        String gobcs=tgobc.getText().toString().trim();
-        String gscs=tgsc.getText().toString().trim();
-        String gsts=tgst.getText().toString().trim();
-        String gvj1=tgvj.getText().toString().trim();
-        String gnt1s=tgnt1.getText().toString().trim();
-        String gnt2s=tgnt2.getText().toString().trim();
-        String gnt3s=tgnt3.getText().toString().trim();
-        String lopens=tlopen.getText().toString().trim();
-        String lobcs=tlobc.getText().toString().trim();
-        String lscs=tlsc.getText().toString().trim();
-        String lsts=tlst.getText().toString().trim();
-        String lvjs=tlvj.getText().toString().trim();
-        String lnt1s=tlnt1.getText().toString().trim();
-        String lnt2s=tlnt2.getText().toString().trim();
-        String lnt3s=tlnt3.getText().toString().trim();
-        if(gopens.equals("")||gobcs.equals("")||gscs.equals("")||gsts.equals("")||gvj1.equals("")||gnt1s.equals("")||gnt2s.equals("")||gnt3s.equals("")||lopens.equals("")||lobcs.equals("")||lscs.equals("")||lsts.equals("")||lnt1s.equals("")||lvjs.equals("")||lnt2s.equals("")||lnt3s.equals(""))
-        {
-            Toast.makeText(getApplicationContext(),"All fiels are necessary",Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-            NewCategory fill=new NewCategory(gopens,gobcs,gscs,gsts,gnt1s,gvj1,gnt2s,gnt3s,lopens,lobcs,lscs,lsts,lvjs,lnt1s,lnt2s,lnt3s);
-            FirebaseFirestore.getInstance().collection("Vacancy").document("Round").collection(r).document(b).set(fill);
-            Toast.makeText(UpdateVacancy.this, "Vacancy updated successfully", Toast.LENGTH_SHORT).show();
-            tgopen.setText("");
-            tgobc.setText("");
-            tgsc.setText("");
-            tgst.setText("");
-            tgvj.setText("");
-            tgnt1.setText("");
-            tgnt2.setText("");
-            tgnt3.setText("");
-            tlopen.setText("");
-            tlobc.setText("");
-            tlsc.setText("");
-            tlst.setText("");
-            tlvj.setText("");
-            tlnt1.setText("");
-            tlnt2.setText("");
-            tlnt3.setText("");
-        }
-
-    }
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +58,68 @@ public class UpdateVacancy extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void showMe(String b,String r) {
+        EditText tgopen = findViewById(R.id.text3);
+        EditText tlopen = findViewById(R.id.text8);
+        EditText tgobc = findViewById(R.id.text9);
+        EditText tlobc = findViewById(R.id.text10);
+        EditText tgnt1 = findViewById(R.id.text11);
+        EditText tlnt1 = findViewById(R.id.text16);
+        EditText tgnt2 = findViewById(R.id.text17);
+        EditText tlnt2 = findViewById(R.id.text18);
+        EditText tgnt3 = findViewById(R.id.text23);
+        EditText tlnt3 = findViewById(R.id.text24);
+        EditText tgvj = findViewById(R.id.text25);
+        EditText tlvj = findViewById(R.id.text26);
+        EditText tgst = findViewById(R.id.text31);
+        EditText tlst = findViewById(R.id.text32);
+        EditText tgsc = findViewById(R.id.text33);
+        EditText tlsc = findViewById(R.id.text29);
+        String gopens=tgopen.getText().toString().trim();
+        String gobcs=tgobc.getText().toString().trim();
+        String gscs=tgsc.getText().toString().trim();
+        String gsts=tgst.getText().toString().trim();
+        String gvj1=tgvj.getText().toString().trim();
+        String gnt1s=tgnt1.getText().toString().trim();
+        String gnt2s=tgnt2.getText().toString().trim();
+        String gnt3s=tgnt3.getText().toString().trim();
+        String lopens=tlopen.getText().toString().trim();
+        String lobcs=tlobc.getText().toString().trim();
+        String lscs=tlsc.getText().toString().trim();
+        String lsts=tlst.getText().toString().trim();
+        String lvjs=tlvj.getText().toString().trim();
+        String lnt1s=tlnt1.getText().toString().trim();
+        String lnt2s=tlnt2.getText().toString().trim();
+        String lnt3s=tlnt3.getText().toString().trim();
+        if(gopens.equals("")||gobcs.equals("")||gscs.equals("")||gsts.equals("")||gvj1.equals("")||gnt1s.equals("")||gnt2s.equals("")||gnt3s.equals("")||lopens.equals("")||lobcs.equals("")||lscs.equals("")||lsts.equals("")||lnt1s.equals("")||lvjs.equals("")||lnt2s.equals("")||lnt3s.equals(""))
+        {
+            Toast.makeText(getApplicationContext(),"All fields are necessary",Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            NewCategory fill=new NewCategory(gopens,gobcs,gscs,gsts,gnt1s,gvj1,gnt2s,gnt3s,lopens,lobcs,lscs,lsts,lvjs,lnt1s,lnt2s,lnt3s);
+            FirebaseFirestore.getInstance().collection("Vacancy").document("Round").collection(r).document(b).set(fill);
+            Toast.makeText(UpdateVacancy.this, "Vacancy updated successfully", Toast.LENGTH_SHORT).show();
+            tgopen.setText("");
+            tgobc.setText("");
+            tgsc.setText("");
+            tgst.setText("");
+            tgvj.setText("");
+            tgnt1.setText("");
+            tgnt2.setText("");
+            tgnt3.setText("");
+            tlopen.setText("");
+            tlobc.setText("");
+            tlsc.setText("");
+            tlst.setText("");
+            tlvj.setText("");
+            tlnt1.setText("");
+            tlnt2.setText("");
+            tlnt3.setText("");
+        }
+
     }
 
     @Override

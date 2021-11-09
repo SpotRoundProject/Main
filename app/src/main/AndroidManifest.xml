@@ -13,8 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotround">
-        <activity android:name=".setSchedule"></activity>
+        <activity android:name=".setSchedule"/>
         <activity android:name=".CandidateList" />
+        <activity android:name="SetPreference"/>
         <activity android:name=".ResultActivity" />
         <activity
             android:name=".UpdateVacancy"
