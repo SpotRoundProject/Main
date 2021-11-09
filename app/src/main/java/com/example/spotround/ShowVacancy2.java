@@ -41,7 +41,8 @@ public class ShowVacancy2 extends AppCompatActivity
         TextView tlst=findViewById(R.id.text32);
         TextView tgsc=findViewById(R.id.text33);
         TextView tlsc=findViewById(R.id.text29);
-        FirebaseFirestore.getInstance().collection("Vacancy").document("Round").collection(r).document(b).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        FirebaseFirestore.getInstance().collection("Vacancy").document("Round").
+                collection(r).document(b).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot)
             {

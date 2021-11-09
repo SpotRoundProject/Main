@@ -156,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:contentDescription="Request Blood"
-                    android:text="Seats"
+                    android:text="Vacency"
                     android:textColor="#0353F4"
                     android:textSize="17sp" />
 

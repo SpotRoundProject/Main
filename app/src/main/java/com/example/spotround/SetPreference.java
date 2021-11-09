@@ -80,10 +80,12 @@ public class SetPreference extends AppCompatActivity {
                     Preference preference = new Preference(binding.Preference1.getSelectedItem().toString(),
                             binding.Preference2.getSelectedItem().toString(), binding.Preference3.getSelectedItem().toString(),
                             binding.Preference4.getSelectedItem().toString(), binding.Preference5.getSelectedItem().toString(),
-                            binding.Preference6.getSelectedItem().toString(), false,"", "");
+                            binding.Preference6.getSelectedItem().toString(), application.isClgSeat(),application.getSeatType(), application.getSeatCode());
                     reference.set(preference);
                 }
 
+                binding.btnSubmitPreference.setText("Submitted");
+                binding.btnSubmitPreference.setEnabled(false);
                 progressDialog.hide();
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
