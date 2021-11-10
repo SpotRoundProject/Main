@@ -1,6 +1,5 @@
 package com.example.spotround;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,10 +30,10 @@ public class ComputeResult extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compute_result);
-        DatabaseReference dr1=FirebaseDatabase.getInstance().getReference("Vacancy");
+        DatabaseReference dr1 = FirebaseDatabase.getInstance().getReference("Vacancy");
         FirebaseFirestore.getInstance()
                 .collection("StudentInfo")
-                .orderBy("state_merit_rank");
+                .orderBy("rank");
         Task<QuerySnapshot> dr=FirebaseFirestore.getInstance().collection("StudentInfo").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
         {
             @Override
