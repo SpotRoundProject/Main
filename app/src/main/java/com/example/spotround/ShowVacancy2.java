@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.spotround.modle.NewCategory;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,115 +47,99 @@ public class ShowVacancy2 extends AppCompatActivity
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot)
             {
-               String tmp3=documentSnapshot.getString("gopens");
-               tgopen.setText(tmp3);
-               if(!tmp3.equals("0"))
+                NewCategory category = documentSnapshot.toObject(NewCategory.class);
+               tgopen.setText(category.getGopens());
+               if(!(category.getGopens() == 0))
                    tgopen.setTextColor(Color.GREEN);
                else
                    tgopen.setTextColor(Color.RED);
 
-               tmp3="";
-                tmp3=documentSnapshot.getString("lopens");
-                tlopen.setText(tmp3);
-                if(!tmp3.equals("0"))
+                tlopen.setText(category.getLopens());
+                if(!(category.getLopens() == 0))
                     tlopen.setTextColor(Color.GREEN);
                 else
                     tlopen.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("gobcs");
-                tgobc.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tgobc.setText(category.getGobcs());
+                if(!(category.getGobcs() == 0))
                     tgobc.setTextColor(Color.GREEN);
                 else
                     tgobc.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("lobcs");
-                tlobc.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tlobc.setText(category.getLobcs());
+                if(!(category.getLobcs() == 0))
                     tlobc.setTextColor(Color.GREEN);
                 else
                     tlobc.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("gnt1s");
-                tgnt1.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tgnt1.setText(category.getGnt1s());
+                if(!(category.getGnt1s() == 0))
                     tgnt1.setTextColor(Color.GREEN);
                 else
                     tgnt1.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("lnt1s");
-                tlnt1.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tlnt1.setText(category.getLnt1s());
+                if(!(category.getLnt1s() == 0))
                     tlnt1.setTextColor(Color.GREEN);
                 else
                     tlnt1.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("gnt2s");
-                tgnt2.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tgnt2.setText(category.getGnt2s());
+                if(!(category.getGnt2s() == 0))
                     tgnt2.setTextColor(Color.GREEN);
                 else
                     tgnt2.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("lnt2s");
-                tlnt2.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tlnt2.setText(category.getLnt2s());
+                if(!(category.getLnt2s() == 0))
                     tlnt2.setTextColor(Color.GREEN);
                 else
                     tlnt2.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("gnt3s");
-                tgnt3.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tgnt3.setText(category.getGnt3s());
+                if(!(category.getGnt3s() == 0))
                     tgnt3.setTextColor(Color.GREEN);
                 else
                     tgnt3.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("lnt3s");
-                tlnt3.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tlnt3.setText(category.getLnt3s());
+                if(!(category.getLnt3s() == 0))
                     tlnt3.setTextColor(Color.GREEN);
                 else
                     tlnt3.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("gvjs");
-                tgvj.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tgvj.setText(category.getGvjs());
+                if(!(category.getGvjs() == 0))
                     tgvj.setTextColor(Color.GREEN);
                 else
                     tgvj.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("lvjs");
-                tlvj.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tlvj.setText(category.getLvjs());
+                if(!(category.getLvjs() == 0))
                     tlvj.setTextColor(Color.GREEN);
                 else
                     tlvj.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("gsts");
-                tgst.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tgst.setText(category.getGsts());
+                if(!(category.getGsts() == 0))
                     tgst.setTextColor(Color.GREEN);
                 else
                     tgst.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("lsts");
-                tlst.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tlst.setText(category.getLsts());
+                if(!(category.getLsts() == 0))
                     tlst.setTextColor(Color.GREEN);
                 else
                     tlst.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("gscs");
-                tgsc.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tgsc.setText(category.getGscs());
+                if(!(category.getGscs() == 0))
                     tgsc.setTextColor(Color.GREEN);
                 else
                     tgsc.setTextColor(Color.RED);
-                tmp3="";
-                tmp3=documentSnapshot.getString("lscs");
-                tlsc.setText(tmp3);
-                if(!tmp3.equals("0"))
+
+                tlsc.setText(category.getLscs());
+                if(!(category.getLscs() == 0))
                     tlsc.setTextColor(Color.GREEN);
                 else
                     tlsc.setTextColor(Color.RED);
