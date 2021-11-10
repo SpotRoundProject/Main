@@ -76,7 +76,7 @@ public class SetPreference extends AppCompatActivity {
                     Toast.makeText(SetPreference.this, "Select valid branch", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    reference = fireStore.collection("Round1Preference").document(uid);
+                    reference = fireStore.collection("Preference").document("Round").collection("Round 1").document(uid);
                     Preference preference = new Preference(binding.Preference1.getSelectedItem().toString(),
                             binding.Preference2.getSelectedItem().toString(), binding.Preference3.getSelectedItem().toString(),
                             binding.Preference4.getSelectedItem().toString(), binding.Preference5.getSelectedItem().toString(),
@@ -101,7 +101,7 @@ public class SetPreference extends AppCompatActivity {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                reference = fireStore.collection("Round1Preference").document(uid);
+                reference = fireStore.collection("Preference").document("Round").collection("Round 1").document(uid);
                 reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
