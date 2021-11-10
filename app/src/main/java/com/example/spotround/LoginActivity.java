@@ -73,44 +73,46 @@ public class LoginActivity extends AppCompatActivity {
             auth.signInWithEmailAndPassword(text_email,text_password).
                     addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
+
+                            String type = binding.LoginActivityType.getSelectedItem().toString();
+                            String id = auth.getCurrentUser().getUid();
+                            if(type.equals("Admin"))
+                            {
+
+                                database.getReference().child("Admin").orderByKey().equalTo(id).
+                                        addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                progressDialog.hide();
+                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                if(snapshot.getChildrenCount() == 1) {
+                                                    Toast.makeText(LoginActivity.this,"Login Successfully",
+                                                            Toast.LENGTH_SHORT).show();
+
+                                                    prefs.edit().putBoolean("mode", false).apply();
+                                                    Intent intent = new Intent(LoginActivity.this, InstituteActivity.class);
+                                                    startActivity(intent);
+                                                    binding.LoginActivityEmail.setText("");
+                                                    finish();
+                                                }
+                                                else {
+                                                    Toast.makeText(LoginActivity.this, "No admin account with this credentials",
+                                                            Toast.LENGTH_SHORT).show();
+                                                    auth.signOut();
+                                                }
+                                                binding.LoginActivityPassword.setText("");
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
                             if(auth.getCurrentUser().isEmailVerified()) {
 
-                                String type = binding.LoginActivityType.getSelectedItem().toString();
-                                String id = auth.getCurrentUser().getUid();
 
-                                if(type.equals("Admin")) {
-
-                                    database.getReference().child("Admin").orderByKey().equalTo(id).
-                                            addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            progressDialog.hide();
-                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                            if(snapshot.getChildrenCount() == 1) {
-                                                Toast.makeText(LoginActivity.this,"Login Successfully",
-                                                        Toast.LENGTH_SHORT).show();
-
-                                                prefs.edit().putBoolean("mode", false).apply();
-                                                Intent intent = new Intent(LoginActivity.this, InstituteActivity.class);
-                                                startActivity(intent);
-                                                binding.LoginActivityEmail.setText("");
-                                                finish();
-                                            }
-                                            else {
-                                                Toast.makeText(LoginActivity.this, "No admin account with this credentials",
-                                                        Toast.LENGTH_SHORT).show();
-                                                auth.signOut();
-                                            }
-                                            binding.LoginActivityPassword.setText("");
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                            Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                                else {
+                                if(type.equals("User")) {
                                     database.getReference().child("User").orderByKey().equalTo(id).
                                             addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
