@@ -1,5 +1,8 @@
 package com.example.spotround.modle;
 
+import android.icu.text.RelativeDateTimeFormatter;
+import android.text.PrecomputedText;
+
 public class NewCategory {
     int gopens, gobcs, gscs, gsts, gvjs, gnt1s, gnt2s, gnt3s, lopens, lobcs, lscs, lsts, lvjs, lnt1s, lnt2s, lnt3s;
 
@@ -149,4 +152,149 @@ public class NewCategory {
     public void setLnt3s(String lnt3s) {
         this.lnt3s = Integer.parseInt(lnt3s);
     }
+
+    public int getCasteVacancy(String caste) {
+        switch(caste) {
+            case "gopens":
+                return getGopens();
+            case "gobcs":
+                return getGobcs();
+            case "gscs":
+                return getGscs();
+            case "gsts":
+                return getGsts();
+            case "gvjs":
+                return getGvjs();
+            case "gnt1s":
+                return getGnt1s();
+            case "gnt2s":
+                return getGnt2s();
+            case "gnt3s":
+                return getGnt3s();
+            case "lopens":
+                return getLopens();
+            case "lobcs":
+                return getLobcs();
+            case "lscs":
+                return getLscs();
+            case "lsts":
+                return getLsts();
+            case "lvjs":
+                return getLvjs();
+            case "lnt1s":
+                return getLnt1s();
+            case "lnt2s":
+                return getLnt2s();
+            case "lnt3s":
+                return getLnt3s();
+        }
+        return 0;
+    }
+
+    public void DecCasteVacancy(String caste) {
+        switch(caste) {
+            case "gopens":
+                setGopens((getGopens() - 1) + "");
+                break;
+            case "gobcs":
+                setGobcs((getGobcs() - 1) + "");
+                break;
+            case "gscs":
+                setGscs((getGscs() - 1) + "");
+                break;
+            case "gsts":
+                setGsts((getGsts() - 1) + "");
+                break;
+            case "gvjs":
+                setGvjs((getGvjs() - 1) + "");
+                break;
+            case "gnt1s":
+                setGnt1s((getGnt1s() - 1) + "");
+                break;
+            case "gnt2s":
+                setGnt2s((getGnt2s() - 1) + "");
+                break;
+            case "gnt3s":
+                setGnt3s((getGnt3s() - 1) + "");
+                break;
+            case "lopens":
+                setLopens((getLopens() - 1) + "");
+                break;
+            case "lobcs":
+                setLobcs((getLobcs() - 1) + "");
+                break;
+            case "lscs":
+                setLscs((getLscs() - 1) + "");
+                break;
+            case "lsts":
+                setLsts((getLsts() - 1) + "");
+                break;
+            case "lvjs":
+                setLvjs((getLvjs() - 1) + "");
+                break;
+            case "lnt1s":
+                setLnt1s((getLnt1s() - 1) + "");
+                break;
+            case "lnt2s":
+                setLnt2s((getLnt2s() - 1) + "");
+                break;
+            case "lnt3s":
+                setLnt3s((getLnt3s() - 1) + "");
+                break;
+        }
+    }
+
+    public void IncCasteVacancy(String caste) {
+        switch(caste) {
+            case "gopens":
+                setGopens((getGopens() + 1) + "");
+                break;
+            case "gobcs":
+                setGobcs((getGobcs() + 1) + "");
+                break;
+            case "gscs":
+                setGscs((getGscs() + 1) + "");
+                break;
+            case "gsts":
+                setGsts((getGsts() + 1) + "");
+                break;
+            case "gvjs":
+                setGvjs((getGvjs() + 1) + "");
+                break;
+            case "gnt1s":
+                setGnt1s((getGnt1s() + 1) + "");
+                break;
+            case "gnt2s":
+                setGnt2s((getGnt2s() + 1) + "");
+                break;
+            case "gnt3s":
+                setGnt3s((getGnt3s() + 1) + "");
+                break;
+            case "lopens":
+                setLopens((getLopens() + 1) + "");
+                break;
+            case "lobcs":
+                setLobcs((getLobcs() + 1) + "");
+                break;
+            case "lscs":
+                setLscs((getLscs() + 1) + "");
+                break;
+            case "lsts":
+                setLsts((getLsts() + 1) + "");
+                break;
+            case "lvjs":
+                setLvjs((getLvjs() + 1) + "");
+                break;
+            case "lnt1s":
+                setLnt1s((getLnt1s() + 1) + "");
+                break;
+            case "lnt2s":
+                setLnt2s((getLnt2s() + 1) + "");
+                break;
+            case "lnt3s":
+                setLnt3s((getLnt3s() + 1) + "");
+                break;
+        }
+    }
+
 }
