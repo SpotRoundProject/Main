@@ -93,6 +93,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -101,6 +102,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -109,6 +111,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -117,6 +120,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
             </LinearLayout>
         </LinearLayout>
@@ -176,6 +180,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -184,6 +189,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -192,6 +198,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -200,6 +207,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
             </LinearLayout>
         </LinearLayout>
@@ -259,6 +267,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -267,6 +276,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -275,6 +285,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -283,6 +294,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
             </LinearLayout>
         </LinearLayout>
@@ -342,6 +354,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -350,6 +363,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -358,6 +372,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
 
                 <EditText
@@ -366,6 +381,7 @@
                     android:layout_height="35dp"
                     android:background="@drawable/textviewborder"
                     android:gravity="center"
+                    android:inputType="number"
                     android:text="0" />
             </LinearLayout>
         </LinearLayout>

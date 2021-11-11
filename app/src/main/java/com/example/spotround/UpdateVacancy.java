@@ -99,7 +99,11 @@ public class UpdateVacancy extends AppCompatActivity {
         }
         else
         {
-            NewCategory fill=new NewCategory(gopens,gobcs,gscs,gsts,gnt1s,gvj1,gnt2s,gnt3s,lopens,lobcs,lscs,lsts,lvjs,lnt1s,lnt2s,lnt3s);
+            NewCategory fill=new NewCategory(Integer.parseInt(gopens), Integer.parseInt(gobcs), Integer.parseInt(gscs),
+                    Integer.parseInt(gsts), Integer.parseInt(gnt1s), Integer.parseInt(gvj1), Integer.parseInt(gnt2s),
+                            Integer.parseInt(gnt3s), Integer.parseInt(lopens), Integer.parseInt(lobcs), Integer.parseInt(lscs),
+                                    Integer.parseInt(lsts), Integer.parseInt(lvjs), Integer.parseInt(lnt1s), Integer.parseInt(lnt2s),
+                                            Integer.parseInt(lnt3s));
             FirebaseFirestore.getInstance().collection("Vacancy").document("Round").collection(r).document(b).set(fill);
             Toast.makeText(UpdateVacancy.this, "Vacancy updated successfully", Toast.LENGTH_SHORT).show();
             tgopen.setText("");

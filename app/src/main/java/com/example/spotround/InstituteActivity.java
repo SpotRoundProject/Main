@@ -6,8 +6,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -52,6 +54,7 @@ public class InstituteActivity extends AppCompatActivity {
     TextView text2;
     ActivityInstituteBinding binding;
     PopupMenu popupMenu;
+    String fileName;
 
     ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -132,6 +135,12 @@ public class InstituteActivity extends AppCompatActivity {
                 startActivity(new Intent(InstituteActivity.this, setSchedule.class));
             }
         });
+        binding.generateResult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InstituteActivity.this, ComputeResult.class));
+            }
+        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -140,15 +149,22 @@ public class InstituteActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == SELECT_PDF) {
             Uri selectedPdfUri = data.getData();
             if (null != selectedPdfUri) {
-                String fileName = data.getData().getPath();
+                fileName = data.getData().getPath();
                 fileName = fileName.substring(fileName.lastIndexOf(":") + 1);
                 fileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName;
 
-                Window window = dialog.getWindow();
-                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                dialog.setTitle("Uploading "+ fileName);
-                dialog.show();
-                update(fileName,1);
+                new AlertDialog.Builder(InstituteActivity.this)
+                        .setTitle("Alert")
+                        .setMessage("Are you sure you want upload data from "+ "'" + fileName + "'")
+
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                update(fileName,1);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
             else {
                 Log.w("InstituteActivity", "Pdf not selected");
@@ -157,6 +173,10 @@ public class InstituteActivity extends AppCompatActivity {
     }
 
     private void update(String fileName, int a) {
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.setTitle("Uploading "+ fileName);
+        dialog.show();
 
         executorService.execute(new Runnable() {
             @Override
@@ -240,10 +260,10 @@ public class InstituteActivity extends AppCompatActivity {
             line = scn.nextLine();
 
             line = line.replace(" $", "");
-            line = line.replace("NT 1 (NT-B)","NT-B");
-            line = line.replace("NT 2 (NT-C)","NT-C");
-            line = line.replace("NT 3 (NT-D)","NT-D");
-            line = line.replace("DJ/VJ","VJNT");
+            line = line.replace("NT 1 (NT-B)","NT1");
+            line = line.replace("NT 2 (NT-C)","NT2");
+            line = line.replace("NT 3 (NT-D)","NT3");
+            line = line.replace("DT/VJ","VJ");
             line = line.replace(" Yes","");
             line = line.replace(" PWD","");
             line = line.replace(" DEF","");
