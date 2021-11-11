@@ -1307,6 +1307,7 @@ public class ComputeResult extends AppCompatActivity {
                                                             }
                                                         }
                                                     }
+                                                    Log.d("ComputeResult",seat+" "+type+" "+pref);
                                                     if(info.getGender().equals("F")&&(check==4))
                                                     {
                                                         String Id1=doc1.getId().toString();

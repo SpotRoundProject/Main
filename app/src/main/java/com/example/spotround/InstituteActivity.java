@@ -132,6 +132,13 @@ public class InstituteActivity extends AppCompatActivity {
                 startActivity(new Intent(InstituteActivity.this, setSchedule.class));
             }
         });
+        binding.generateResult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(InstituteActivity.this,ComputeResult.class));
+            }
+        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
