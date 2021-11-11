@@ -89,4 +89,19 @@ public class Preference {
     public void setPreference6(String preference6) {
         this.preference6 = preference6;
     }
+
+    @Override
+    public String toString() {
+        return "Preference{" +
+                "preference1='" + preference1 + '\'' +
+                ", preference2='" + preference2 + '\'' +
+                ", preference3='" + preference3 + '\'' +
+                ", preference4='" + preference4 + '\'' +
+                ", preference5='" + preference5 + '\'' +
+                ", preference6='" + preference6 + '\'' +
+                ", seatType='" + seatType + '\'' +
+                ", seatCode='" + seatCode + '\'' +
+                ", clgSeat=" + clgSeat +
+                '}';
+    }
 }
