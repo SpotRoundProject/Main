@@ -320,4 +320,24 @@ public class NewCategory {
                 ", lnt3s=" + lnt3s +
                 '}';
     }
+
+    public void setRound2() {
+        int gopen = gopens + gobcs + gscs + gsts + gvjs + gnt1s + gnt2s + gnt3s + lopens + lobcs + lscs + lsts + lvjs + lnt1s + lnt2s + lnt3s;
+        setGopens(gopen);
+        setGobcs(0);
+        setGscs(0);
+        setGsts(0);
+        setGvjs(0);
+        setGnt1s(0);
+        setGnt2s(0);
+        setGnt3s(0);
+        setLopens(0);
+        setLobcs(0);
+        setLscs(0);
+        setLsts(0);
+        setLvjs(0);
+        setLnt1s(0);
+        setLnt2s(0);
+        setLnt3s(0);
+    }
 }
