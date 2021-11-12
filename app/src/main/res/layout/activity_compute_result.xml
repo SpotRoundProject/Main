@@ -6,14 +6,69 @@
     android:layout_height="match_parent"
     tools:context=".ComputeResult">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/seeresult"
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Result"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.06" />
+
+    <Button
+        android:id="@+id/Round1"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#757171"
+        android:enabled="false"
+        android:text="Round 1"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/Round2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView25"
+        app:layout_constraintVertical_bias="0.751" />
+
+    <Button
+        android:id="@+id/Round2"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#757171"
+        android:enabled="false"
+        android:text="Round 2"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/Round3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView25"
+        app:layout_constraintVertical_bias="0.862" />
+
+    <Button
+        android:id="@+id/Round3"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#757171"
+        android:enabled="false"
+        android:text="Round 3"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView25"
+        app:layout_constraintVertical_bias="0.626" />
 </androidx.constraintlayout.widget.ConstraintLayout>
