@@ -13,9 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotround">
-        <activity android:name=".setSchedule"/>
+        <activity
+            android:name=".ComputeResult"
+            android:exported="false" />
+        <activity android:name=".setSchedule" />
         <activity android:name=".CandidateList" />
-        <activity android:name="SetPreference"/>
+        <activity android:name=".SetPreference" />
         <activity android:name=".ResultActivity" />
         <activity
             android:name=".UpdateVacancy"
@@ -41,7 +44,6 @@
         <activity
             android:name=".PaymentActivity"
             android:label="Make Payment" />
-        <activity android:name=".ComputeResult" />
         <activity
             android:name=".UpdVacancyActivity"
             android:label="Update Vacancy"

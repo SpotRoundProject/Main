@@ -90,14 +90,14 @@ public class Apply extends AppCompatActivity {
 
         database.getReference().child("User").child(uid).orderByKey().
                 addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                loginCredentials = snapshot.getValue(LoginCredentials.class);
-            }
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        loginCredentials = snapshot.getValue(LoginCredentials.class);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
 
         binding.ApplyActivitybtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +134,7 @@ public class Apply extends AppCompatActivity {
 
                 if(binding.ApplyActivityCapSeat.isChecked()) {
                     if(!binding.seatCode.getSelectedItem().toString().equals("Select seat code") &&
-                    !binding.seatType.getSelectedItem().toString().equals("Select seat Type")) {
+                            !binding.seatType.getSelectedItem().toString().equals("Select seat Type")) {
                         application.setSeatCode(binding.seatCode.getSelectedItem().toString());
                         application.setSeatType(binding.seatType.getSelectedItem().toString());
                     }
@@ -302,7 +302,7 @@ public class Apply extends AppCompatActivity {
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
-    mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
         @Override
         public void onVerificationCompleted(PhoneAuthCredential credential) {
@@ -344,7 +344,7 @@ public class Apply extends AppCompatActivity {
 
         @Override
         public void onCodeSent(@NonNull String verificationId,
-                @NonNull PhoneAuthProvider.ForceResendingToken token) {
+                               @NonNull PhoneAuthProvider.ForceResendingToken token) {
             super.onCodeSent(verificationId, token);
             // The SMS verification code has been sent to the provided phone number, we
             // now need to ask the user to enter the code and then construct a credential
@@ -371,7 +371,7 @@ public class Apply extends AppCompatActivity {
                             binding.ApplyActivitybtnVerifyOTP.setVisibility(View.VISIBLE);
                             binding.ApplyActivityPhoneNo.setFocusable(true);
                             flagPhoneNoVerified = true;
-                            
+
                             Toast.makeText(Apply.this, "registered successfully", Toast.LENGTH_SHORT).show();
                         }
                     }

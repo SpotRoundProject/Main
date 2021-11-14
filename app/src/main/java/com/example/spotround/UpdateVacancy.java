@@ -106,22 +106,22 @@ public class UpdateVacancy extends AppCompatActivity {
                                             Integer.parseInt(lnt3s));
             FirebaseFirestore.getInstance().collection("Vacancy").document("Round").collection(r).document(b).set(fill);
             Toast.makeText(UpdateVacancy.this, "Vacancy updated successfully", Toast.LENGTH_SHORT).show();
-            tgopen.setText("");
-            tgobc.setText("");
-            tgsc.setText("");
-            tgst.setText("");
-            tgvj.setText("");
-            tgnt1.setText("");
-            tgnt2.setText("");
-            tgnt3.setText("");
-            tlopen.setText("");
-            tlobc.setText("");
-            tlsc.setText("");
-            tlst.setText("");
-            tlvj.setText("");
-            tlnt1.setText("");
-            tlnt2.setText("");
-            tlnt3.setText("");
+            tgopen.setText("0");
+            tgobc.setText("0");
+            tgsc.setText("0");
+            tgst.setText("0");
+            tgvj.setText("0");
+            tgnt1.setText("0");
+            tgnt2.setText("0");
+            tgnt3.setText("0");
+            tlopen.setText("0");
+            tlobc.setText("0");
+            tlsc.setText("0");
+            tlst.setText("0");
+            tlvj.setText("0");
+            tlnt1.setText("0");
+            tlnt2.setText("0");
+            tlnt3.setText("0");
         }
 
     }

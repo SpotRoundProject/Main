@@ -36,7 +36,9 @@ public class setSchedule extends AppCompatActivity {
         binding.updatebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 schedule = new Schedule(binding.date.getText().toString(),binding.applicationFillingStart.getText().toString(),binding.applicationFillingEnd.getText().toString(),binding.round1Start.getText().toString(),binding.round1End.getText().toString(),binding.R1Result.getText().toString(),binding.round2Start.getText().toString(),binding.round2End.getText().toString(),binding.R2Result.getText().toString(),binding.round3Start.getText().toString(),binding.round3End.getText().toString(),binding.R3Result.getText().toString());
+                if(check(schedule))
                 reference.set(schedule);
             }
         });
@@ -125,6 +127,12 @@ public class setSchedule extends AppCompatActivity {
 
 
     }
+
+    private boolean check(Schedule schedule)
+    {
+        return true;
+    }
+
     public void popTimePicker(String button)
     {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener()
