@@ -1344,7 +1344,7 @@ public class ComputeResult extends AppCompatActivity {
                                                 }
                                             });
 
-                                        }
+                                        }/*
                                         cse.setRound2();
                                         it.setRound2();
                                         me.setRound2();
@@ -1356,7 +1356,7 @@ public class ComputeResult extends AppCompatActivity {
                                         FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Civil Engineering").set(cv);
                                         FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Electronics Engineering").set(en);
                                         FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Electrical Engineering").set(el);
-                                        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Mechanical Engineering").set(me);
+                                        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Mechanical Engineering").set(me);*/
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override
