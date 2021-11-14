@@ -48,97 +48,97 @@ public class ShowVacancy2 extends AppCompatActivity
             public void onSuccess(DocumentSnapshot documentSnapshot)
             {
                 NewCategory category = documentSnapshot.toObject(NewCategory.class);
-               tgopen.setText(category.getGopens());
+               tgopen.setText(category.getGopens()+"");
                if(!(category.getGopens() == 0))
                    tgopen.setTextColor(Color.GREEN);
                else
                    tgopen.setTextColor(Color.RED);
 
-                tlopen.setText(category.getLopens());
+                tlopen.setText(category.getLopens()+"");
                 if(!(category.getLopens() == 0))
                     tlopen.setTextColor(Color.GREEN);
                 else
                     tlopen.setTextColor(Color.RED);
 
-                tgobc.setText(category.getGobcs());
+                tgobc.setText(category.getGobcs()+"");
                 if(!(category.getGobcs() == 0))
                     tgobc.setTextColor(Color.GREEN);
                 else
                     tgobc.setTextColor(Color.RED);
 
-                tlobc.setText(category.getLobcs());
+                tlobc.setText(category.getLobcs()+"");
                 if(!(category.getLobcs() == 0))
                     tlobc.setTextColor(Color.GREEN);
                 else
                     tlobc.setTextColor(Color.RED);
 
-                tgnt1.setText(category.getGnt1s());
+                tgnt1.setText(category.getGnt1s()+"");
                 if(!(category.getGnt1s() == 0))
                     tgnt1.setTextColor(Color.GREEN);
                 else
                     tgnt1.setTextColor(Color.RED);
 
-                tlnt1.setText(category.getLnt1s());
+                tlnt1.setText(category.getLnt1s()+"");
                 if(!(category.getLnt1s() == 0))
                     tlnt1.setTextColor(Color.GREEN);
                 else
                     tlnt1.setTextColor(Color.RED);
 
-                tgnt2.setText(category.getGnt2s());
+                tgnt2.setText(category.getGnt2s()+"");
                 if(!(category.getGnt2s() == 0))
                     tgnt2.setTextColor(Color.GREEN);
                 else
                     tgnt2.setTextColor(Color.RED);
 
-                tlnt2.setText(category.getLnt2s());
+                tlnt2.setText(category.getLnt2s()+"");
                 if(!(category.getLnt2s() == 0))
                     tlnt2.setTextColor(Color.GREEN);
                 else
                     tlnt2.setTextColor(Color.RED);
 
-                tgnt3.setText(category.getGnt3s());
+                tgnt3.setText(category.getGnt3s()+"");
                 if(!(category.getGnt3s() == 0))
                     tgnt3.setTextColor(Color.GREEN);
                 else
                     tgnt3.setTextColor(Color.RED);
 
-                tlnt3.setText(category.getLnt3s());
+                tlnt3.setText(category.getLnt3s()+"");
                 if(!(category.getLnt3s() == 0))
                     tlnt3.setTextColor(Color.GREEN);
                 else
                     tlnt3.setTextColor(Color.RED);
 
-                tgvj.setText(category.getGvjs());
+                tgvj.setText(category.getGvjs()+"");
                 if(!(category.getGvjs() == 0))
                     tgvj.setTextColor(Color.GREEN);
                 else
                     tgvj.setTextColor(Color.RED);
 
-                tlvj.setText(category.getLvjs());
+                tlvj.setText(category.getLvjs()+"");
                 if(!(category.getLvjs() == 0))
                     tlvj.setTextColor(Color.GREEN);
                 else
                     tlvj.setTextColor(Color.RED);
 
-                tgst.setText(category.getGsts());
+                tgst.setText(category.getGsts()+"");
                 if(!(category.getGsts() == 0))
                     tgst.setTextColor(Color.GREEN);
                 else
                     tgst.setTextColor(Color.RED);
 
-                tlst.setText(category.getLsts());
+                tlst.setText(category.getLsts()+"");
                 if(!(category.getLsts() == 0))
                     tlst.setTextColor(Color.GREEN);
                 else
                     tlst.setTextColor(Color.RED);
 
-                tgsc.setText(category.getGscs());
+                tgsc.setText(category.getGscs()+"");
                 if(!(category.getGscs() == 0))
                     tgsc.setTextColor(Color.GREEN);
                 else
                     tgsc.setTextColor(Color.RED);
 
-                tlsc.setText(category.getLscs());
+                tlsc.setText(category.getLscs()+"");
                 if(!(category.getLscs() == 0))
                     tlsc.setTextColor(Color.GREEN);
                 else
