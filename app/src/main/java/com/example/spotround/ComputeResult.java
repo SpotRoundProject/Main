@@ -5,10 +5,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivityComputeResultBinding;
@@ -20,6 +23,7 @@ import com.example.spotround.modle.StudentInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,20 +32,36 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ComputeResult extends AppCompatActivity {
     public static int a=0;
 
     ActivityComputeResultBinding binding;
     ProgressDialog progressDialog;
-    NewCategory cse,it,en,el,cv,me;
+    NewCategory cse,it,en,el,cv,me, selectBranch;
     Application application;
     StudentInfo info;
     Preference preference;
+    Map<String, NewCategory>vacancy = new HashMap<>();
+    Map<Long, Application>applicationList = new HashMap<>();
+    Map<Long, StudentInfo>studentInfoList = new HashMap<>();
+    Map<Long, Preference>preferenceList = new HashMap<>();
+    List<Long> rankList = new ArrayList<>();
+    int pref=0;
+    int check=0;
+    String seat="";
+    String type="";
+    int access=1;
+    private long applicationSize, currentApplications;
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,1317 +72,89 @@ public class ComputeResult extends AppCompatActivity {
         progressDialog = new ProgressDialog(ComputeResult.this);
         progressDialog.setTitle("Round 1");
         progressDialog.setMessage("Fetching Vacancy");
+        /*Map<String, Boolean> rresult = new HashMap<>();
+        rresult.put("R", false);
+        FirebaseFirestore.getInstance().collection("Round1Result").document("Result").set(rresult);
+        FirebaseFirestore.getInstance().collection("Round2Result").document("Result").set(rresult);
+        FirebaseFirestore.getInstance().collection("Round3Result").document("Result").set(rresult);*/
 
-        binding.Round1.setEnabled(true);
+        FirebaseFirestore.getInstance().collection("RoundResult").document("Round1").
+                get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()) {
+                    boolean result = (boolean) documentSnapshot.get("R");
+                    if(result) {
+                        binding.Round1.setEnabled(false);
+                        binding.Round1.setText("Seats Allotted");
+                    }
+                    else {
+                        binding.Round1.setEnabled(true);
+                    }
+                }
+            }
+        });
+
+        FirebaseFirestore.getInstance().collection("RoundResult").document("Round2").
+                get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()) {
+                    boolean result = (boolean) documentSnapshot.get("R");
+                    if(result) {
+                        binding.Round2.setEnabled(false);
+                        binding.Round2.setText("Seats Allotted");
+                    }
+                    else {
+                        binding.Round2.setEnabled(true);
+                    }
+                }
+            }
+        });
+
+        FirebaseFirestore.getInstance().collection("RoundResult").document("Round3").
+                get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()) {
+                    boolean result = (boolean) documentSnapshot.get("R");
+                    if(result) {
+                        binding.Round3.setEnabled(false);
+                        binding.Round3.setText("Seats Allotted");
+                    }
+                    else {
+                        binding.Round3.setEnabled(true);
+                    }
+                }
+            }
+        });
+
 
         binding.Round1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                vacancy.clear();
+                applicationList.clear();
+                studentInfoList.clear();
+                preferenceList.clear();
+                rankList.clear();
+                binding.Round1.setEnabled(false);
+                progressDialog.setTitle("Round 1");
+                progressDialog.setMessage("Fetching Vacancy");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 getVacancyRound1(new FirestoreCallback(){
                     @Override
                     public void onCallback() {
-                        FirebaseFirestore.getInstance().collection("Application")
-                                .orderBy("rank")
-                                .get()
-                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
-                                {
-                                    @Override
-                                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots)
-                                    {
-                                        for(QueryDocumentSnapshot doc1:queryDocumentSnapshots)
-                                        {
-                                            application=doc1.toObject(Application.class);
-                                            Log.d("application", application.toString());
-                                            FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
-                                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                                                    info = documentSnapshot.toObject(StudentInfo.class);
-                                                    if(info.getCaste().equals("SEBC"))
-                                                        info.setCaste("Open");
-                                                    else if(info.getCaste().equals("SBC"))
-                                                        info.setCaste("OBC");
-                                                    Log.d("Info", info.toString());
-                                                    FirebaseFirestore.getInstance().collection("Preference/Round/Round 1/").document(doc1.getId())
-                                                            .get()
-                                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                @Override
-                                                                public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                                                                    preference =  documentSnapshot.toObject(Preference.class);
-                                                                    Log.d("Preference", preference.toString());
-
-                                                                    int pref=0;
-                                                                    int check=0;
-                                                                    String seat="";
-                                                                    String type="";
-                                                                    Map<String, NewCategory>vacancy = new HashMap<>();
-                                                                    vacancy.put("Computer Science and Engineering",cse);
-                                                                    vacancy.put("Information Technology",it);
-                                                                    vacancy.put("Electrical Engineering",el);
-                                                                    vacancy.put("Electronics Engineering",en);
-                                                                    vacancy.put("Civil Engineering",cv);
-                                                                    vacancy.put("Mechanical Engineering",me);
-
-                                                                    //Map<String,Integer>update=new HashMap<String,Integer>();
-                                                                    int access=1;
-                                                                    if(info.getCaste().equals("Open"))
-                                                                    {
-
-                                                                        //System.out.println("Hi");
-                                                                        access=vacancy.get(preference.getPreference1()).getGopens();
-                                                                        //control=myp1.get(first);
-                                                                        if(access!=0)
-                                                                        {
-                                                                            seat=preference.getPreference1();
-                                                                            type="gopens";
-                                                                            pref=1;
-                                                                            //update.clear();
-                                                                            //update.put("gopens",access-1);
-                                                                            vacancy.get(preference.getPreference1()).setGopens(access-1);
-                                                                            //control.put("gopens",access-1);
-                                                                            //myp1.put(first,control);
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            access=vacancy.get(preference.getPreference2()).getGopens();
-                                                                            //control=myp1.get(second);
-                                                                            if(access!=0)
-                                                                            {
-                                                                                seat=preference.getPreference2();
-                                                                                type="gopens";
-                                                                                pref=2;
-                                                                                vacancy.get(preference.getPreference2()).setGopens(access-1);
-                                                                                //update.clear();
-                                                                                //update.put("gopens",access-1);
-                                                                                //control.put("gopens",access-1);
-                                                                                //myp1.put(second,control);
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                access=vacancy.get(preference.getPreference3()).getGopens();
-                                                                                // access=myp1.get(third).get("gopens");
-                                                                                //control=myp1.get(third);
-                                                                                if(access!=0)
-                                                                                {
-                                                                                    seat=preference.getPreference3();
-                                                                                    type="gopens";
-                                                                                    pref=3;
-                                                                                    vacancy.get(preference.getPreference3()).setGopens(access-1);
-                                                                                    //update.clear();
-                                                                                    //update.put("gopens",access-1);
-                                                                                    //control.put("gopens",access-1);
-                                                                                    //myp1.put(third,control);
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    access=vacancy.get(preference.getPreference4()).getGopens();
-                                                                                    //access=myp1.get(forth).get("gopens");
-                                                                                    //control=myp1.get(forth);
-                                                                                    if(access!=0)
-                                                                                    {
-                                                                                        seat=preference.getPreference4();
-                                                                                        type="gopens";
-                                                                                        pref=4;
-                                                                                        vacancy.get(preference.getPreference4()).setGopens(access-1);
-                                                                                        //update.clear();
-                                                                                        //update.put("gopens",access-1);
-                                                                                        //control.put("gopens",access-1);
-                                                                                        //myp1.put(forth,control);
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        access=vacancy.get(preference.getPreference5()).getGopens();
-                                                                                        // access=myp1.get(fifth).get("gopens");
-                                                                                        //control=myp1.get(fifth);
-                                                                                        if(access!=0)
-                                                                                        {
-                                                                                            seat=preference.getPreference5();
-                                                                                            type="gopens";
-                                                                                            pref=5;
-                                                                            /*update.clear();
-                                                                            update.put("gopens",access-1);
-                                                                            control.put("gopens",access-1);
-                                                                            myp1.put(fifth,control);*/
-                                                                                            vacancy.get(preference.getPreference5()).setGopens(access-1);
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            access=vacancy.get(preference.getPreference6()).getGopens();
-                                                                                            //access=myp1.get(sixth).get("gopens");
-                                                                                            // control=myp1.get(sixth);
-                                                                                            if(access!=0)
-                                                                                            {
-                                                                                                seat=preference.getPreference6();
-                                                                                                type="gopens";
-                                                                                                pref=6;
-                                                                               /* update.clear();
-                                                                                update.put("gopens",access-1);
-                                                                                control.put("gopens",access-1);
-                                                                                myp1.put(sixth,control);*/
-                                                                                                vacancy.get(preference.getPreference6()).setGopens(access-1);
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                //System.out.println("Sorry.You have not alloted any seat");
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-
-                                                                            }
-                                                                        }
-
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        access=vacancy.get(preference.getPreference1()).getGopens();
-                                                                        //access=myp1.get(first).get("gopens");
-                                                                        //control=myp1.get(first);
-                                                                        if(access!=0)
-                                                                        {
-                                                                            seat=preference.getPreference1();
-                                                                            type="gopens";
-                                                                            pref=1;
-                                                            /*update.clear();
-                                                            update.put("gopens",access-1);
-                                                            control.put("gopens",access-1);
-                                                            myp1.put(first,control);*/
-                                                                            //control2=contro;
-                                                                            vacancy.get(preference.getPreference1()).setGopens(access-1);
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            Toast.makeText(getApplicationContext(),"hi",Toast.LENGTH_LONG).show();
-                                                                            //access=myp1.get(second).get("gopens");
-                                                                            access=vacancy.get(preference.getPreference2()).getGopens();
-                                                                            //control=myp1.get(second);
-                                                                            if(access!=0)
-                                                                            {
-                                                                                seat=preference.getPreference2();
-                                                                                type="gopens";
-                                                                                pref=2;
-                                                                /*update.clear();
-                                                                control.put("gopens",access-1);
-                                                                myp1.put(second,control);
-                                                                control2=control;*/
-                                                                                vacancy.get(preference.getPreference2()).setGopens(access-1);
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                /*access=myp1.get(third).get("gopens");
-                                                                control=myp1.get(third);*/
-                                                                                access=vacancy.get(preference.getPreference3()).getGopens();
-                                                                                if(access!=0)
-                                                                                {
-                                                                                    seat=preference.getPreference3();
-                                                                                    type="gopens";
-                                                                                    pref=3;
-                                                                    /*update.clear();
-                                                                    update.put("gopens",access-1);
-                                                                    control.put("gopens",access-1);
-                                                                    myp1.put(third,control);
-                                                                    control2=control;*/
-                                                                                    vacancy.get(preference.getPreference3()).setGopens(access-1);
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    access=vacancy.get(preference.getPreference4()).getGopens();
-                                                                   /* access=myp1.get(forth).get("gopens");
-                                                                    control=myp1.get(forth);*/
-                                                                                    if(access!=0)
-                                                                                    {
-                                                                                        seat=preference.getPreference4();
-                                                                                        type="gopens";
-                                                                                        pref=4;
-                                                                        /*update.clear();
-                                                                        update.put("gopens",access-1);
-                                                                        control.put("gopens",access-1);
-                                                                        myp1.put(forth,control);
-                                                                        control2=control;*/
-                                                                                        vacancy.get(preference.getPreference4()).setGopens(access-1);
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                        /*access=myp1.get(fifth).get("gopens");
-                                                                        control=myp1.get(fifth);*/
-                                                                                        access=vacancy.get(preference.getPreference5()).getGopens();
-                                                                                        if(access!=0)
-                                                                                        {
-                                                                                            seat=preference.getPreference5();
-                                                                                            type="gopens";
-                                                                                            pref=5;
-                                                                           /* update.clear();
-                                                                            update.put("gopens",access-1);
-                                                                            control.put("gopens",access-1);
-                                                                            myp1.put(fifth,control);
-                                                                            control2=control;*/
-                                                                                            vacancy.get(preference.getPreference5()).setGopens(access-1);
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                            /*access=myp1.get(sixth).get("gopens");
-                                                                            control=myp1.get(sixth);*/
-                                                                                            access=vacancy.get(preference.getPreference6()).getGopens();
-                                                                                            if(access!=0)
-                                                                                            {
-                                                                                                seat=preference.getPreference6();
-                                                                                                type="gopens";
-                                                                                                pref=6;
-                                                                               /* update.clear();
-                                                                                update.put("gopens",access-1);
-                                                                                control.put("gopens",access-1);
-                                                                                myp1.put(sixth,control);
-                                                                                control2=control;*/
-                                                                                                vacancy.get(preference.getPreference6()).setGopens(access-1);
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                check+=1;
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-
-                                                                            }
-
-                                                                        }
-                                                                        if(info.getGender().equals("F")&&(info.getCaste().equals("Open")))
-                                                                        {
-                                                           /* access=myp1.get(first).get("lopens");
-                                                            control=myp1.get(first);*/
-                                                                            access=vacancy.get(preference.getPreference1()).getLopens();
-                                                                            if(access!=0)
-                                                                            {
-                                                                                if(seat.equals(""))
-                                                                                {
-                                                                                    seat=preference.getPreference1();
-                                                                                    type="lopens";
-                                                                                    pref=1;
-                                                                    /*update.clear();
-                                                                    update.put("lopens",access-1);
-                                                                    control.put("lopens",access-1);
-                                                                    myp1.put(first,control);*/
-                                                                                    vacancy.get(preference.getPreference1()).setLopens(access-1);
-                                                                                }
-                                                                                else if(seat.equals(preference.getPreference1()))
-                                                                                {
-                                                                                    //int solve=control2.get("gopens");
-                                                                                    int solve=vacancy.get(seat).getGopens();
-                                                                                    vacancy.get(seat).setGopens(solve+1);
-                                                                                    //control.put("gopens",solve+1);
-                                                                                    seat=preference.getPreference1();
-                                                                                    type="lopens";
-                                                                                    pref=1;
-                                                                  /*  update.clear();
-                                                                    update.put("lopens",access-1);
-                                                                    control.put("lopens",access-1);
-                                                                    myp1.put(first,control);*/
-                                                                                    vacancy.get(preference.getPreference1()).setLopens(access-1);
-                                                                                }
-                                                                                else if(!seat.equals(""))
-                                                                                {
-                                                                                    // int solve=control2.get("gopens");
-                                                                                    int solve=vacancy.get(seat).getGopens();
-                                                                                    vacancy.get(seat).setGopens(solve+1);
-                                                                                    // control2.put("gopens",solve+1);
-                                                                                    //myp1.put(seat,control2);
-                                                                                    seat=preference.getPreference1();
-                                                                                    type="lopens";
-                                                                                    pref=1;
-                                                                    /*update.clear();
-                                                                    update.put("lopens",access-1);
-                                                                    control.put("lopens",access-1);
-                                                                    myp1.put(first,control);*/
-                                                                                    vacancy.get(seat).setLopens((access-1));
-                                                                                }
-
-
-
-                                                                            }
-                                                                            else
-                                                                            {
-                                                              /* access=myp1.get(second).get("lopens");
-                                                                control=myp1.get(second); */
-                                                                                access=vacancy.get(preference.getPreference2()).getLopens();
-                                                                                if(access!=0)
-                                                                                {
-                                                                                    if(seat.equals(""))
-                                                                                    {
-                                                                                        seat=preference.getPreference2();
-                                                                                        type="lopens";
-                                                                                        pref=2;
-                                                                       /* update.clear();
-                                                                        update.put("lopens",access-1);
-                                                                        control.put("lopens",access-1);
-                                                                        myp1.put(second,control);*/
-                                                                                        vacancy.get(preference.getPreference2()).setLopens(access-1);
-                                                                                    }
-
-                                                                                    else if(seat.equals(preference.getPreference2()))
-                                                                                    {
-                                                                        /*
-                                                                        int solve=control2.get("gopens");
-                                                                        control.put("gopens",solve+1);*/
-                                                                                        int solve=vacancy.get(seat).getGopens();
-                                                                                        vacancy.get(seat).setGopens(solve+1);
-                                                                                        seat=preference.getPreference2();
-                                                                                        type="lopens";
-                                                                                        pref=2;
-                                                                        /*update.clear();
-                                                                        update.put("lopens",access-1);
-                                                                        control.put("lopens",access-1);
-                                                                        myp1.put(second,control);*/
-                                                                                        vacancy.get(preference.getPreference2()).setLopens(access-1);
-                                                                                    }
-                                                                                    else if(pref<2)
-                                                                                    {
-                                                                                        Log.d("ComputeResult","Do Nothing Eat Five star");
-                                                                                    }
-                                                                                    else if(!seat.equals(""))
-                                                                                    {
-                                                                       /* int solve=control2.get("gopens");
-                                                                        control2.put("gopens",solve+1);*/
-                                                                                        int solve=vacancy.get(seat).getGopens();
-                                                                                        vacancy.get(seat).setGopens(solve+1);
-                                                                                        /*myp1.put(seat,control2);*/
-                                                                                        seat=preference.getPreference2();
-                                                                                        type="lopens";
-                                                                                        pref=2;
-                                                                      /*  update.clear();
-                                                                        update.put("lopens",access-1);
-                                                                        control.put("lopens",access-1);
-                                                                        myp1.put(second,control);*/
-                                                                                        vacancy.get(preference.getPreference2()).setLopens(access-1);
-                                                                                    }
-
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                   /* access=myp1.get(third).get("lopens");
-                                                                    control=myp1.get(third);*/
-                                                                                    access=vacancy.get(preference.getPreference3()).getLopens();
-                                                                                    if(access!=0)
-                                                                                    {
-                                                                                        if(seat.equals(""))
-                                                                                        {
-                                                                                            seat=preference.getPreference3();
-                                                                                            type="lopens";
-                                                                                            pref=3;
-                                                                            /*update.clear();
-                                                                            update.put("lopens",access-1);
-                                                                            control.put("lopens",access-1);
-                                                                            myp1.put(third,control);*/
-                                                                                            vacancy.get(preference.getPreference3()).setLopens(access-1);
-                                                                                        }
-                                                                                        else if(seat.equals(preference.getPreference3()))
-                                                                                        {
-                                                                            /*int solve=control2.get("gopens");
-                                                                            control.put("gopens",solve+1);*/
-                                                                                            int solve=vacancy.get(seat).getGopens();
-                                                                                            vacancy.get(seat).setGopens(solve+1);
-                                                                                            seat=preference.getPreference3();
-                                                                                            type="lopens";
-                                                                                            pref=3;
-                                                                           /* update.clear();
-                                                                            update.put("lopens",access-1);
-                                                                            control.put("lopens",access-1);
-                                                                            myp1.put(third,control);*/
-                                                                                            vacancy.get(preference.getPreference3()).setLopens(access-1);
-                                                                                        }
-                                                                                        else if(pref<3)
-                                                                                        {}
-                                                                                        else if(!seat.equals(""))
-                                                                                        {
-                                                                            /*int solve=control2.get("gopens");
-                                                                            control2.put("gopens",solve+1);*/
-                                                                                            int solve=vacancy.get(seat).getGopens();
-                                                                                            vacancy.get(seat).setGopens(solve+1);
-                                                                                            // myp1.put(seat,control2);
-                                                                                            seat=preference.getPreference3();
-                                                                                            type="lopens";
-                                                                                            pref=3;
-                                                                           /* update.clear();
-                                                                            update.put("lopens",access-1);
-                                                                            control.put("lopens",access-1);
-                                                                            myp1.put(third,control);*/
-                                                                                            vacancy.get(preference.getPreference3()).setLopens(access-1);
-                                                                                        }
-
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                        /*access=myp1.get(forth).get("lopens");
-                                                                        control=myp1.get(forth);*/
-                                                                                        access=vacancy.get(preference.getPreference4()).getLopens();
-                                                                                        if(access!=0)
-                                                                                        {
-                                                                                            if(seat.equals(""))
-                                                                                            {
-                                                                                                seat=preference.getPreference4();
-                                                                                                type="lopens";
-                                                                                                pref=4;
-                                                                               /* update.clear();
-                                                                                update.put("lopens",access-1);
-                                                                                control.put("lopens",access-1);
-                                                                                myp1.put(forth,control);*/
-                                                                                                vacancy.get(preference.getPreference4()).setLopens(access-1);
-                                                                                            }
-                                                                                            else if(seat.equals(preference.getPreference4()))
-                                                                                            {
-                                                                                /*int solve=control2.get("gopens");
-                                                                                control.put("gopens",solve+1);*/
-                                                                                                int solve=vacancy.get(seat).getGopens();
-                                                                                                vacancy.get(seat).setGopens(solve+1);
-                                                                                                seat=preference.getPreference4();
-                                                                                                type="lopens";
-                                                                                                pref=4;
-                                                                              /*  update.clear();
-                                                                                update.put("lopens",access-1);
-                                                                                control.put("lopens",access-1);
-                                                                                myp1.put(forth,control);*/
-                                                                                                vacancy.get(preference.getPreference4()).setLopens(access-1);
-                                                                                            }
-                                                                                            else if(pref<4)
-                                                                                            {}
-                                                                                            else if(!seat.equals(""))
-                                                                                            {
-                                                                              /*  int solve=control2.get("gopens");
-                                                                                control2.put("gopens",solve+1);*/
-                                                                                                int solve=vacancy.get(seat).getGopens();
-                                                                                                vacancy.get(seat).setGopens(solve+1);
-                                                                                                //myp1.put(seat,control2);
-                                                                                                seat=preference.getPreference4();
-                                                                                                type="lopens";
-                                                                                                pref=4;
-                                                                                /*update.clear();
-                                                                                update.put("lopens",access-1);
-                                                                                control.put("lopens",access-1);
-                                                                                myp1.put(forth,control);*/
-                                                                                                vacancy.get(preference.getPreference4()).setLopens(access-1);
-                                                                                            }
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                            /*access=myp1.get(fifth).get("lopens");
-                                                                            control=myp1.get(fifth);*/
-                                                                                            access=vacancy.get(preference.getPreference5()).getLopens();
-                                                                                            if(access!=0)
-                                                                                            {
-                                                                                                if(seat.equals(""))
-                                                                                                {
-                                                                                                    seat=preference.getPreference5();
-                                                                                                    type="lopens";
-                                                                                                    pref=5;
-                                                                                   /* update.clear();
-                                                                                    update.put("lopens",access-1);
-                                                                                    control.put("lopens",access-1);
-                                                                                    myp1.put(fifth,control);*/
-                                                                                                    vacancy.get(preference.getPreference5()).setLopens(access-1);
-                                                                                                }
-                                                                                                else if(seat.equals(preference.getPreference5()))
-                                                                                                {
-                                                                                  /*  int solve=control2.get("gopens");
-                                                                                    control.put("gopens",solve+1);*/
-                                                                                                    int solve=vacancy.get(seat).getGopens();
-                                                                                                    vacancy.get(seat).setGopens(solve+1);
-                                                                                                    seat=preference.getPreference5();
-                                                                                                    type="lopens";
-                                                                                                    pref=5;
-                                                                                   /* update.clear();
-                                                                                    update.put("lopens",access-1);
-                                                                                    control.put("lopens",access-1);
-                                                                                    myp1.put(fifth,control);*/
-                                                                                                    vacancy.get(preference.getPreference5()).setLopens(access-1);
-                                                                                                }
-                                                                                                else if(pref<5)
-                                                                                                {}
-                                                                                                else if(!seat.equals(""))
-                                                                                                {
-                                                                                    /*int solve=control2.get("gopens");
-                                                                                    control2.put("gopens",solve+1);*/
-                                                                                                    int solve=vacancy.get(seat).getGopens();
-                                                                                                    vacancy.get(seat).setGopens(solve+1);
-                                                                                                    //myp1.put(seat,control2);
-                                                                                                    seat=preference.getPreference5();
-                                                                                                    type="lopens";
-                                                                                                    pref=5;
-                                                                                   /* update.clear();
-                                                                                    update.put("lopens",access-1);
-                                                                                    control.put("lopens",access-1);
-                                                                                    myp1.put(fifth,control);*/
-                                                                                                    vacancy.get(preference.getPreference5()).setLopens(access-1);
-                                                                                                }
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                               /* access=myp1.get(sixth).get("lopens");
-                                                                                control=myp1.get(sixth);*/
-                                                                                                access=vacancy.get(preference.getPreference6()).getLopens();
-                                                                                                if(access!=0)
-                                                                                                {
-                                                                                                    if(seat.equals(""))
-                                                                                                    {
-                                                                                                        seat=preference.getPreference6();
-                                                                                                        type="lopens";
-                                                                                                        pref=6;
-                                                                                        /*update.clear();
-                                                                                        update.put("lopens",access-1);
-                                                                                        control.put("lopens",access-1);
-                                                                                        myp1.put(sixth,control);*/
-                                                                                                        vacancy.get(preference.getPreference6()).setLopens(access-1);
-                                                                                                    }
-                                                                                                    else if(seat.equals(preference.getPreference6()))
-                                                                                                    {
-                                                                                        /*int solve=control2.get("gopens");
-                                                                                        control.put("gopens",solve+1);*/
-                                                                                                        int solve=vacancy.get(seat).getGopens();
-                                                                                                        vacancy.get(seat).setGopens(solve+1);
-                                                                                                        seat=preference.getPreference6();
-                                                                                                        type="lopens";
-                                                                                                        pref=6;
-                                                                                        /*update.clear();
-                                                                                        update.put("lopens",access-1);
-                                                                                        control.put("lopens",access-1);
-                                                                                        myp1.put(sixth,control);*/
-                                                                                                        vacancy.get(preference.getPreference6()).setLopens(access-1);
-                                                                                                    }
-                                                                                                    else if(pref<6)
-                                                                                                    {}
-                                                                                                    else if(!seat.equals(""))
-                                                                                                    {
-                                                                                        /*int solve=control2.get("gopens");
-                                                                                        control2.put("gopens",solve+1);*/
-                                                                                                        int solve=vacancy.get(seat).getGopens();
-                                                                                                        vacancy.get(seat).setGopens(solve+1);
-                                                                                                        //myp1.put(seat,control2);
-                                                                                                        seat=preference.getPreference6();
-                                                                                                        type="lopens";
-                                                                                                        pref=6;
-                                                                                       /* update.clear();
-                                                                                        update.put("lopens",access-1);
-                                                                                        control.put("lopens",access-1);
-                                                                                        myp1.put(sixth,control);*/
-                                                                                                        vacancy.get(preference.getPreference6()).setLopens(access-1);
-                                                                                                    }
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    check+=1;
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-
-                                                                                }
-                                                                            }
-
-                                                                        }
-                                                                        if(!info.getCaste().equals("Open"))
-                                                                        {
-                                                                            String l="g";
-                                                                            l=l+info.getCaste().toLowerCase();
-                                                                            l=l+"s";
-                                                                            //System.out.println(l);
-                                                            /*access=myp1.get(first).get(l);
-                                                            control=myp1.get(first);*/
-                                                                            access = vacancy.get(preference.getPreference1()).getCasteVacancy(l);
-                                                                            if(access!=0)
-                                                                            {
-                                                                                if(seat.equals(""))
-                                                                                {
-                                                                                    seat=preference.getPreference1();
-                                                                                    type=l;
-                                                                                    pref=1;
-                                                                                    /*update.clear();*/
-                                                                    /*update.put("gopens",access-1);
-                                                                    control.put(l,access-1);
-                                                                    myp1.put(first,control);
-                                                                    control2=control;*/
-                                                                                    vacancy.get(preference.getPreference1()).DecCasteVacancy(l);
-                                                                                }
-                                                                                else if(seat.equals(preference.getPreference1()))
-                                                                                {
-                                                                    /*System.out.println(type);
-                                                                    int solve=control2.get(type);
-                                                                    control.put(type,solve+1);*/
-                                                                                    vacancy.get(preference.getPreference1()).IncCasteVacancy(type);
-                                                                                    seat=preference.getPreference1();
-                                                                                    type=l;
-                                                                                    pref=1;
-                                                                    /*update.clear();
-                                                                    update.put(type,access-1);
-                                                                    control.put(type,access-1);
-                                                                    myp1.put(first,control);*/
-                                                                                    vacancy.get(preference.getPreference1()).DecCasteVacancy(type);
-                                                                                }
-                                                                                else if(!seat.equals(""))
-                                                                                {
-                                                                    /*int solve=control2.get(type);
-                                                                    control2.put(type,solve+1);
-                                                                    myp1.put(seat,control2);*/
-                                                                                    vacancy.get(preference.getPreference1()).IncCasteVacancy(type);
-                                                                                    seat=preference.getPreference1();
-                                                                                    type=l;
-                                                                                    pref=1;
-                                                                    /*update.clear();
-                                                                    update.put(type,access-1);
-                                                                    control.put(type,access-1);
-                                                                    myp1.put(first,control);
-                                                                    control2=control;*/
-                                                                                    vacancy.get(preference.getPreference1()).DecCasteVacancy(type);
-                                                                                }
-
-
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                /*access=myp1.get(second).get(l);
-                                                                control=myp1.get(second);*/
-                                                                                access = vacancy.get(preference.getPreference1()).getCasteVacancy(l);
-                                                                                if(access!=0)
-                                                                                {
-                                                                                    if(seat.equals(""))
-                                                                                    {
-                                                                                        seat=preference.getPreference2();
-                                                                                        type=l;
-                                                                                        pref=2;
-                                                                        /*update.clear();
-                                                                        update.put(l,access-1);
-                                                                        control.put(l,access-1);
-                                                                        myp1.put(second,control);
-                                                                        control2=control;*/
-                                                                                        vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
-                                                                                    }
-                                                                                    else if(seat.equals(preference.getPreference2()))
-                                                                                    {
-                                                                        /*int solve=control2.get(type);
-                                                                        control.put(type,solve+1);*/
-                                                                                        vacancy.get(preference.getPreference2()).IncCasteVacancy(type);
-                                                                                        seat=preference.getPreference2();
-                                                                                        type=l;
-                                                                                        //pref=3;
-                                                                                        pref=2;
-                                                                        /*update.clear();
-                                                                        update.put(type,access-1);
-                                                                        control.put(type,access-1);
-                                                                        myp1.put(second,control);*/
-                                                                                        vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
-                                                                                    }
-                                                                                    else if(pref<2&&!seat.equals(""))
-                                                                                    {}
-                                                                                    else if(!seat.equals(""))
-                                                                                    {
-                                                                        /*int solve=control2.get(type);
-                                                                        control2.put(type,solve+1);
-                                                                        myp1.put(seat,control2);*/
-                                                                                        vacancy.get(preference.getPreference2()).IncCasteVacancy(type);
-                                                                                        seat=preference.getPreference2();
-                                                                                        type=l;
-                                                                                        //pref=3;
-                                                                                        pref =2;
-                                                                        /*update.clear();
-                                                                        update.put(type,access-1);
-                                                                        control.put(type,access-1);
-                                                                        myp1.put(second,control);*/
-                                                                                        vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
-                                                                                    }
-
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                    /*access=myp1.get(third).get(l);
-                                                                    control=myp1.get(third);*/
-                                                                                    access=vacancy.get(preference.getPreference3()).getCasteVacancy(l);
-                                                                                    if(access!=0)
-                                                                                    {
-                                                                                        if(seat.equals(""))
-                                                                                        {
-                                                                                            seat=preference.getPreference3();
-                                                                                            type=l;
-                                                                                            pref=3;
-                                                                            /*update.clear();
-                                                                            update.put(l,access-1);
-                                                                            control.put(l,access-1);
-                                                                            myp1.put(third,control);
-                                                                            control2=control;*/
-                                                                                            vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
-                                                                                        }
-                                                                                        else if(seat.equals(preference.getPreference3()))
-                                                                                        {
-                                                                            /*int solve=control2.get(type);
-                                                                            control.put(type,solve+1);*/
-                                                                                            vacancy.get(preference.getPreference3()).IncCasteVacancy(type);
-                                                                                            //seat=forth;
-                                                                                            seat = preference.getPreference3();
-                                                                                            type=l;
-                                                                                            pref=3;
-                                                                            /*update.clear();
-                                                                            update.put(type,access-1);
-                                                                            control.put(type,access-1);
-                                                                            myp1.put(third,control);*/
-                                                                                            vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
-                                                                                        }
-                                                                                        else if(pref<3&&!seat.equals(""))
-                                                                                        {}
-                                                                                        else if(!seat.equals(""))
-                                                                                        {
-                                                                            /*int solve=control2.get(type);
-                                                                            control2.put(type,solve+1);
-                                                                            myp1.put(seat,control2);*/
-                                                                                            vacancy.get(preference.getPreference3()).IncCasteVacancy(type);
-                                                                                            seat=preference.getPreference3();
-                                                                                            type=l;
-                                                                                            pref=3;
-                                                                            /*update.clear();
-                                                                            update.put(type,access-1);
-                                                                            control.put(type,access-1);
-                                                                            myp1.put(third,control);*/
-                                                                                            vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
-                                                                                        }
-
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                        /*access=myp1.get(forth).get(l);
-                                                                        control=myp1.get(forth);*/
-                                                                                        access = vacancy.get(preference.getPreference4()).getCasteVacancy(l);
-                                                                                        if(access!=0)
-                                                                                        {
-                                                                                            if(seat.equals(""))
-                                                                                            {
-                                                                                                seat=preference.getPreference4();
-                                                                                                type=l;
-                                                                                                pref=4;
-                                                                                /*update.clear();
-                                                                                update.put(l,access-1);
-                                                                                control.put(l,access-1);
-                                                                                myp1.put(forth,control);
-                                                                                control2=control;*/
-                                                                                                vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
-                                                                                            }
-                                                                                            else if(seat.equals(preference.getPreference4()))
-                                                                                            {
-                                                                                /*int solve=control2.get(type);
-                                                                                control.put(type,solve+1);*/
-                                                                                                vacancy.get(preference.getPreference4()).IncCasteVacancy(type);
-                                                                                                seat=preference.getPreference4();
-                                                                                                type=l;
-                                                                                                pref=4;
-                                                                                /*update.clear();
-                                                                                update.put(type,access-1);
-                                                                                control.put(type,access-1);
-                                                                                myp1.put(forth,control);*/
-                                                                                                vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
-                                                                                            }
-                                                                                            else if(pref<4&&!seat.equals(""))
-                                                                                            {}
-                                                                                            else if(!seat.equals(""))
-                                                                                            {
-                                                                                /*int solve=control2.get(type);
-                                                                                control2.put(type,solve+1);
-                                                                                myp1.put(seat,control2);*/
-                                                                                                vacancy.get(preference.getPreference4()).IncCasteVacancy(type);
-                                                                                                seat=preference.getPreference4();
-                                                                                                type=l;
-                                                                                                pref=4;
-                                                                                /*update.clear();
-                                                                                update.put(type,access-1);
-                                                                                control.put(type,access-1);
-                                                                                myp1.put(forth,control);*/
-                                                                                                vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
-                                                                                            }
-
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                            /*access=myp1.get(fifth).get(l);
-                                                                            control=myp1.get(fifth);*/
-                                                                                            access = vacancy.get(preference.getPreference5()).getCasteVacancy(l);
-                                                                                            if(access!=0)
-                                                                                            {
-                                                                                                if(seat.equals(""))
-                                                                                                {
-                                                                                                    seat=preference.getPreference5();
-                                                                                                    type=l;
-                                                                                                    pref=5;
-                                                                                    /*update.clear();
-                                                                                    update.put(l,access-1);
-                                                                                    control.put(l,access-1);
-                                                                                    myp1.put(fifth,control);
-                                                                                    control2=control;*/
-                                                                                                    vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
-                                                                                                }
-                                                                                                else if(seat.equals(preference.getPreference5()))
-                                                                                                {
-                                                                                    /*int solve=control2.get(type);
-                                                                                    control.put(type,solve+1);*/
-                                                                                                    vacancy.get(preference.getPreference5()).IncCasteVacancy(type);
-                                                                                                    seat=preference.getPreference5();
-                                                                                                    type=l;
-                                                                                                    pref=5;
-                                                                                    /*update.clear();
-                                                                                    update.put(type,access-1);
-                                                                                    control.put(type,access-1);
-                                                                                    myp1.put(fifth,control);*/
-                                                                                                    vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
-                                                                                                }
-                                                                                                else if(pref<5&&!seat.equals(""))
-                                                                                                {}
-                                                                                                else if(!seat.equals(""))
-                                                                                                {
-                                                                                    /*int solve=control2.get(type);
-                                                                                    control2.put(type,solve+1);
-                                                                                    myp1.put(seat,control2);*/
-                                                                                                    vacancy.get(preference.getPreference5()).IncCasteVacancy(type);
-                                                                                                    seat=preference.getPreference5();
-                                                                                                    type=l;
-                                                                                                    pref=5;
-                                                                                    /*update.clear();
-                                                                                    update.put(type,access-1);
-                                                                                    control.put(type,access-1);
-                                                                                    myp1.put(fifth,control);*/
-                                                                                                    vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
-                                                                                                }
-
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                /*access=myp1.get(sixth).get(l);
-                                                                                control=myp1.get(sixth);*/
-                                                                                                access = vacancy.get(preference.getPreference6()).getCasteVacancy(l);
-                                                                                                if(access!=0)
-                                                                                                {
-                                                                                                    if(seat.equals(""))
-                                                                                                    {
-                                                                                                        seat=preference.getPreference6();
-                                                                                                        type=l;
-                                                                                                        pref=6;
-                                                                                        /*update.clear();
-                                                                                        update.put(l,access-1);
-                                                                                        control.put(l,access-1);
-                                                                                        myp1.put(sixth,control);
-                                                                                        control2=control;*/
-                                                                                                        vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
-                                                                                                    }
-                                                                                                    else if(seat.equals(preference.getPreference6()))
-                                                                                                    {
-                                                                                        /*int solve=control2.get(type);
-                                                                                        control.put(type,solve+1);*/
-                                                                                                        vacancy.get(preference.getPreference6()).IncCasteVacancy(type);
-                                                                                                        seat=preference.getPreference6();
-                                                                                                        type=l;
-                                                                                                        pref=6;
-                                                                                        /*update.clear();
-                                                                                        update.put(type,access-1);
-                                                                                        control.put(type,access-1);
-                                                                                        myp1.put(sixth,control);*/
-                                                                                                        vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
-                                                                                                    }
-                                                                                                    else if(pref<6&&!seat.equals(""))
-                                                                                                    {}
-                                                                                                    else if(!seat.equals(""))
-                                                                                                    {
-                                                                                        /*int solve=control2.get(type);
-                                                                                        control2.put(type,solve+1);
-                                                                                        myp1.put(seat,control2);*/
-                                                                                                        vacancy.get(preference.getPreference6()).IncCasteVacancy(type);
-                                                                                                        seat=preference.getPreference6();
-                                                                                                        type=l;
-                                                                                                        pref=6;
-                                                                                        /*update.clear();
-                                                                                        update.put(type,access-1);
-                                                                                        control.put(type,access-1);
-                                                                                        myp1.put(sixth,control);*/
-                                                                                                        vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
-                                                                                                    }
-
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    check+=1;
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                //System.out.println("Student has alloted "+seat+" as "+type+".With preference"+pref);
-                                                                            }
-                                                                            //System.out.println("Student has alloted "+seat+" as "+type+".With preference"+pref);
-
-                                                                        }
-                                                                        if(!info.getCaste().equals("Open")&&info.getGender().equals("F"))
-                                                                        {
-                                                                            String l="l"+info.getCaste().toLowerCase();
-                                                                            l=l+"s";
-                                                            /*access=myp1.get(first).get(l);
-                                                            control=myp1.get(first);*/
-                                                                            access = vacancy.get(preference.getPreference1()).getCasteVacancy(l);
-                                                                            if(access!=0)
-                                                                            {
-                                                                                if(seat.equals(""))
-
-                                                                                {
-                                                                                    seat=preference.getPreference1();
-                                                                                    type=l;
-                                                                                    pref=1;
-                                                                            /*update.clear();
-                                                                            update.put("gopens",access-1);*/
-                                                                    /*control.put(l,access-1);
-                                                                    myp1.put(first,control);
-                                                                    control2=control;*/
-                                                                                    vacancy.get(preference.getPreference1()).DecCasteVacancy(l);
-                                                                                }
-                                                                                if(seat.equals(preference.getPreference1()))
-                                                                                {
-                                                                    /*int solve=control2.get(type);
-                                                                    control.put(type,solve+1);*/
-                                                                                    vacancy.get(preference.getPreference1()).IncCasteVacancy(type);
-                                                                                    seat=preference.getPreference1();
-                                                                                    type=l;
-                                                                                    pref=1;
-                                                                    /*update.clear();
-                                                                    update.put(type,access-1);
-                                                                    control.put(type,access-1);
-                                                                    myp1.put(first,control);*/
-                                                                                    vacancy.get(preference.getPreference1()).DecCasteVacancy(type);
-                                                                                }
-                                                                                else if(!seat.equals(""))
-                                                                                {
-                                                                    /*int solve=control2.get(type);
-                                                                    control2.put(type,solve+1);
-                                                                    myp1.put(seat,control2);*/
-                                                                                    vacancy.get(preference.getPreference1()).IncCasteVacancy(type);
-                                                                                    seat=preference.getPreference1();
-                                                                                    type=l;
-                                                                                    pref=1;
-                                                                    /*update.clear();
-                                                                    update.put(type,access-1);
-                                                                    control.put(type,access-1);
-                                                                    myp1.put(first,control);
-                                                                    control2=control;*/
-                                                                                    vacancy.get(preference.getPreference1()).DecCasteVacancy(type);
-                                                                                }
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                /*access=myp1.get(second).get(l);
-                                                                control=myp1.get(second);*/
-                                                                                access = vacancy.get(preference.getPreference2()).getCasteVacancy(l);
-                                                                                if(access!=0)
-                                                                                {
-                                                                                    if(seat.equals(""))
-                                                                                    {
-                                                                                        seat=preference.getPreference2();
-                                                                                        type=l;
-                                                                                        pref=2;
-                                                                        /*update.clear();
-                                                                        update.put(l,access-1);
-                                                                        control.put(l,access-1);
-                                                                        myp1.put(second,control);
-                                                                        control2=control;*/
-                                                                                        vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
-                                                                                    }
-                                                                                    else if(seat.equals(preference.getPreference2()))
-                                                                                    {
-                                                                        /*int solve=control2.get(type);
-                                                                        control.put(type,solve+1);*/
-                                                                                        vacancy.get(preference.getPreference2()).IncCasteVacancy(type);
-                                                                                        seat=preference.getPreference2();
-                                                                                        type=l;
-                                                                                        pref=2;
-                                                                        /*update.clear();
-                                                                        update.put(type,access-1);
-                                                                        control.put(type,access-1);
-                                                                        myp1.put(second,control);*/
-                                                                                        vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
-                                                                                    }
-                                                                                    else if(pref<2&&!seat.equals(""))
-                                                                                    {}
-                                                                                    else if(!seat.equals(""))
-                                                                                    {
-                                                                        /*int solve=control2.get(type);
-                                                                        control2.put(type,solve+1);
-                                                                        myp1.put(seat,control2);*/
-                                                                                        vacancy.get(preference.getPreference2()).IncCasteVacancy(type);
-                                                                                        seat=preference.getPreference2();
-                                                                                        type=l;
-                                                                                        pref=2;
-                                                                        /*update.clear();
-                                                                        update.put(type,access-1);
-                                                                        control.put(type,access-1);
-                                                                        myp1.put(second,control);*/
-                                                                                        vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
-                                                                                    }
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                    /*access=myp1.get(third).get(l);
-                                                                    control=myp1.get(third);*/
-                                                                                    access = vacancy.get(preference.getPreference3()).getCasteVacancy(l);
-                                                                                    if(access!=0)
-                                                                                    {
-                                                                                        if(seat.equals(""))
-                                                                                        {
-                                                                                            seat=preference.getPreference3();
-                                                                                            type=l;
-                                                                                            pref=3;
-                                                                            /*update.clear();
-                                                                            update.put(l,access-1);
-                                                                            control.put(l,access-1);
-                                                                            myp1.put(third,control);
-                                                                            control2=control;*/
-                                                                                            vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
-                                                                                        }
-                                                                                        else if(seat.equals(preference.getPreference3()))
-                                                                                        {
-                                                                            /*int solve=control2.get(type);
-                                                                            control.put(type,solve+1);*/
-                                                                                            vacancy.get(preference.getPreference3()).IncCasteVacancy(type);
-                                                                                            seat=preference.getPreference3();
-                                                                                            type=l;
-                                                                                            pref=3;
-                                                                            /*update.clear();
-                                                                            update.put(type,access-1);
-                                                                            control.put(type,access-1);
-                                                                            myp1.put(third,control);*/
-                                                                                            vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
-                                                                                        }
-                                                                                        else if(pref<3&&!seat.equals(""))
-                                                                                        {}
-                                                                                        else if(!seat.equals(""))
-                                                                                        {
-                                                                            /*int solve=control2.get(type);
-                                                                            control2.put(type,solve+1);
-                                                                            myp1.put(seat,control2);*/
-                                                                                            vacancy.get(preference.getPreference3()).IncCasteVacancy(type);
-                                                                                            seat=preference.getPreference3();
-                                                                                            type=l;
-                                                                                            pref=5;
-                                                                            /*update.clear();
-                                                                            update.put(type,access-1);
-                                                                            control.put(type,access-1);
-                                                                            myp1.put(third,control);*/
-                                                                                            vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
-                                                                                        }
-                                                                                    }
-                                                                                    else
-                                                                                    {
-
-                                                                        /*access=myp1.get(forth).get(l);
-                                                                        control=myp1.get(forth);*/
-                                                                                        access = vacancy.get(preference.getPreference4()).getCasteVacancy(l);
-                                                                                        if(access!=0)
-                                                                                        {
-                                                                                            if(seat.equals(""))
-                                                                                            {
-                                                                                                seat=preference.getPreference4();
-                                                                                                type=l;
-                                                                                                pref=4;
-                                                                                /*update.clear();
-                                                                                update.put(l,access-1);
-                                                                                control.put(l,access-1);
-                                                                                myp1.put(forth,control);
-                                                                                control2=control;*/
-                                                                                                vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
-                                                                                            }
-                                                                                            else if(seat.equals(preference.getPreference4()))
-                                                                                            {
-                                                                                                vacancy.get(preference.getPreference4()).IncCasteVacancy(type);
-                                                                                                seat=preference.getPreference4();
-                                                                                                type=l;
-                                                                                                pref=4;
-                                                                                /*update.clear();
-                                                                                update.put(type,access-1);
-                                                                                control.put(type,access-1);
-                                                                                myp1.put(forth,control);*/
-                                                                                                vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
-                                                                                            }
-                                                                                            else if(pref<4&&!seat.equals(""))
-                                                                                            {}
-                                                                                            else if(!seat.equals(""))
-                                                                                            {
-                                                                                /*int solve=control2.get(type);
-                                                                                control2.put(type,solve+1);
-                                                                                myp1.put(seat,control2);*/
-                                                                                                vacancy.get(preference.getPreference4()).IncCasteVacancy(type);
-                                                                                                seat=preference.getPreference4();
-                                                                                                type=l;                                                                                          pref=4;
-                                                                                /*update.clear();
-                                                                                update.put(type,access-1);
-                                                                                control.put(type,access-1);
-                                                                                myp1.put(forth,control);*/
-                                                                                                vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
-                                                                                            }
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                            /*access=myp1.get(fifth).get(l);
-                                                                            control=myp1.get(fifth);*/
-                                                                                            access = vacancy.get(preference.getPreference5()).getCasteVacancy(l);
-                                                                                            if(access!=0)
-                                                                                            {
-                                                                                                if(seat.equals(""))
-                                                                                                {
-                                                                                                    seat=preference.getPreference5();
-                                                                                                    type=l;
-                                                                                                    pref=5;
-                                                                                    /*update.clear();
-                                                                                    update.put(l,access-1);
-                                                                                    control.put(l,access-1);
-                                                                                    myp1.put(fifth,control);
-                                                                                    control2=control;*/
-                                                                                                    vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
-                                                                                                }
-                                                                                                else if(seat.equals(preference.getPreference5()))
-                                                                                                {
-                                                                                    /*int solve=control2.get(type);
-                                                                                    control.put(type,solve+1);*/
-                                                                                                    vacancy.get(preference.getPreference5()).IncCasteVacancy(type);
-                                                                                                    seat=preference.getPreference5();
-                                                                                                    type=l;
-                                                                                                    pref=5;
-                                                                                    /*update.clear();
-                                                                                    update.put(type,access-1);
-                                                                                    control.put(type,access-1);
-                                                                                    myp1.put(fifth,control);*/
-                                                                                                    vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
-                                                                                                }
-                                                                                                else if(pref<5&&!seat.equals(""))
-                                                                                                {}
-                                                                                                else if(!seat.equals(""))
-                                                                                                {
-                                                                                    /*int solve=control2.get(type);
-                                                                                    control2.put(type,solve+1);
-                                                                                    myp1.put(seat,control2);*/
-                                                                                                    vacancy.get(preference.getPreference5()).IncCasteVacancy(type);
-                                                                                                    seat=preference.getPreference5();
-                                                                                                    type=l;
-                                                                                                    pref=5;
-                                                                                    /*update.clear();
-                                                                                    update.put(type,access-1);
-                                                                                    control.put(type,access-1);
-                                                                                    myp1.put(fifth,control);*/
-                                                                                                    vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
-                                                                                                }
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                /*access=myp1.get(sixth).get(l);
-                                                                                control=myp1.get(sixth);*/
-                                                                                                access = vacancy.get(preference.getPreference6()).getCasteVacancy(l);
-                                                                                                if(access!=0)
-                                                                                                {
-                                                                                                    if(seat.equals(""))
-                                                                                                    {
-                                                                                                        seat=preference.getPreference6();
-                                                                                                        type=l;
-                                                                                                        pref=6;
-                                                                                        /*update.clear();
-                                                                                        update.put(l,access-1);
-                                                                                        control.put(l,access-1);
-                                                                                        myp1.put(sixth,control);
-                                                                                        control2=control;*/
-                                                                                                        vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
-                                                                                                    }
-                                                                                                    else if(seat.equals(preference.getPreference6()))
-                                                                                                    {
-                                                                                        /*int solve=control2.get(type);
-                                                                                        control.put(type,solve+1);*/
-                                                                                                        vacancy.get(preference.getPreference6()).IncCasteVacancy(type);
-                                                                                                        seat=preference.getPreference6();
-                                                                                                        type=l;
-                                                                                                        pref=6;
-                                                                                        /*update.clear();
-                                                                                        update.put(type,access-1);
-                                                                                        control.put(type,access-1);
-                                                                                        myp1.put(sixth,control);*/
-                                                                                                        vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
-                                                                                                    }
-                                                                                                    else if(pref<6&&!seat.equals(""))
-                                                                                                    {}
-                                                                                                    else if(!seat.equals(""))
-                                                                                                    {
-                                                                                        /*int solve=control2.get(type);
-                                                                                        control2.put(type,solve+1);
-                                                                                        myp1.put(seat,control2);*/
-                                                                                                        vacancy.get(preference.getPreference6()).IncCasteVacancy(type);
-                                                                                                        seat=preference.getPreference6();
-                                                                                                        type=l;
-                                                                                                        pref=6;
-                                                                                        /*update.clear();
-                                                                                        update.put(type,access-1);
-                                                                                        control.put(type,access-1);
-                                                                                        myp1.put(sixth,control);*/
-                                                                                                        vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
-                                                                                                    }
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    check+=1;
-                                                                                                    //System.out.println("Sorry ! You have not alloted seat");
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-
-                                                                                }
-
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    if(info.getGender().equals("F")&&(check==4))
-                                                                    {
-                                                                        String Id1=doc1.getId().toString();
-                                                                        //FirebaseFirestore.getInstance().collection("Student Info").document(Id1).update("status1","Sorry!You have not allotted seat");
-
-                                                                    }
-                                                                    else if(info.getGender().equals("F")&&info.getCaste().equals("Open")&&check==2)
-                                                                    {
-                                                                        String Id1=doc1.getId().toString();
-                                                                        //FirebaseFirestore.getInstance().collection("StudentInfo").document(Id1).update("status1","Sorry!You have not allotted seat");
-                                                                    }
-                                                                    else if(info.getGender().equals("M")&&(check==2)&&!info.getCaste().equals("Open"))
-                                                                    {
-                                                                        String Id1=doc1.getId().toString();
-                                                                        //FirebaseFirestore.getInstance().collection("StudentInfo").document(Id1).update("status1","Sorry!You have not allotted seat");
-                                                                    }
-                                                                    else if(info.getGender().equals("M")&&check==1&&info.getCaste().equals("Open"))
-                                                                    {
-                                                                        String Id1=doc1.getId().toString();
-                                                                        //FirebaseFirestore.getInstance().collection("StudentInfo").document(Id1).update("status1","Sorry!You have not allotted seat");
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        //String Id1=doc1.getId().toString();
-                                                                        Result result = new Result(pref + "",type,seat);
-                                                                        FirebaseFirestore.getInstance().collection("Result").document(application.getRank() + "").set(result);
-                                                                        Toast.makeText(getApplicationContext(),"Student alloted "+seat+" as "+type+". "+"Alloted preference is "+pref,Toast.LENGTH_LONG).show();
-                                                                    }
-                                                                }
-                                                            });
-                                                }
-                                            });
-
-                                        }
-                                        cse.setRound2();
-                                        it.setRound2();
-                                        me.setRound2();
-                                        cv.setRound2();
-                                        el.setRound2();
-                                        en.setRound2();
-                                        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Computer Science and Engineering").set(cse);
-                                        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Information Technology").set(it);
-                                        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Civil Engineering").set(cv);
-                                        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Electronics Engineering").set(en);
-                                        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Electrical Engineering").set(el);
-                                        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Mechanical Engineering").set(me);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
+                        progressDialog.setMessage("Fetching Student Information");
+                        getStudentInfoRound1(new FirestoreCallback() {
                             @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getApplicationContext(),"Hi",Toast.LENGTH_LONG).show();
-
+                            public void onCallback() {
+                                progressDialog.setMessage("Allotting seats");
+                                generateResultRound1();
                             }
                         });
                     }
@@ -1370,17 +162,79 @@ public class ComputeResult extends AppCompatActivity {
             }
         });
 
+        binding.Round2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vacancy.clear();
+                applicationList.clear();
+                studentInfoList.clear();
+                preferenceList.clear();
+                rankList.clear();
+                binding.Round2.setEnabled(false);
+                progressDialog.setTitle("Round 2");
+                progressDialog.setMessage("Fetching Vacancy");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                getVacancyRound2(new FirestoreCallback() {
+                    @Override
+                    public void onCallback() {
+                        progressDialog.setMessage("Fetching Student Information");
+                        getStudentInfoRound2(new FirestoreCallback() {
+                            @Override
+                            public void onCallback() {
+                                progressDialog.setMessage("Allotting seats");
+                                generateResultRound2();
+                            }
+                        });
+                    }
+                });
+            }
+        });
 
-
-
-
-
-
+        binding.Round3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vacancy.clear();
+                applicationList.clear();
+                studentInfoList.clear();
+                preferenceList.clear();
+                rankList.clear();
+                binding.Round2.setEnabled(false);
+                progressDialog.setTitle("Round 3");
+                progressDialog.setMessage("Fetching Vacancy");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                getVacancyRound3(new FirestoreCallback() {
+                    @Override
+                    public void onCallback() {
+                        progressDialog.setMessage("Fetching Student Information");
+                        getStudentInfoRound3(new FirestoreCallback() {
+                            @Override
+                            public void onCallback() {
+                                progressDialog.setMessage("Allotting seats");
+                                generateResultRound3();
+                            }
+                        });
+                    }
+                });
+            }
+        });
 
     }
 
-    private void getVacancyRound1(FirestoreCallback firestoreCallback)
-    {
+    private interface FirestoreCallback {
+        void onCallback();
+    }
+
+    //Round1
+
+    private void getVacancyRound1(FirestoreCallback firestoreCallback) {
         FirebaseFirestore.getInstance().collection("Vacancy")
                 .document("Round").collection("Round 1")
                 .document("Civil Engineering")
@@ -1442,6 +296,12 @@ public class ComputeResult extends AppCompatActivity {
                                                                                                     {
                                                                                                         me=documentSnapshot.toObject(NewCategory.class);
                                                                                                         Log.d("ME", me.toString());
+                                                                                                        vacancy.put("Computer Science and Engineering",cse);
+                                                                                                        vacancy.put("Information Technology",it);
+                                                                                                        vacancy.put("Electrical Engineering",el);
+                                                                                                        vacancy.put("Electronics Engineering",en);
+                                                                                                        vacancy.put("Civil Engineering",cv);
+                                                                                                        vacancy.put("Mechanical Engineering",me);
                                                                                                         firestoreCallback.onCallback();
                                                                                                     }
                                                                                                 });
@@ -1457,12 +317,720 @@ public class ComputeResult extends AppCompatActivity {
                 });
     }
 
-    private interface FirestoreCallback {
-        void onCallback();
+    private void getStudentInfoRound1(FirestoreCallback firestoreCallback) {
+        currentApplications = 0;
+        FirebaseFirestore.getInstance().collection("Application")
+                .orderBy("rank")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
+                {
+                    @Override
+                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots)
+                    {
+                        applicationSize = queryDocumentSnapshots.size();
+                        for(QueryDocumentSnapshot doc1:queryDocumentSnapshots)
+                        {
+                            application=doc1.toObject(Application.class);
+
+                            applicationList.put(application.getRank(), application);
+                            Log.d("application", application.toString());
+                            FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
+                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                    info = documentSnapshot.toObject(StudentInfo.class);
+
+                                    if(info.getCaste().equals("SEBC"))
+                                        info.setCaste("Open");
+                                    else if(info.getCaste().equals("SBC"))
+                                        info.setCaste("OBC");
+                                    studentInfoList.put(info.getRank(), info);
+                                    Log.d("Info", info.toString());
+                                    currentApplications ++;
+                                }
+                            });
+
+                        }
+                        untilDataFetch1(firestoreCallback);
+                    }
+
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),"Hi",Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
-    private void getVacancyRound2(FirestoreCallback firestoreCallback)
-    {
+    private void untilDataFetch1(FirestoreCallback firestoreCallback) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                while(currentApplications != applicationSize);
+                getPreferenceRound1(firestoreCallback);
+            }
+        });
+    }
+
+    private void getPreferenceRound1(FirestoreCallback firestoreCallback) {
+        FirebaseFirestore.getInstance().collection("Preference/Round/Round 1/")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            List<DocumentSnapshot> list = task.getResult().getDocuments();
+                            for(int i = 0; i < list.size(); i++) {
+                                rankList.add(Long.parseLong(list.get(i).getId()));
+                                preferenceList.put(Long.parseLong(list.get(i).getId()), list.get(i).toObject(Preference.class));
+                            }
+                            Collections.sort(rankList);
+                            firestoreCallback.onCallback();
+                        }
+                    }
+                });
+    }
+
+    private void generateResultRound1() {
+        for(Long rank:rankList) {
+            pref = 0;
+            seat = "";
+            type = "";
+            preference = preferenceList.get(rank);
+            preference.check();
+            application = applicationList.get(rank);
+            info = studentInfoList.get(rank);
+            Log.d(rank+"",preference.toString());
+            check = 0;
+            if (info.getCaste().equals("Open")) {
+
+                access = vacancy.get(preference.getPreference1()).getGopens();
+                if (access != 0) {
+                    seat = preference.getPreference1();
+                    type = "gopens";
+                    pref = 1;
+                    vacancy.get(preference.getPreference1()).setGopens(access - 1);
+                } else {
+                    access = vacancy.get(preference.getPreference2()).getGopens();
+                    if (access != 0) {
+                        seat = preference.getPreference2();
+                        type = "gopens";
+                        pref = 2;
+                        vacancy.get(preference.getPreference2()).setGopens(access - 1);
+                    } else {
+                        access = vacancy.get(preference.getPreference3()).getGopens();
+                        if (access != 0) {
+                            seat = preference.getPreference3();
+                            type = "gopens";
+                            pref = 3;
+                            vacancy.get(preference.getPreference3()).setGopens(access - 1);
+                        } else {
+                            access = vacancy.get(preference.getPreference4()).getGopens();
+                            if (access != 0) {
+                                seat = preference.getPreference4();
+                                type = "gopens";
+                                pref = 4;
+                                vacancy.get(preference.getPreference4()).setGopens(access - 1);
+                            } else {
+                                access = vacancy.get(preference.getPreference5()).getGopens();
+                                if (access != 0) {
+                                    seat = preference.getPreference5();
+                                    type = "gopens";
+                                    pref = 5;
+                                    vacancy.get(preference.getPreference5()).setGopens(access - 1);
+                                } else {
+                                    access = vacancy.get(preference.getPreference6()).getGopens();
+                                    if (access != 0) {
+                                        seat = preference.getPreference6();
+                                        type = "gopens";
+                                        pref = 6;
+                                        vacancy.get(preference.getPreference6()).setGopens(access - 1);
+                                    } else {
+                                        Log.d("Round1","Sorry.You have not allotted any seat");
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+            } else {
+                access = vacancy.get(preference.getPreference1()).getGopens();
+                if (access != 0) {
+                    seat = preference.getPreference1();
+                    type = "gopens";
+                    pref = 1;
+                    vacancy.get(preference.getPreference1()).setGopens(access - 1);
+                } else {
+                    Toast.makeText(getApplicationContext(), "hi", Toast.LENGTH_LONG).show();
+                    access = vacancy.get(preference.getPreference2()).getGopens();
+                    if (access != 0) {
+                        seat = preference.getPreference2();
+                        type = "gopens";
+                        pref = 2;
+                        vacancy.get(preference.getPreference2()).setGopens(access - 1);
+                    } else {
+                        access = vacancy.get(preference.getPreference3()).getGopens();
+                        if (access != 0) {
+                            seat = preference.getPreference3();
+                            type = "gopens";
+                            pref = 3;
+                            vacancy.get(preference.getPreference3()).setGopens(access - 1);
+                        } else {
+                            access = vacancy.get(preference.getPreference4()).getGopens();
+                            if (access != 0) {
+                                seat = preference.getPreference4();
+                                type = "gopens";
+                                pref = 4;
+                                vacancy.get(preference.getPreference4()).setGopens(access - 1);
+                            } else {
+                                access = vacancy.get(preference.getPreference5()).getGopens();
+                                if (access != 0) {
+                                    seat = preference.getPreference5();
+                                    type = "gopens";
+                                    pref = 5;
+                                    vacancy.get(preference.getPreference5()).setGopens(access - 1);
+                                } else {
+                                    access = vacancy.get(preference.getPreference6()).getGopens();
+                                    if (access != 0) {
+                                        seat = preference.getPreference6();
+                                        type = "gopens";
+                                        pref = 6;
+                                        vacancy.get(preference.getPreference6()).setGopens(access - 1);
+                                    } else {
+                                        check += 1;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+                if (info.getGender().equals("F") && (info.getCaste().equals("Open"))) {
+                    access = vacancy.get(preference.getPreference1()).getLopens();
+                    if (access != 0) {
+                        if (seat.equals("")) {
+                            seat = preference.getPreference1();
+                            type = "lopens";
+                            pref = 1;
+                            vacancy.get(preference.getPreference1()).setLopens(access - 1);
+                        } else if (seat.equals(preference.getPreference1())) {
+                            int solve = vacancy.get(seat).getGopens();
+                            vacancy.get(seat).setGopens(solve + 1);
+                            seat = preference.getPreference1();
+                            type = "lopens";
+                            pref = 1;
+                            vacancy.get(preference.getPreference1()).setLopens(access - 1);
+                        } else if (!seat.equals("")) {
+                            int solve = vacancy.get(seat).getGopens();
+                            vacancy.get(seat).setGopens(solve + 1);
+                            seat = preference.getPreference1();
+                            type = "lopens";
+                            pref = 1;
+                            vacancy.get(seat).setLopens((access - 1));
+                        }
+                    } else {
+                        access = vacancy.get(preference.getPreference2()).getLopens();
+                        if (access != 0) {
+                            if (seat.equals("")) {
+                                seat = preference.getPreference2();
+                                type = "lopens";
+                                pref = 2;
+                                vacancy.get(preference.getPreference2()).setLopens(access - 1);
+                            } else if (seat.equals(preference.getPreference2())) {
+                                int solve = vacancy.get(seat).getGopens();
+                                vacancy.get(seat).setGopens(solve + 1);
+                                seat = preference.getPreference2();
+                                type = "lopens";
+                                pref = 2;
+                                vacancy.get(preference.getPreference2()).setLopens(access - 1);
+                            } else if (pref < 2) {
+                                Log.d("ComputeResult", "Seat already allotted");
+                            } else if (!seat.equals("")) {
+                                int solve = vacancy.get(seat).getGopens();
+                                vacancy.get(seat).setGopens(solve + 1);
+                                seat = preference.getPreference2();
+                                type = "lopens";
+                                pref = 2;
+                                vacancy.get(preference.getPreference2()).setLopens(access - 1);
+                            }
+
+                        } else {
+                            access = vacancy.get(preference.getPreference3()).getLopens();
+                            if (access != 0) {
+                                if (seat.equals("")) {
+                                    seat = preference.getPreference3();
+                                    type = "lopens";
+                                    pref = 3;
+                                    vacancy.get(preference.getPreference3()).setLopens(access - 1);
+                                } else if (seat.equals(preference.getPreference3())) {
+                                    int solve = vacancy.get(seat).getGopens();
+                                    vacancy.get(seat).setGopens(solve + 1);
+                                    seat = preference.getPreference3();
+                                    type = "lopens";
+                                    pref = 3;
+                                    vacancy.get(preference.getPreference3()).setLopens(access - 1);
+                                } else if (pref < 3) {
+                                    Log.d("ComputeResult", "Seat already allotted");
+                                } else if (!seat.equals("")) {
+                                    int solve = vacancy.get(seat).getGopens();
+                                    vacancy.get(seat).setGopens(solve + 1);
+                                    seat = preference.getPreference3();
+                                    type = "lopens";
+                                    pref = 3;
+                                    vacancy.get(preference.getPreference3()).setLopens(access - 1);
+                                }
+
+                            } else {
+                                access = vacancy.get(preference.getPreference4()).getLopens();
+                                if (access != 0) {
+                                    if (seat.equals("")) {
+                                        seat = preference.getPreference4();
+                                        type = "lopens";
+                                        pref = 4;
+                                        vacancy.get(preference.getPreference4()).setLopens(access - 1);
+                                    } else if (seat.equals(preference.getPreference4())) {
+                                        int solve = vacancy.get(seat).getGopens();
+                                        vacancy.get(seat).setGopens(solve + 1);
+                                        seat = preference.getPreference4();
+                                        type = "lopens";
+                                        pref = 4;
+                                        vacancy.get(preference.getPreference4()).setLopens(access - 1);
+                                    } else if (pref < 4) {
+                                        Log.d("ComputeResult", "Seat already allotted");
+                                    } else if (!seat.equals("")) {
+                                        int solve = vacancy.get(seat).getGopens();
+                                        vacancy.get(seat).setGopens(solve + 1);
+                                        seat = preference.getPreference4();
+                                        type = "lopens";
+                                        pref = 4;
+                                        vacancy.get(preference.getPreference4()).setLopens(access - 1);
+                                    }
+                                } else {
+                                    access = vacancy.get(preference.getPreference5()).getLopens();
+                                    if (access != 0) {
+                                        if (seat.equals("")) {
+                                            seat = preference.getPreference5();
+                                            type = "lopens";
+                                            pref = 5;
+                                            vacancy.get(preference.getPreference5()).setLopens(access - 1);
+                                        } else if (seat.equals(preference.getPreference5())) {
+                                            int solve = vacancy.get(seat).getGopens();
+                                            vacancy.get(seat).setGopens(solve + 1);
+                                            seat = preference.getPreference5();
+                                            type = "lopens";
+                                            pref = 5;
+                                            vacancy.get(preference.getPreference5()).setLopens(access - 1);
+                                        } else if (pref < 5) {
+                                            Log.d("ComputeResult", "Seat already allotted");
+                                        } else if (!seat.equals("")) {
+                                            int solve = vacancy.get(seat).getGopens();
+                                            vacancy.get(seat).setGopens(solve + 1);
+                                            seat = preference.getPreference5();
+                                            type = "lopens";
+                                            pref = 5;
+                                            vacancy.get(preference.getPreference5()).setLopens(access - 1);
+                                        }
+                                    } else {
+                                        access = vacancy.get(preference.getPreference6()).getLopens();
+                                        if (access != 0) {
+                                            if (seat.equals("")) {
+                                                seat = preference.getPreference6();
+                                                type = "lopens";
+                                                pref = 6;
+                                                vacancy.get(preference.getPreference6()).setLopens(access - 1);
+                                            } else if (seat.equals(preference.getPreference6())) {
+                                                int solve = vacancy.get(seat).getGopens();
+                                                vacancy.get(seat).setGopens(solve + 1);
+                                                seat = preference.getPreference6();
+                                                type = "lopens";
+                                                pref = 6;
+                                                vacancy.get(preference.getPreference6()).setLopens(access - 1);
+                                            } else if (pref < 6) {
+                                                Log.d("ComputeResult", "Seat already allotted");
+                                            } else if (!seat.equals("")) {
+                                                int solve = vacancy.get(seat).getGopens();
+                                                vacancy.get(seat).setGopens(solve + 1);
+                                                seat = preference.getPreference6();
+                                                type = "lopens";
+                                                pref = 6;
+                                                vacancy.get(preference.getPreference6()).setLopens(access - 1);
+                                            }
+                                        } else {
+                                            check += 1;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+                if (!info.getCaste().equals("Open")) {
+                    String l = "g";
+                    l = l + info.getCaste().toLowerCase();
+                    l = l + "s";
+                    access = vacancy.get(preference.getPreference1()).getCasteVacancy(l);
+                    if (access != 0) {
+                        if (seat.equals("")) {
+                            seat = preference.getPreference1();
+                            type = l;
+                            pref = 1;
+                            vacancy.get(preference.getPreference1()).DecCasteVacancy(l);
+                        } else if (seat.equals(preference.getPreference1())) {
+                            vacancy.get(preference.getPreference1()).IncCasteVacancy(type);
+                            seat = preference.getPreference1();
+                            type = l;
+                            pref = 1;
+                            vacancy.get(preference.getPreference1()).DecCasteVacancy(type);
+                        } else if (!seat.equals("")) {
+                            vacancy.get(preference.getPreference1()).IncCasteVacancy(type);
+                            seat = preference.getPreference1();
+                            type = l;
+                            pref = 1;
+                            vacancy.get(preference.getPreference1()).DecCasteVacancy(type);
+                        }
+                    } else {
+                        access = vacancy.get(preference.getPreference1()).getCasteVacancy(l);
+                        if (access != 0) {
+                            if (seat.equals("")) {
+                                seat = preference.getPreference2();
+                                type = l;
+                                pref = 2;
+                                vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
+                            } else if (seat.equals(preference.getPreference2())) {
+                                vacancy.get(preference.getPreference2()).IncCasteVacancy(type);
+                                seat = preference.getPreference2();
+                                type = l;
+                                pref = 2;
+                                vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
+                            } else if (pref < 2 && !seat.equals("")) {
+                                Log.d("ComputeResult", "Seat already allotted");
+                            } else if (!seat.equals("")) {
+                                vacancy.get(preference.getPreference2()).IncCasteVacancy(type);
+                                seat = preference.getPreference2();
+                                type = l;
+                                pref = 2;
+                                vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
+                            }
+                        } else {
+                            access = vacancy.get(preference.getPreference3()).getCasteVacancy(l);
+                            if (access != 0) {
+                                if (seat.equals("")) {
+                                    seat = preference.getPreference3();
+                                    type = l;
+                                    pref = 3;
+                                    vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
+                                } else if (seat.equals(preference.getPreference3())) {
+                                    vacancy.get(preference.getPreference3()).IncCasteVacancy(type);
+                                    seat = preference.getPreference3();
+                                    type = l;
+                                    pref = 3;
+                                    vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
+                                } else if (pref < 3 && !seat.equals("")) {
+                                    Log.d("ComputeResult", "Seat already allotted");
+                                } else if (!seat.equals("")) {
+                                    vacancy.get(preference.getPreference3()).IncCasteVacancy(type);
+                                    seat = preference.getPreference3();
+                                    type = l;
+                                    pref = 3;
+                                    vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
+                                }
+                            } else {
+                                access = vacancy.get(preference.getPreference4()).getCasteVacancy(l);
+                                if (access != 0) {
+                                    if (seat.equals("")) {
+                                        seat = preference.getPreference4();
+                                        type = l;
+                                        pref = 4;
+                                        vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
+                                    } else if (seat.equals(preference.getPreference4())) {
+                                        vacancy.get(preference.getPreference4()).IncCasteVacancy(type);
+                                        seat = preference.getPreference4();
+                                        type = l;
+                                        pref = 4;
+                                        vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
+                                    } else if (pref < 4 && !seat.equals("")) {
+                                        Log.d("ComputeResult", "Seat already allotted");
+                                    } else if (!seat.equals("")) {
+                                        vacancy.get(preference.getPreference4()).IncCasteVacancy(type);
+                                        seat = preference.getPreference4();
+                                        type = l;
+                                        pref = 4;
+                                        vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
+                                    }
+                                } else {
+                                    access = vacancy.get(preference.getPreference5()).getCasteVacancy(l);
+                                    if (access != 0) {
+                                        if (seat.equals("")) {
+                                            seat = preference.getPreference5();
+                                            type = l;
+                                            pref = 5;
+                                            vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
+                                        } else if (seat.equals(preference.getPreference5())) {
+                                            vacancy.get(preference.getPreference5()).IncCasteVacancy(type);
+                                            seat = preference.getPreference5();
+                                            type = l;
+                                            pref = 5;
+                                            vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
+                                        } else if (pref < 5 && !seat.equals("")) {
+                                            Log.d("ComputeResult", "Seat already allotted");
+                                        } else if (!seat.equals("")) {
+                                            vacancy.get(preference.getPreference5()).IncCasteVacancy(type);
+                                            seat = preference.getPreference5();
+                                            type = l;
+                                            pref = 5;
+                                            vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
+                                        }
+                                    } else {
+                                        access = vacancy.get(preference.getPreference6()).getCasteVacancy(l);
+                                        if (access != 0) {
+                                            if (seat.equals("")) {
+                                                seat = preference.getPreference6();
+                                                type = l;
+                                                pref = 6;
+                                                vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
+                                            } else if (seat.equals(preference.getPreference6())) {
+                                                vacancy.get(preference.getPreference6()).IncCasteVacancy(type);
+                                                seat = preference.getPreference6();
+                                                type = l;
+                                                pref = 6;
+                                                vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
+                                            } else if (pref < 6 && !seat.equals("")) {
+                                                Log.d("ComputeResult", "Seat already allotted");
+                                            } else if (!seat.equals("")) {
+                                                vacancy.get(preference.getPreference6()).IncCasteVacancy(type);
+                                                seat = preference.getPreference6();
+                                                type = l;
+                                                pref = 6;
+                                                vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
+                                            }
+                                        } else {
+                                            check += 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!info.getCaste().equals("Open") && info.getGender().equals("F")) {
+                    String l = "l" + info.getCaste().toLowerCase();
+                    l = l + "s";
+                    access = vacancy.get(preference.getPreference1()).getCasteVacancy(l);
+                    if (access != 0) {
+                        if (seat.equals("")) {
+                            seat = preference.getPreference1();
+                            type = l;
+                            pref = 1;
+                            vacancy.get(preference.getPreference1()).DecCasteVacancy(l);
+                        }
+                        if (seat.equals(preference.getPreference1())) {
+                            vacancy.get(preference.getPreference1()).IncCasteVacancy(type);
+                            seat = preference.getPreference1();
+                            type = l;
+                            pref = 1;
+                            vacancy.get(preference.getPreference1()).DecCasteVacancy(type);
+                        } else if (!seat.equals("")) {
+                            vacancy.get(preference.getPreference1()).IncCasteVacancy(type);
+                            seat = preference.getPreference1();
+                            type = l;
+                            pref = 1;
+                            vacancy.get(preference.getPreference1()).DecCasteVacancy(type);
+                        }
+                    } else {
+                        access = vacancy.get(preference.getPreference2()).getCasteVacancy(l);
+                        if (access != 0) {
+                            if (seat.equals("")) {
+                                seat = preference.getPreference2();
+                                type = l;
+                                pref = 2;
+                                vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
+                            } else if (seat.equals(preference.getPreference2())) {
+                                vacancy.get(preference.getPreference2()).IncCasteVacancy(type);
+                                seat = preference.getPreference2();
+                                type = l;
+                                pref = 2;
+                                vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
+                            } else if (pref < 2 && !seat.equals("")) {
+                                Log.d("ComputeResult", "Seat already allotted");
+                            } else if (!seat.equals("")) {
+                                vacancy.get(preference.getPreference2()).IncCasteVacancy(type);
+                                seat = preference.getPreference2();
+                                type = l;
+                                pref = 2;
+                                vacancy.get(preference.getPreference2()).DecCasteVacancy(type);
+                            }
+                        } else {
+                            access = vacancy.get(preference.getPreference3()).getCasteVacancy(l);
+                            if (access != 0) {
+                                if (seat.equals("")) {
+                                    seat = preference.getPreference3();
+                                    type = l;
+                                    pref = 3;
+                                    vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
+                                } else if (seat.equals(preference.getPreference3())) {
+                                    vacancy.get(preference.getPreference3()).IncCasteVacancy(type);
+                                    seat = preference.getPreference3();
+                                    type = l;
+                                    pref = 3;
+                                    vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
+                                } else if (pref < 3 && !seat.equals("")) {
+                                    Log.d("ComputeResult", "Seat already allotted");
+                                } else if (!seat.equals("")) {
+                                    vacancy.get(preference.getPreference3()).IncCasteVacancy(type);
+                                    seat = preference.getPreference3();
+                                    type = l;
+                                    pref = 5;
+                                    vacancy.get(preference.getPreference3()).DecCasteVacancy(type);
+                                }
+                            } else {
+                                access = vacancy.get(preference.getPreference4()).getCasteVacancy(l);
+                                if (access != 0) {
+                                    if (seat.equals("")) {
+                                        seat = preference.getPreference4();
+                                        type = l;
+                                        pref = 4;
+                                        vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
+                                    } else if (seat.equals(preference.getPreference4())) {
+                                        vacancy.get(preference.getPreference4()).IncCasteVacancy(type);
+                                        seat = preference.getPreference4();
+                                        type = l;
+                                        pref = 4;
+                                        vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
+                                    } else if (pref < 4 && !seat.equals("")) {
+                                        Log.d("ComputeResult", "Seat already allotted");
+                                    } else if (!seat.equals("")) {
+                                        vacancy.get(preference.getPreference4()).IncCasteVacancy(type);
+                                        seat = preference.getPreference4();
+                                        type = l;
+                                        pref = 4;
+                                        vacancy.get(preference.getPreference4()).DecCasteVacancy(type);
+                                    }
+                                } else {
+                                    access = vacancy.get(preference.getPreference5()).getCasteVacancy(l);
+                                    if (access != 0) {
+                                        if (seat.equals("")) {
+                                            seat = preference.getPreference5();
+                                            type = l;
+                                            pref = 5;
+                                            vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
+                                        } else if (seat.equals(preference.getPreference5())) {
+                                            vacancy.get(preference.getPreference5()).IncCasteVacancy(type);
+                                            seat = preference.getPreference5();
+                                            type = l;
+                                            pref = 5;
+                                            vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
+                                        } else if (pref < 5 && !seat.equals("")) {
+                                            Log.d("ComputeResult", "Seat already allotted");
+                                        } else if (!seat.equals("")) {
+                                            vacancy.get(preference.getPreference5()).IncCasteVacancy(type);
+                                            seat = preference.getPreference5();
+                                            type = l;
+                                            pref = 5;
+                                            vacancy.get(preference.getPreference5()).DecCasteVacancy(type);
+                                        }
+                                    } else {
+                                        access = vacancy.get(preference.getPreference6()).getCasteVacancy(l);
+                                        if (access != 0) {
+                                            if (seat.equals("")) {
+                                                seat = preference.getPreference6();
+                                                type = l;
+                                                pref = 6;
+                                                vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
+                                            } else if (seat.equals(preference.getPreference6())) {
+                                                vacancy.get(preference.getPreference6()).IncCasteVacancy(type);
+                                                seat = preference.getPreference6();
+                                                type = l;
+                                                pref = 6;
+                                                vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
+                                            } else if (pref < 6 && !seat.equals("")) {
+                                                Log.d("ComputeResult", "Seat already allotted");
+                                            } else if (!seat.equals("")) {
+                                                vacancy.get(preference.getPreference6()).IncCasteVacancy(type);
+                                                seat = preference.getPreference6();
+                                                type = l;
+                                                pref = 6;
+                                                vacancy.get(preference.getPreference6()).DecCasteVacancy(type);
+                                            }
+                                        } else {
+                                            check += 1;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                }
+            }
+
+
+            if (info.getGender().equals("F") && (check == 4)) {
+                Log.d("Round 1", "Seat not allotted");
+
+            } else if (info.getGender().equals("F") && info.getCaste().equals("Open") && check == 2) {
+                Log.d("Round 1", "Seat not allotted");
+            } else if (info.getGender().equals("M") && (check == 2) && !info.getCaste().equals("Open")) {
+                Log.d("Round 1", "Seat not allotted");
+            } else if (info.getGender().equals("M") && check == 1 && info.getCaste().equals("Open")) {
+                Log.d("Round 1", "Seat not allotted");
+            } else {
+                if(pref != 0) {
+                    Result result = new Result(pref + "", type, seat);
+                    FirebaseFirestore.getInstance().collection("Result").document(application.getRank() + "").set(result);
+                    Toast.makeText(getApplicationContext(), "Student allotted " + seat + " as " + type + ". " + "Allotted preference is " + pref, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        progressDialog.setMessage("Updating Vacancy");
+        updateVacancyRound2();
+    }
+
+    private void updateVacancyRound2() {
+        cse.setRound2();
+        it.setRound2();
+        me.setRound2();
+        cv.setRound2();
+        el.setRound2();
+        en.setRound2();
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Computer Science and Engineering").set(cse);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Information Technology").set(it);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Civil Engineering").set(cv);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Electronics Engineering").set(en);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Electrical Engineering").set(el);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 2").document("Mechanical Engineering").set(me);
+        Map<String, Boolean> rresult = new HashMap<>();
+        rresult.put("R", true);
+        FirebaseFirestore.getInstance().collection("RoundResult").document("Round1").set(rresult).
+                addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(@NonNull Void unused) {
+                        new AlertDialog.Builder(ComputeResult.this)
+                                .setTitle("Round 1")
+                                .setMessage("Seats allotted Successfully")
+
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {}
+                                })
+                                .setNegativeButton(android.R.string.no, null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
+        binding.Round1.setText("Seats Allotted");
+        progressDialog.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    //Round2
+
+    private void getVacancyRound2(FirestoreCallback firestoreCallback) {
         FirebaseFirestore.getInstance().collection("Vacancy")
                 .document("Round").collection("Round 2")
                 .document("Civil Engineering")
@@ -1524,6 +1092,12 @@ public class ComputeResult extends AppCompatActivity {
                                                                                                     {
                                                                                                         me=documentSnapshot.toObject(NewCategory.class);
                                                                                                         Log.d("ME", me.toString());
+                                                                                                        vacancy.put("Computer Science and Engineering",cse);
+                                                                                                        vacancy.put("Information Technology",it);
+                                                                                                        vacancy.put("Electrical Engineering",el);
+                                                                                                        vacancy.put("Electronics Engineering",en);
+                                                                                                        vacancy.put("Civil Engineering",cv);
+                                                                                                        vacancy.put("Mechanical Engineering",me);
                                                                                                         firestoreCallback.onCallback();
                                                                                                     }
                                                                                                 });
@@ -1539,8 +1113,190 @@ public class ComputeResult extends AppCompatActivity {
                 });
     }
 
-    private void getVacancyRound3(FirestoreCallback firestoreCallback)
-    {
+    private void getStudentInfoRound2(FirestoreCallback firestoreCallback) {
+        currentApplications = 0;
+        FirebaseFirestore.getInstance().collection("Application")
+                .orderBy("rank")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
+                {
+                    @Override
+                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots)
+                    {
+                        applicationSize = queryDocumentSnapshots.size();
+                        for(QueryDocumentSnapshot doc1:queryDocumentSnapshots)
+                        {
+                            application=doc1.toObject(Application.class);
+                            applicationList.put(application.getRank(), application);
+                            Log.d("application", application.toString());
+                            FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
+                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                    info = documentSnapshot.toObject(StudentInfo.class);
+
+                                    if(info.getCaste().equals("SEBC"))
+                                        info.setCaste("Open");
+                                    else if(info.getCaste().equals("SBC"))
+                                        info.setCaste("OBC");
+                                    studentInfoList.put(info.getRank(), info);
+                                    Log.d("Info", info.toString());
+                                    currentApplications ++;
+                                }
+                            });
+
+                        }
+                        untilDataFetch2(firestoreCallback);
+                    }
+
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),"Hi",Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
+    private void untilDataFetch2(FirestoreCallback firestoreCallback) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                while(currentApplications != applicationSize);
+                getPreferenceRound2(firestoreCallback);
+            }
+        });
+    }
+
+    private void getPreferenceRound2(FirestoreCallback firestoreCallback) {
+        FirebaseFirestore.getInstance().collection("Preference/Round/Round 2/")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            List<DocumentSnapshot> list = task.getResult().getDocuments();
+                            for(int i = 0; i < list.size(); i++) {
+                                rankList.add(Long.parseLong(list.get(i).getId()));
+                                preferenceList.put(Long.parseLong(list.get(i).getId()), list.get(i).toObject(Preference.class));
+                            }
+                            Collections.sort(rankList);
+                            firestoreCallback.onCallback();
+                        }
+                    }
+                });
+    }
+
+    private void generateResultRound2() {
+        for(Long rank:rankList) {
+            pref = 0;
+            seat = "";
+            type = "";
+            preference = preferenceList.get(rank);
+            preference.check();
+            application = applicationList.get(rank);
+            info = studentInfoList.get(rank);
+            check = 0;
+            access = vacancy.get(preference.getPreference1()).getGopens();
+            if (access != 0) {
+                seat = preference.getPreference1();
+                type = "gopens";
+                pref = 1;
+                vacancy.get(preference.getPreference1()).setGopens(access - 1);
+            } else {
+                access = vacancy.get(preference.getPreference2()).getGopens();
+                if (access != 0) {
+                    seat = preference.getPreference2();
+                    type = "gopens";
+                    pref = 2;
+                    vacancy.get(preference.getPreference2()).setGopens(access - 1);
+                } else {
+                    access = vacancy.get(preference.getPreference3()).getGopens();
+                    if (access != 0) {
+                        seat = preference.getPreference3();
+                        type = "gopens";
+                        pref = 3;
+                        vacancy.get(preference.getPreference3()).setGopens(access - 1);
+                    } else {
+                        access = vacancy.get(preference.getPreference4()).getGopens();
+                        if (access != 0) {
+                            seat = preference.getPreference4();
+                            type = "gopens";
+                            pref = 4;
+                            vacancy.get(preference.getPreference4()).setGopens(access - 1);
+                        } else {
+                            access = vacancy.get(preference.getPreference5()).getGopens();
+                            if (access != 0) {
+                                seat = preference.getPreference5();
+                                type = "gopens";
+                                pref = 5;
+                                vacancy.get(preference.getPreference5()).setGopens(access - 1);
+                            } else {
+                                access = vacancy.get(preference.getPreference6()).getGopens();
+                                if (access != 0) {
+                                    seat = preference.getPreference6();
+                                    type = "gopens";
+                                    pref = 6;
+                                    vacancy.get(preference.getPreference6()).setGopens(access - 1);
+                                } else {
+                                    check += 1;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            if (check == 0 && pref != 0) {
+                Result result = new Result(pref + "", type, seat);
+                FirebaseFirestore.getInstance().collection("Result").document(application.getRank() + "").set(result);
+                Toast.makeText(getApplicationContext(), "Student allotted " + seat + " as " + type + ". " + "Allotted preference is " + pref, Toast.LENGTH_LONG).show();
+            }
+        }
+        progressDialog.setMessage("Updating Vacancy");
+        updateVacancyRound3();
+    }
+
+    private void updateVacancyRound3() {
+        cse.setRound2();
+        it.setRound2();
+        me.setRound2();
+        cv.setRound2();
+        el.setRound2();
+        en.setRound2();
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 3").document("Computer Science and Engineering").set(cse);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 3").document("Information Technology").set(it);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 3").document("Civil Engineering").set(cv);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 3").document("Electronics Engineering").set(en);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 3").document("Electrical Engineering").set(el);
+        FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 3").document("Mechanical Engineering").set(me);
+        Map<String, Boolean> rresult = new HashMap<>();
+        rresult.put("R", true);
+        FirebaseFirestore.getInstance().collection("RoundResult").document("Round2").set(rresult).
+                addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(@NonNull Void unused) {
+                        new AlertDialog.Builder(ComputeResult.this)
+                                .setTitle("Round 2")
+                                .setMessage("Seats allotted Successfully")
+
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {}
+                                })
+                                .setNegativeButton(android.R.string.no, null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
+        binding.Round2.setText("Seats Allotted");
+        progressDialog.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    //Round3
+
+    private void getVacancyRound3(FirestoreCallback firestoreCallback) {
         FirebaseFirestore.getInstance().collection("Vacancy")
                 .document("Round").collection("Round 3")
                 .document("Civil Engineering")
@@ -1616,196 +1372,168 @@ public class ComputeResult extends AppCompatActivity {
                     }
                 });
     }
-}
 
-
-/*
-package com.example.spotround;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.List;
-import java.util.Objects;
-
-public class ComputeResult extends AppCompatActivity {
-    public static int a=0;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compute_result);
-        DatabaseReference dr1 = FirebaseDatabase.getInstance().getReference("Vacancy");
-        FirebaseFirestore.getInstance()
-                .collection("StudentInfo")
-                .orderBy("rank");
-        Task<QuerySnapshot> dr=FirebaseFirestore.getInstance().collection("StudentInfo").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
-        {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> snapshotList=queryDocumentSnapshots.getDocuments();
-                for(DocumentSnapshot snapshot:snapshotList)
+    private void getStudentInfoRound3(FirestoreCallback firestoreCallback) {
+        currentApplications = 0;
+        FirebaseFirestore.getInstance().collection("Application")
+                .orderBy("rank")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
                 {
-                    FirebaseDatabase db=FirebaseDatabase.getInstance();
-                    DatabaseReference root=db.getReference("Vacancy");
-                    String name2= Objects.requireNonNull(snapshot.get("name")).toString();
-                    String first= Objects.requireNonNull(snapshot.get("first_preference")).toString();
-                    String second=Objects.requireNonNull(snapshot.get("second_preference").toString());
-                    String third= Objects.requireNonNull(snapshot.get("third_preference")).toString();
-                    String forth=snapshot.get("forth_preference").toString();
-                    String fifth=snapshot.get("fifth_preference").toString();
-                    String sixth=snapshot.get("sixth_preference").toString();
+                    @Override
+                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots)
+                    {
+                        applicationSize = queryDocumentSnapshots.size();
+                        for(QueryDocumentSnapshot doc1:queryDocumentSnapshots)
+                        {
+                            application=doc1.toObject(Application.class);
+                            applicationList.put(application.getRank(), application);
+                            Log.d("application", application.toString());
+                            FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
+                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                    info = documentSnapshot.toObject(StudentInfo.class);
 
-                    DocumentReference dref=FirebaseFirestore.getInstance().collection("Vacancy").document(first);
-                    dref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable  DocumentSnapshot value, @Nullable  FirebaseFirestoreException error) {
-                            String abc1=value.getString("gopens");
-                            int a1=Integer.parseInt(abc1);
-                            if(a1!=0)
-                            {
-                                int a=Integer.parseInt(abc1);
-                                a=a-1;
-                                abc1=Integer.toString(a);
-                                String at=snapshot.getId().toString();
-                                FirebaseFirestore.getInstance().collection("StudentInfo").document(at).update("status1","Prefernce is alloted:-"+first);
-                                FirebaseFirestore.getInstance().collection("Vacancy").document(first).update("gopens",abc1);
-                            }
-                            else
-                            {
-                                DocumentReference dref1=FirebaseFirestore.getInstance().collection("Vacancy").document(second);
-                                dref1.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable DocumentSnapshot value1, @Nullable FirebaseFirestoreException error) {
-                                        String abc2=value1.getString("gopens");
-                                        int b1=Integer.parseInt(abc2);
-                                        if(b1!=0)
-                                        {
-                                            int b=Integer.parseInt(abc2);
-                                            b=b-1;
-                                            abc2=Integer.toString(b);
-                                            String at1=snapshot.getId().toString();
-                                            FirebaseFirestore.getInstance().collection("StudentInfo").document(at1).update("status1","Prefernce is alloted:-"+second);
-                                            FirebaseFirestore.getInstance().collection("Vacancy").document(second).update("gopens",abc2);
-                                        }
-                                        else
-                                        {
-                                            DocumentReference dref2=FirebaseFirestore.getInstance().collection("Vacancy").document(third);
-                                            dref2.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onEvent(@Nullable DocumentSnapshot value2, @Nullable FirebaseFirestoreException error) {
-                                                    String abc3=value2.getString("gopens");
-                                                    int c1=Integer.parseInt(abc3);
-                                                    if(c1!=0)
-                                                    {
-                                                        int c=Integer.parseInt(abc3);
-                                                        c=c-1;
-                                                        abc3=Integer.toString(c);
-                                                        String at2=snapshot.getId().toString();
-                                                        FirebaseFirestore.getInstance().collection("StudentInfo").document(at2).update("status1","Prefernce is alloted:-"+third);
-                                                        FirebaseFirestore.getInstance().collection("Vacancy").document(third).update("gopens",abc3);
-                                                    }
-                                                    else
-                                                    {
-                                                        DocumentReference dref3=FirebaseFirestore.getInstance().collection("Vacancy").document(forth);
-                                                        dref3.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                                            @Override
-                                                            public void onEvent(@Nullable DocumentSnapshot value3, @Nullable  FirebaseFirestoreException error) {
-                                                                String abc4=value3.getString("gopens");
-                                                                int d1=Integer.parseInt(abc4);
-                                                                if(d1!=0)
-                                                                {
-                                                                    int d=Integer.parseInt(abc4);
-                                                                    d=d-1;
-                                                                    abc4=Integer.toString(d);
-                                                                    String at3=snapshot.getId().toString();
-                                                                    FirebaseFirestore.getInstance().collection("StudentInfo").document(at3).update("status1","Prefernce is alloted:-"+forth);
-                                                                    FirebaseFirestore.getInstance().collection("Vacancy").document(forth).update("gopens",abc4);
-                                                                }
-                                                                else
-                                                                {
-                                                                    DocumentReference dref4=FirebaseFirestore.getInstance().collection("Vacancy").document(fifth);
-                                                                    dref4.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                                                        @Override
-                                                                        public void onEvent(@Nullable DocumentSnapshot value4, @Nullable FirebaseFirestoreException error) {
-                                                                            String abc5=value4.getString("gopens");
-                                                                            int e1=Integer.parseInt(abc5);
-                                                                            if(e1!=0)
-                                                                            {
-                                                                                int e=Integer.parseInt(abc5);
-                                                                                e=e-1;
-                                                                                abc5=Integer.toString(e);
-                                                                                String at4=snapshot.getId().toString();
-                                                                                FirebaseFirestore.getInstance().collection("StudentInfo").document(at4).update("status1","Prefernce is alloted:"+fifth);
-                                                                                FirebaseFirestore.getInstance().collection("Vacancy").document(fifth).update("gopens",abc5);
+                                    if(info.getCaste().equals("SEBC"))
+                                        info.setCaste("Open");
+                                    else if(info.getCaste().equals("SBC"))
+                                        info.setCaste("OBC");
+                                    studentInfoList.put(info.getRank(), info);
+                                    Log.d("Info", info.toString());
+                                    currentApplications ++;
+                                }
+                            });
 
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                DocumentReference dref5=FirebaseFirestore.getInstance().collection("Vacancy").document(sixth);
-                                                                                dref5.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                                                                    @Override
-                                                                                    public void onEvent(@Nullable DocumentSnapshot value5, @Nullable  FirebaseFirestoreException error) {
-
-                                                                                        String abc6=value5.getString("gopens");
-                                                                                        int f6=Integer.parseInt(abc6);
-                                                                                        if(f6!=0)
-                                                                                        {
-                                                                                            int f=Integer.parseInt(abc6);
-                                                                                            f=f-1;
-                                                                                            abc6=Integer.toString(f);
-                                                                                            String at5=snapshot.getId().toString();
-                                                                                            FirebaseFirestore.getInstance().collection("StudentInfo").document(at5).update("status1","Prefernce is alloted:-"+sixth);
-                                                                                            FirebaseFirestore.getInstance().collection("Vacancy").document(sixth).update("gopens",abc6);
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            Toast.makeText(ComputeResult.this,"No seat is allocated",Toast.LENGTH_LONG).show();
-                                                                                        }
-                                                                                    }
-                                                                                });
-                                                                            }
-                                                                        }
-                                                                    });
-                                                                }
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            });
-                                        }
-
-                                    }
-                                });
-                            }
-                            Toast.makeText(ComputeResult.this,abc1,Toast.LENGTH_LONG).show();
                         }
-                    });
+                        untilDataFetch3(firestoreCallback);
+                    }
 
-                }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),"Hi",Toast.LENGTH_LONG).show();
+
             }
         });
     }
 
-    private void update(String def)
-    {
-        a=Integer.valueOf(def);
+    private void untilDataFetch3(FirestoreCallback firestoreCallback) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                while(currentApplications != applicationSize);
+                getPreferenceRound3(firestoreCallback);
+            }
+        });
     }
-}*/
+
+    private void getPreferenceRound3(FirestoreCallback firestoreCallback) {
+        FirebaseFirestore.getInstance().collection("Preference/Round/Round 3/")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            List<DocumentSnapshot> list = task.getResult().getDocuments();
+                            for(int i = 0; i < list.size(); i++) {
+                                rankList.add(Long.parseLong(list.get(i).getId()));
+                                preferenceList.put(Long.parseLong(list.get(i).getId()), list.get(i).toObject(Preference.class));
+                            }
+                            Collections.sort(rankList);
+                            firestoreCallback.onCallback();
+                        }
+                    }
+                });
+    }
+
+    private void generateResultRound3() {
+        for(Long rank:rankList) {
+            pref = 0;
+            seat = "";
+            type = "";
+            preference = preferenceList.get(rank);
+            preference.check();
+            application = applicationList.get(rank);
+            info = studentInfoList.get(rank);
+            check = 0;
+            access = vacancy.get(preference.getPreference1()).getGopens();
+            if (access != 0) {
+                seat = preference.getPreference1();
+                type = "gopens";
+                pref = 1;
+                vacancy.get(preference.getPreference1()).setGopens(access - 1);
+            } else {
+                access = vacancy.get(preference.getPreference2()).getGopens();
+                if (access != 0) {
+                    seat = preference.getPreference2();
+                    type = "gopens";
+                    pref = 2;
+                    vacancy.get(preference.getPreference2()).setGopens(access - 1);
+                } else {
+                    access = vacancy.get(preference.getPreference3()).getGopens();
+                    if (access != 0) {
+                        seat = preference.getPreference3();
+                        type = "gopens";
+                        pref = 3;
+                        vacancy.get(preference.getPreference3()).setGopens(access - 1);
+                    } else {
+                        access = vacancy.get(preference.getPreference4()).getGopens();
+                        if (access != 0) {
+                            seat = preference.getPreference4();
+                            type = "gopens";
+                            pref = 4;
+                            vacancy.get(preference.getPreference4()).setGopens(access - 1);
+                        } else {
+                            access = vacancy.get(preference.getPreference5()).getGopens();
+                            if (access != 0) {
+                                seat = preference.getPreference5();
+                                type = "gopens";
+                                pref = 5;
+                                vacancy.get(preference.getPreference5()).setGopens(access - 1);
+                            } else {
+                                access = vacancy.get(preference.getPreference6()).getGopens();
+                                if (access != 0) {
+                                    seat = preference.getPreference6();
+                                    type = "gopens";
+                                    pref = 6;
+                                    vacancy.get(preference.getPreference6()).setGopens(access - 1);
+                                } else {
+                                    check += 1;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            if (check == 0 && pref != 0) {
+                Result result = new Result(pref + "", type, seat);
+                FirebaseFirestore.getInstance().collection("Result").document(application.getRank() + "").set(result);
+                Toast.makeText(getApplicationContext(), "Student allotted " + seat + " as " + type + ". " + "Allotted preference is " + pref, Toast.LENGTH_LONG).show();
+            }
+        }
+        Map<String, Boolean> rresult = new HashMap<>();
+        rresult.put("R", true);
+        FirebaseFirestore.getInstance().collection("RoundResult").document("Round3").set(rresult).
+                addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(@NonNull Void unused) {
+                        new AlertDialog.Builder(ComputeResult.this)
+                        .setTitle("Round 3")
+                        .setMessage("Seats allotted Successfully")
+
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {}
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                    }
+                });
+        binding.Round3.setText("Seats Allotted");
+        progressDialog.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+}

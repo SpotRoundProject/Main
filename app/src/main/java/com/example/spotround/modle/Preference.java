@@ -104,4 +104,32 @@ public class Preference {
                 ", clgSeat=" + clgSeat +
                 '}';
     }
+
+    public void check() {
+        if(getPreference2().equals("Select Branch")) {
+            setPreference2(getPreference1());
+            setPreference3(getPreference1());
+            setPreference4(getPreference1());
+            setPreference5(getPreference1());
+            setPreference6(getPreference1());
+        }
+        else if(getPreference3().equals("Select Branch")) {
+            setPreference3(getPreference2());
+            setPreference4(getPreference2());
+            setPreference5(getPreference2());
+            setPreference6(getPreference2());
+        }
+        else if(getPreference4().equals("Select Branch")) {
+            setPreference4(getPreference3());
+            setPreference5(getPreference3());
+            setPreference6(getPreference3());
+        }
+        else if(getPreference5().equals("Select Branch")) {
+            setPreference5(getPreference4());
+            setPreference6(getPreference4());
+        }
+        else if(getPreference6().equals("Select Branch")) {
+            setPreference6(getPreference5());
+        }
+    }
 }

@@ -48,7 +48,7 @@ public class Apply extends AppCompatActivity {
     private FirebaseFirestore fireStore;
     private DocumentReference reference;
     private FirebaseDatabase database;
-    private boolean flagPhoneNoVerified = false;
+    private boolean flagPhoneNoVerified = true;
     private boolean flagPaymentDone = false;
     private String uid;
     private Application application;
@@ -145,21 +145,7 @@ public class Apply extends AppCompatActivity {
                         return;
                     }
                 }
-
-                if(verifyInformation(application)) {
-                    reference = fireStore.collection("Application").document(uid);
-                    reference.set(application);
-                    binding.ApplyActivitybtnRegister.setText("Registered");
-                    binding.ApplyActivitybtnRegister.setEnabled(false);
-                    binding.ApplyActivityName.setError(null);
-                    binding.ApplyActivityCETRank.setError(null);
-                    binding.ApplyActivityApplicationId.setError(null);
-                }
-                else {
-                    Toast.makeText(Apply.this, "Information not correct", Toast.LENGTH_LONG).show();
-                }
-                progressDialog.hide();
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                verifyInformation(application);
             }
         });
 
@@ -417,7 +403,7 @@ public class Apply extends AppCompatActivity {
         binding.ApplyActivitybtnSendOTP.setText(time);
     }
 
-    boolean verifyInformation(Application application) {
+    void verifyInformation(Application application) {
         reference = fireStore.collection("StudentInfo").document(application.getRank() + "");
         reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -425,31 +411,45 @@ public class Apply extends AppCompatActivity {
                 if (documentSnapshot.exists()) {
                     info = documentSnapshot.toObject(StudentInfo.class);
                     Log.d("StudentInfo", documentSnapshot.getId() + info.toString());
+
+                    if (!binding.ApplyActivityApplicationId.getText().toString().equals(info.getApplicationId())) {
+                        Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
+                        /*binding.ApplyActivityCETRank.setError("Invalid Application ID");*/
+                        return;
+                    }
+                    else if (!binding.ApplyActivityApplicationId.getText().toString().equals(info.getApplicationId())) {
+                        Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
+                        /*binding.ApplyActivityCETRank.setError("Invalid Application ID");*/
+                        return;
+                    }
+                    String name = binding.ApplyActivityName.getText().toString();
+                    String[] nameList = name.toLowerCase().split(" ");
+                    for (String test : nameList) {
+                        if (!application.getName().toLowerCase().contains(test)) {
+                            Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
+                            binding.ApplyActivityCETRank.setError("Invalid Name");
+                            return;
+                        }
+                    }
+                    if(!application.getSeatCode().equals("Select seat code") && !application.getSeatType().equals("Select seat Type")) {
+                        reference = fireStore.collection("Application").document(uid);
+                        reference.set(application);
+                        binding.ApplyActivitybtnRegister.setText("Registered");
+                        binding.ApplyActivitybtnRegister.setEnabled(false);
+                        binding.ApplyActivityName.setError(null);
+                        binding.ApplyActivityCETRank.setError(null);
+                        binding.ApplyActivityApplicationId.setError(null);
+                    }
+                    else {
+                        Toast.makeText(Apply.this, "Information not correct", Toast.LENGTH_LONG).show();
+                    }
+                    progressDialog.hide();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 } else {
                     Toast.makeText(Apply.this, "Record Not Found", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        if (info != null) {
-            if (!binding.ApplyActivityApplicationId.getText().toString().equals(info.getApplicationId())) {
-                Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
-                binding.ApplyActivityCETRank.setError("Invalid Application ID");
-                return false;
-            }
-            String name = binding.ApplyActivityName.getText().toString();
-            String[] nameList = name.toLowerCase().split(" ");
-            for (String test : nameList) {
-                if (!application.getName().toLowerCase().contains(test)) {
-                    Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
-                    binding.ApplyActivityCETRank.setError("Invalid Name");
-                    return false;
-                }
-            }
-            if(application.getSeatCode().equals("Select seat code") || application.getSeatType().equals("Select seat Type"))
-                return false;
-            return true;
-        }
-        return false;
     }
 
     @Override

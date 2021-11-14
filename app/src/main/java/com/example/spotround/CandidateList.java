@@ -73,7 +73,7 @@ public class CandidateList extends AppCompatActivity {
                                 if(documentSnapshot.exists()) {
                                     StudentInfo info = documentSnapshot.toObject(StudentInfo.class);
                                     CandidateListObj candidateListObj = new CandidateListObj();
-                                    candidateListObj.setRank(info.getRank());
+                                    candidateListObj.setRank(info.getRank() + "");
                                     candidateListObj.setApplicationId(info.getApplicationId());
                                     candidateListObj.setName(info.getName());
                                     candidateListObj.setCetPercentage(info.getPCMPercentile());

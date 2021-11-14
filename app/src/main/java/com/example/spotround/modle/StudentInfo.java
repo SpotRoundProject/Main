@@ -1,12 +1,13 @@
 package com.example.spotround.modle;
 
 public class StudentInfo {
-    String rank, applicationId, name, caste, gender, PCMPercentile, mathPercentile,
+    String applicationId, name, caste, gender, PCMPercentile, mathPercentile,
             physicsPercentile, chemPercentile, hsc, ssc;
+    Long rank;
 
     public StudentInfo() {}
 
-    public StudentInfo(String rank, String applicationId, String name, String caste, String gender,
+    public StudentInfo(Long rank, String applicationId, String name, String caste, String gender,
                        String PCMPercentile, String mathPercentile, String physicsPercentile,
                        String chemPercentile, String hsc, String ssc) {
         this.rank = rank;
@@ -22,11 +23,11 @@ public class StudentInfo {
         this.ssc = ssc;
     }
 
-    public String getRank() {
+    public Long getRank() {
         return rank;
     }
 
-    public void setRank(String rank) {
+    public void setRank(Long rank) {
         this.rank = rank;
     }
 

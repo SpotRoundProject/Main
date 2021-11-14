@@ -35,6 +35,7 @@ public class SetPreference extends AppCompatActivity {
     Preference pre = null;
     ProgressDialog progressDialog;
     Application application;
+    int clickable = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,12 @@ public class SetPreference extends AppCompatActivity {
         binding.Preference6.setAdapter(adapter);
         binding.btnSubmitPreference.setEnabled(false);
 
+        binding.Preference2.setEnabled(false);
+        binding.Preference3.setEnabled(false);
+        binding.Preference4.setEnabled(false);
+        binding.Preference5.setEnabled(false);
+        binding.Preference6.setEnabled(false);
+
 
         binding.btnSubmitPreference.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,22 +79,142 @@ public class SetPreference extends AppCompatActivity {
                 progressDialog.setCanceledOnTouchOutside(false);
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                reference = fireStore.collection("Preference").document("Round").collection("Round 1").document(application.getRank() + "");
+
                 if(!check()) {
-                    Toast.makeText(SetPreference.this, "Select valid branch", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SetPreference.this, "Select Valid Branch", Toast.LENGTH_SHORT).show();
+                    progressDialog.hide();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    return;
                 }
-                else {
-                    reference = fireStore.collection("Preference").document("Round").collection("Round 1").document(uid);
-                    Preference preference = new Preference(binding.Preference1.getSelectedItem().toString(),
-                            binding.Preference2.getSelectedItem().toString(), binding.Preference3.getSelectedItem().toString(),
-                            binding.Preference4.getSelectedItem().toString(), binding.Preference5.getSelectedItem().toString(),
-                            binding.Preference6.getSelectedItem().toString(), application.isClgSeat(),application.getSeatType(), application.getSeatCode());
-                    reference.set(preference);
-                }
+                Preference preference = new Preference(binding.Preference1.getSelectedItem().toString(),
+                        binding.Preference2.getSelectedItem().toString(), binding.Preference3.getSelectedItem().toString(),
+                        binding.Preference4.getSelectedItem().toString(), binding.Preference5.getSelectedItem().toString(),
+                        binding.Preference6.getSelectedItem().toString(), application.isClgSeat(),application.getSeatType(), application.getSeatCode());
+                reference.set(preference);
 
                 binding.btnSubmitPreference.setText("Submitted");
                 binding.btnSubmitPreference.setEnabled(false);
                 progressDialog.hide();
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
+
+        binding.Preference1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position != 0) {
+                    if(!binding.btnSubmitPreference.getText().toString().equals("Submitted")) {
+                        binding.Preference2.setEnabled(true);
+                        clickable = 2;
+                    }
+                }
+                else {
+                    clickable = 1;
+                    binding.Preference2.setEnabled(false);
+                    binding.Preference3.setEnabled(false);
+                    binding.Preference4.setEnabled(false);
+                    binding.Preference5.setEnabled(false);
+                    binding.Preference6.setEnabled(false);
+                    binding.Preference2.setSelection(0);
+                    binding.Preference3.setSelection(0);
+                    binding.Preference4.setSelection(0);
+                    binding.Preference5.setSelection(0);
+                    binding.Preference6.setSelection(0);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        binding.Preference2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    binding.Preference3.setEnabled(true);
+                    clickable = 3;
+                }
+                else {
+                    clickable = 2;
+                    binding.Preference3.setEnabled(false);
+                    binding.Preference4.setEnabled(false);
+                    binding.Preference5.setEnabled(false);
+                    binding.Preference6.setEnabled(false);
+                    binding.Preference3.setSelection(0);
+                    binding.Preference4.setSelection(0);
+                    binding.Preference5.setSelection(0);
+                    binding.Preference6.setSelection(0);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        binding.Preference3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position != 0) {
+                    binding.Preference4.setEnabled(true);
+                    clickable = 4;
+                }
+                else {
+                    clickable = 3;
+                    binding.Preference4.setEnabled(false);
+                    binding.Preference5.setEnabled(false);
+                    binding.Preference6.setEnabled(false);
+                    binding.Preference4.setSelection(0);
+                    binding.Preference5.setSelection(0);
+                    binding.Preference6.setSelection(0);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        binding.Preference4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position != 0) {
+                    binding.Preference5.setEnabled(true);
+                    clickable = 5;
+                }
+                else {
+                    clickable = 4;
+                    binding.Preference5.setEnabled(false);
+                    binding.Preference6.setEnabled(false);
+                    binding.Preference5.setSelection(0);
+                    binding.Preference6.setSelection(0);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        binding.Preference5.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position != 0) {
+                    binding.Preference6.setEnabled(true);
+                    clickable = 6;
+                }
+                else {
+                    clickable = 5;
+                    binding.Preference6.setEnabled(false);
+                    binding.Preference6.setSelection(0);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -101,7 +228,7 @@ public class SetPreference extends AppCompatActivity {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                reference = fireStore.collection("Preference").document("Round").collection("Round 1").document(uid);
+                reference = fireStore.collection("Preference").document("Round").collection("Round 1").document(application.getRank() + "");
                 reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -139,6 +266,18 @@ public class SetPreference extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        progressDialog.dismiss();
+    }
+
     boolean check() {
         String pref1, pref2, pref3, pref4, pref5, pref6;
         pref1 = binding.Preference1.getSelectedItem().toString();
@@ -148,6 +287,20 @@ public class SetPreference extends AppCompatActivity {
         pref5 = binding.Preference5.getSelectedItem().toString();
         pref6 = binding.Preference6.getSelectedItem().toString();
 
+        if(clickable == 1)
+            return false;
+        if(clickable == 2)
+            return true;
+        if(clickable == 3)
+            return !pref1.equals(pref2);
+        if(clickable == 4) {
+            return !pref1.equals(pref2) && !pref2.equals(pref3) && !pref3.equals(pref1)
+         ;
+        }
+        if(clickable == 5) {
+            return !pref1.equals(pref2) && !pref1.equals(pref3) && !pref1.equals(pref4) &&
+                    !pref2.equals(pref3) && !pref2.equals(pref4) && !pref3.equals(pref4);
+        }
         if(!pref1.equals(pref2) && !pref1.equals(pref3) && !pref1.equals(pref4) && !pref1.equals(pref5) && !pref1.equals(pref6)) {
             if(!pref2.equals(pref3) && !pref2.equals(pref4) && !pref2.equals(pref5) && !pref2.equals(pref6)) {
                 if(!pref3.equals(pref4) && !pref3.equals(pref5) && !pref3.equals(pref6)) {
@@ -161,17 +314,5 @@ public class SetPreference extends AppCompatActivity {
             else return false;
         }
         else return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        progressDialog.dismiss();
     }
 }

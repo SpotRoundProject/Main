@@ -335,11 +335,11 @@ public class InstituteActivity extends AppCompatActivity {
                                 name.append(word1[c]).append(" ");
                             c++;
                         }
-                        StudentInfo studentInfo = new StudentInfo(word1[0], word1[1], name.toString(), word1[c + 1],
+                        StudentInfo studentInfo = new StudentInfo(Long.parseLong(word1[0].trim()), word1[1], name.toString(), word1[c + 1],
                                 word1[c + 2], word1[c + 3], word1[c + 4], word1[c + 5], word1[c + 6], word1[c + 9], word1[c + 10]);
-                        //Log.d("Name : ", name.toString());
+                        Log.d("Name : ", name.toString());
 
-                        reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank());
+                        reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank() + "");
                         reference.set(studentInfo);
                     }
 
@@ -361,11 +361,11 @@ public class InstituteActivity extends AppCompatActivity {
                         c1++;
                     }
 
-                    StudentInfo studentInfo = new StudentInfo(word[0], word[1], name.toString(), word[c1 + 1], word[c1 + 2],
+                    StudentInfo studentInfo = new StudentInfo(Long.parseLong(word[0].trim()), word[1], name.toString(), word[c1 + 1], word[c1 + 2],
                             word[c1 + 3], word[c1 + 4], word[c1 + 5], word[c1 + 6], word[c1 + 10], word[c1 + 11]);
                     //Log.d("Name : ", name.toString());
 
-                    reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank());
+                    reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank() + "");
                     reference.set(studentInfo);
                 }
             //}
