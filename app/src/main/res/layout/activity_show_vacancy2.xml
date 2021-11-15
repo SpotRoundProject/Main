@@ -2,41 +2,73 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/round1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ShowVacancy2">
 
 
-    <ScrollView
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Vacancy"
+        android:textColor="#E11313"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/round"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="Round 1"
+        app:layout_constraintBottom_toBottomOf="@+id/textView26"
+        app:layout_constraintEnd_toEndOf="@+id/textView26"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/textView26"
+        app:layout_constraintTop_toTopOf="@+id/textView26"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="24dp"
+        android:scrollbarSize="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/bs"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent"
-            >
+            app:layout_constraintTop_toBottomOf="parent">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:layout_gravity="center">
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/IT"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Information Technology"
-                    android:id="@+id/IT"
-                    android:textSize="20dp"
                     android:layout_gravity=""
+                    android:text="Information Technology"
+                    android:textSize="20sp"
                     android:textStyle="bold">
 
                 </TextView>
@@ -98,7 +130,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text8"
@@ -106,7 +140,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text9"
@@ -114,7 +150,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text10"
@@ -122,14 +160,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -181,7 +221,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text16"
@@ -189,7 +231,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text17"
@@ -197,7 +241,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text18"
@@ -205,14 +251,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -264,7 +312,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text24"
@@ -272,7 +322,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text25"
@@ -280,7 +332,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text26"
@@ -288,14 +342,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -347,7 +403,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text32"
@@ -355,7 +413,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text33"
@@ -363,7 +423,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/text29"
@@ -371,31 +433,33 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/CSE"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Computer science and Engineering"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:id="@+id/CSE"
-                    >
-                </TextView>
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -446,7 +510,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext8"
@@ -454,7 +520,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext9"
@@ -462,7 +530,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext10"
@@ -470,14 +540,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -529,7 +601,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext16"
@@ -537,7 +611,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext17"
@@ -545,7 +621,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext18"
@@ -553,14 +631,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -612,7 +692,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext24"
@@ -620,7 +702,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext25"
@@ -628,7 +712,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext26"
@@ -636,14 +722,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -695,7 +783,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext32"
@@ -703,7 +793,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext33"
@@ -711,7 +803,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/csetext29"
@@ -719,23 +813,27 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:layout_gravity="center">
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/EN"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Electronics Engineering"
-                    android:id="@+id/EN"
-                    android:textSize="20dp"
                     android:layout_gravity=""
+                    android:text="Electronics Engineering"
+                    android:textSize="20sp"
                     android:textStyle="bold">
 
                 </TextView>
@@ -797,7 +895,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext8"
@@ -805,7 +905,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext9"
@@ -813,7 +915,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext10"
@@ -821,14 +925,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -880,7 +986,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext16"
@@ -888,7 +996,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext17"
@@ -896,7 +1006,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext18"
@@ -904,14 +1016,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -963,7 +1077,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext24"
@@ -971,7 +1087,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext25"
@@ -979,7 +1097,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext26"
@@ -987,14 +1107,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -1046,7 +1168,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext32"
@@ -1054,7 +1178,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext33"
@@ -1062,7 +1188,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/entext29"
@@ -1070,23 +1198,27 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:layout_gravity="center">
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/EL"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Electrical Engineering"
-                    android:id="@+id/EL"
-                    android:textSize="20dp"
                     android:layout_gravity=""
+                    android:text="Electrical Engineering"
+                    android:textSize="20sp"
                     android:textStyle="bold">
 
                 </TextView>
@@ -1148,7 +1280,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext8"
@@ -1156,7 +1290,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext9"
@@ -1164,7 +1300,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext10"
@@ -1172,14 +1310,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -1231,7 +1371,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext16"
@@ -1239,7 +1381,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext17"
@@ -1247,7 +1391,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext18"
@@ -1255,14 +1401,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -1314,7 +1462,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext24"
@@ -1322,7 +1472,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext25"
@@ -1330,7 +1482,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext26"
@@ -1338,14 +1492,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -1397,7 +1553,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext32"
@@ -1405,7 +1563,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext33"
@@ -1413,7 +1573,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/eltext29"
@@ -1421,23 +1583,27 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:layout_gravity="center">
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/CV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Civil Engineering"
-                    android:id="@+id/CV"
-                    android:textSize="20dp"
                     android:layout_gravity=""
+                    android:text="Civil Engineering"
+                    android:textSize="20sp"
                     android:textStyle="bold">
 
                 </TextView>
@@ -1499,7 +1665,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext8"
@@ -1507,7 +1675,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext9"
@@ -1515,7 +1685,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext10"
@@ -1523,14 +1695,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -1582,7 +1756,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext16"
@@ -1590,7 +1766,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext17"
@@ -1598,7 +1776,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext18"
@@ -1606,14 +1786,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -1665,7 +1847,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext24"
@@ -1673,7 +1857,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext25"
@@ -1681,7 +1867,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext26"
@@ -1689,14 +1877,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -1748,7 +1938,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext32"
@@ -1756,7 +1948,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext33"
@@ -1764,7 +1958,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/cvtext29"
@@ -1772,23 +1968,27 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:layout_gravity="center">
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/ME"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mechanical Engineering"
-                    android:id="@+id/ME"
-                    android:textSize="20dp"
                     android:layout_gravity=""
+                    android:text="Mechanical Engineering"
+                    android:textSize="20sp"
                     android:textStyle="bold">
 
                 </TextView>
@@ -1850,7 +2050,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext8"
@@ -1858,7 +2060,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext9"
@@ -1866,7 +2070,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext10"
@@ -1874,14 +2080,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -1933,7 +2141,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext16"
@@ -1941,7 +2151,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext17"
@@ -1949,7 +2161,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext18"
@@ -1957,14 +2171,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -2016,7 +2232,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext24"
@@ -2024,7 +2242,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext25"
@@ -2032,7 +2252,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext26"
@@ -2040,14 +2262,16 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -2099,7 +2323,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext32"
@@ -2107,7 +2333,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext33"
@@ -2115,7 +2343,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/metext29"
@@ -2123,7 +2353,9 @@
                         android:layout_height="35dp"
                         android:background="@drawable/textviewborder"
                         android:gravity="center"
-                        android:text="-" />
+                        android:text="-"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -2132,7 +2364,6 @@
 
 
     </ScrollView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

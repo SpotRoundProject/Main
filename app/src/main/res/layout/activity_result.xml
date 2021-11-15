@@ -18,18 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/Round"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Round 1"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,8 +26,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Round"
-        app:layout_constraintVertical_bias="0.369">
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        app:layout_constraintVertical_bias="0.615">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,22 +39,30 @@
 
             <TextView
                 android:id="@+id/textView14"
-                android:layout_width="210dp"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
                 android:background="@drawable/textviewborder"
-                android:text="Choice Code Allotted"
-                android:textSize="20sp"
+                android:gravity="center"
+                android:paddingStart="2dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="2dp"
+                android:text="Seat Code"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/choiceAllotted"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_height="45dp"
                 android:background="@drawable/textviewborder"
-                android:paddingLeft="5dp"
-                android:text="0"
-                android:textSize="20sp"
+                android:gravity="center"
+                android:paddingStart="2dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="2dp"
+                android:text="Not Allotted"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -80,21 +76,30 @@
 
             <TextView
                 android:id="@+id/textView15"
-                android:layout_width="210dp"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
                 android:background="@drawable/textviewborder"
+                android:gravity="center"
+                android:paddingStart="2dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="2dp"
                 android:text="Seat Type"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/seatType"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:background="@drawable/textviewborder"
-                android:paddingLeft="5dp"
+                android:gravity="center"
+                android:paddingStart="2dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="2dp"
                 android:text="0"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -108,64 +113,74 @@
 
             <TextView
                 android:id="@+id/textView16"
-                android:layout_width="210dp"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
                 android:background="@drawable/textviewborder"
-                android:text="Preference no Allotted"
-                android:textSize="20sp"
+                android:gravity="center"
+                android:paddingStart="2dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="2dp"
+                android:text="Preference no"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/PreferenceAllotted"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:background="@drawable/textviewborder"
-                android:paddingLeft="5dp"
+                android:gravity="center"
+                android:paddingStart="2dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="2dp"
                 android:text="0"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
     <Button
-        android:id="@+id/betterment"
+        android:id="@+id/Reject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="348dp"
+        android:layout_marginTop="294dp"
         android:backgroundTint="#E40A0A"
-        android:text="Betterment (Not Freeze)"
+        android:text="Reject Seat"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Round" />
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        app:layout_constraintVertical_bias="0.275" />
 
     <Button
         android:id="@+id/freeze"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#1AD5DC"
-        android:text="Freeze"
+        android:text="Accept Seat"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/betterment"
+        app:layout_constraintTop_toBottomOf="@+id/Reject"
         app:layout_constraintVertical_bias="0.339" />
 
     <TextView
         android:id="@+id/textView17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="280dp"
         android:text="Choose option for Seat Acceptance"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/betterment"
+        app:layout_constraintBottom_toTopOf="@+id/Reject"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Round"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        app:layout_constraintVertical_bias="0.841" />
 
     <TextView
         android:id="@+id/textView21"
@@ -179,6 +194,6 @@
         app:layout_constraintBottom_toTopOf="@+id/freeze"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/betterment" />
+        app:layout_constraintTop_toBottomOf="@+id/Reject" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

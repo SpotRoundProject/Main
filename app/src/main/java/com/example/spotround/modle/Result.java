@@ -34,4 +34,10 @@ public class Result {
     public void setChoiceCode(String choiceCode) {
         this.choiceCode = choiceCode;
     }
+
+    public String checkType() {
+        int size = seatType.length() - 1;
+        return seatType.substring(0, size);
+    }
+
 }

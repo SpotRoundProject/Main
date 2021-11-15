@@ -1,18 +1,27 @@
 package com.example.spotround;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivityResultBinding;
+import com.example.spotround.modle.Application;
 import com.example.spotround.modle.Result;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ResultActivity extends AppCompatActivity {
@@ -22,6 +31,7 @@ public class ResultActivity extends AppCompatActivity {
     FirebaseAuth auth;
     Result result;
     ProgressDialog progressDialog;
+    Application application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,46 +45,157 @@ public class ResultActivity extends AppCompatActivity {
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("Fetching data");
 
-        reference = fireStore.collection("Result").document(auth.getCurrentUser().getUid());
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        FirebaseFirestore.getInstance().collection("Application").document(auth.getCurrentUser().getUid())
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                progressDialog.show();
-                progressDialog.setCancelable(false);
-                progressDialog.setCanceledOnTouchOutside(false);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
+            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()) {
-                    result = documentSnapshot.toObject(Result.class);
-                    if(result.getPreferenceNo().contains("1"))
-                        binding.betterment.setEnabled(false);
-                    binding.choiceAllotted.setText(result.getChoiceCode());
-                    binding.PreferenceAllotted.setText(result.getPreferenceNo());
-                    binding.seatType.setText(result.getSeatType());
+                    application = documentSnapshot.toObject(Application.class);
+                    reference = fireStore.collection("Result").document(application.getRank() + "");
+
+                    reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                            if(documentSnapshot.exists()) {
+                                result = documentSnapshot.toObject(Result.class);
+                                if(result.getPreferenceNo().contains("1"))
+                                    binding.Reject.setEnabled(false);
+                                binding.choiceAllotted.setText(result.getChoiceCode());
+                                binding.PreferenceAllotted.setText(result.getPreferenceNo());
+                                binding.seatType.setText(result.checkType());
+                                progressDialog.hide();
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+                            else {
+                                FirebaseFirestore.getInstance().collection("SeatAccepted")
+                                        .document(application.getRank() + "").get()
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                                if(documentSnapshot.exists()) {
+                                                    binding.Reject.setEnabled(false);
+                                                    binding.freeze.setEnabled(false);
+                                                    binding.freeze.setText("Seat Accepted");
+                                                    result = documentSnapshot.toObject(Result.class);
+                                                    binding.seatType.setText(result.checkType());
+                                                    binding.PreferenceAllotted.setText(result.getPreferenceNo());
+                                                    binding.choiceAllotted.setText(result.getChoiceCode());
+                                                }
+                                                else {
+                                                    binding.choiceAllotted.setText("Not Allotted");
+                                                    binding.Reject.setEnabled(false);
+                                                    binding.freeze.setEnabled(false);
+                                                }
+                                                progressDialog.hide();
+                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                            }
+                                        });
+                            }
+                        }
+                    });
                 }
                 else {
-                    binding.choiceAllotted.setText("Not Allotted");
-                    binding.betterment.setEnabled(false);
                     binding.freeze.setEnabled(false);
+                    binding.Reject.setEnabled(false);
+                    progressDialog.hide();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
-                progressDialog.hide();
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
 
-        binding.betterment.setOnClickListener(new View.OnClickListener() {
+
+        binding.Reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FirebaseFirestore.getInstance().collection("Result").document(application.getRank() + "")
+                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(@NonNull Void unused) {
+                        binding.Reject.setText("Seat Rejected");
+                        binding.Reject.setEnabled(false);
+                        binding.freeze.setEnabled(false);
+                    }
+                });
             }
         });
 
         binding.freeze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.setMessage("Seat Accepted");
+                progressDialog.show();
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+                FirebaseFirestore.getInstance().collection("SeatAccepted")
+                        .document(application.getRank() + "").set(result)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(@NonNull Void unused) {
+                                binding.freeze.setEnabled(false);
+                                binding.Reject.setEnabled(false);
+                                FirebaseFirestore.getInstance().collection("Result")
+                                        .document(application.getRank() + "").delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(@NonNull Void unused) {
+                                        if(application.isClgSeat()) {
+                                            FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
+                                                    .collection("Round 2").document(application.getSeatCode())
+                                                    .update("gopens" , FieldValue.increment(1))
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            binding.freeze.setText("Seat Accepted");
+                                                            new AlertDialog.Builder(ResultActivity.this)
+                                                                    .setTitle("Seat Accepted")
+                                                                    .setMessage("You accepted " + result.getChoiceCode() + " seat")
+
+                                                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                                        public void onClick(DialogInterface dialog, int which) {}
+                                                                    })
+                                                                    .setNegativeButton(android.R.string.no, null)
+                                                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                                                    .show();
+                                                            progressDialog.hide();
+                                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                        }
+                                                    });
+                                        }
+                                        else{
+                                            binding.freeze.setText("Seat Accepted");
+                                            new AlertDialog.Builder(ResultActivity.this)
+                                                    .setTitle("Seat Accepted")
+                                                    .setMessage("You accepted " + result.getChoiceCode() + " seat")
+
+                                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int which) {}
+                                                    })
+                                                    .setNegativeButton(android.R.string.no, null)
+                                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                                    .show();
+                                            progressDialog.hide();
+                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(ResultActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                progressDialog.hide();
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+                        });
             }
         });
     }
