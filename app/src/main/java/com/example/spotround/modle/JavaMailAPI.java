@@ -1,124 +1,184 @@
 package com.example.spotround.modle;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
-import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
-public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
+public class JavaMailAPI extends javax.mail.Authenticator {
+    private String mailhost = "smtp.gmail.com";
+    private String user;
+    private String password;
+    private Session session;
+    private Context context;
+    private Multipart _multipart = new MimeMultipart();
 
-    //Add those line in dependencies
-    //implementation files('libs/activation.jar')
-    //implementation files('libs/additionnal.jar')
-    //implementation files('libs/mail.jar')
+    private static final java.security.Security Security = null;
 
-    //Need INTERNET permission
-
-    //Variables
-    private final Context mContext;
-    private Session mSession;
-
-    private String mEmail;
-    private String mSubject;
-    private String mMessage;
-
-    private ProgressDialog mProgressDialog;
-
-    //Constructor
-    public JavaMailAPI(Context mContext, String mEmail, String mSubject, String mMessage) {
-        this.mContext = mContext;
-        this.mEmail = mEmail;
-        this.mSubject = mSubject;
-        this.mMessage = mMessage;
+    static {
+        Security.addProvider(new com.example.spotround.modle.Utils());
     }
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        //Show progress dialog while sending email
-        mProgressDialog = ProgressDialog.show(mContext,"Sending message", "Please wait...",false,false);
-    }
+    public JavaMailAPI(Context context,String user, String password) {
+        this.context = context;
+        this.user = user;
+        this.password = password;
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        //Dismiss progress dialog when message successfully send
-        mProgressDialog.dismiss();
-
-        //Show success toast
-        Toast.makeText(mContext,"Message Sent",Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected Void doInBackground(Void... params) {
-        //Creating properties
-        Properties props = new Properties();
-
-        //Configuring properties for gmail
-        //If you are not using gmail you may need to change the values
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        /*Properties props = new Properties();
+        props.setProperty("mail.transport.protocol", "smtp");
+        props.setProperty("mail.host", mailhost);
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.port", "2525");
+        props.put("mail.smtp.socketFactory.port", "2525");
+        props.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.socketFactory.fallback", "false");
+        props.setProperty("mail.smtp.quitwait", "false");*/
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", mailhost);
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+// *** BEGIN CHANGE
+        properties.put("mail.smtp.user", user);
 
-        //Creating a new session
-        mSession = Session.getDefaultInstance(props,
-                new javax.mail.Authenticator() {
-                    //Authenticating the password
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(Utils.EMAIL, Utils.PASSWORD);
-                    }
-                });
+        session = Session.getDefaultInstance(properties, this);
+    }
 
-        try {
-            //Creating MimeMessage object
-            MimeMessage mm = new MimeMessage(mSession);
+    protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(user, password);
+    }
 
-            //Setting sender address
-            mm.setFrom(new InternetAddress(Utils.EMAIL));
-            //Adding receiver
-            mm.addRecipient(Message.RecipientType.TO, new InternetAddress(mEmail));
-            //Adding subject
-            mm.setSubject(mSubject);
-            //Adding message
-            mm.setText(mMessage);
-            //Sending email
-            Transport.send(mm);
+    public synchronized void sendPaymentMail(String subject, String body, String date, String id, String applicationID, String from, String mail) throws Exception {
+        try{
+            MimeMessage message = new MimeMessage(session);
+            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
+            message.setFrom(new InternetAddress(from));
+            message.setSender(new InternetAddress(from));
+            message.setSubject(subject);
+            message.setDataHandler(handler);
 
-//            BodyPart messageBodyPart = new MimeBodyPart();
-//
-//            messageBodyPart.setText(message);
-//
-//            Multipart multipart = new MimeMultipart();
-//
-//            multipart.addBodyPart(messageBodyPart);
-//
-//            messageBodyPart = new MimeBodyPart();
-//
-//            DataSource source = new FileDataSource(filePath);
-//
-//            messageBodyPart.setDataHandler(new DataHandler(source));
-//
-//            messageBodyPart.setFileName(filePath);
-//
-//            multipart.addBodyPart(messageBodyPart);
+            BodyPart messageBodyPart = new MimeBodyPart();
+            InputStream is = context.getAssets().open("payment_mail.html");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String str = new String(buffer);
+            str=str.replace("$$id$$", id);
+            str=str.replace("$$email$$", mail);
+            str=str.replace("$$applicationId$$", applicationID);
+            str=str.replace("$$date$$", date);
+            messageBodyPart.setContent(str,"text/html; charset=utf-8");
 
-//            mm.setContent(multipart);
+            _multipart.addBodyPart(messageBodyPart);
 
-        } catch (MessagingException e) {
+            // Put parts in message
+
+            message.setContent(_multipart);
+
+            if (mail.indexOf(',') > 0)
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail));
+            else
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
+            Transport.send(message);
+        }catch(Exception e){
             e.printStackTrace();
         }
-        return null;
+    }
+
+    public synchronized void sendSeatAcceptedMail(String subject, String body, String date, String applicationID, String from, String mail, Result result) throws Exception {
+        try{
+            MimeMessage message = new MimeMessage(session);
+            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
+            message.setFrom(new InternetAddress(from));
+            message.setSender(new InternetAddress(from));
+            message.setSubject(subject);
+            message.setDataHandler(handler);
+
+            BodyPart messageBodyPart = new MimeBodyPart();
+            InputStream is = context.getAssets().open("seat_accepted.html");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String str = new String(buffer);
+            str=str.replace("$$email$$", mail);
+            str=str.replace("$$applicationId$$", applicationID);
+            str=str.replace("$$date$$", date);
+            str=str.replace("$$seatCode$$", result.getChoiceCode());
+            str=str.replace("$$seatType$$", result.checkType().toUpperCase());
+            str=str.replace("$$preferenceNo$$", result.getPreferenceNo());
+            messageBodyPart.setContent(str,"text/html; charset=utf-8");
+
+            _multipart.addBodyPart(messageBodyPart);
+
+            // Put parts in message
+
+            message.setContent(_multipart);
+
+            if (mail.indexOf(',') > 0)
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail));
+            else
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail));
+            Transport.send(message);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public class ByteArrayDataSource implements DataSource {
+        private byte[] data;
+        private String type;
+
+        public ByteArrayDataSource(byte[] data, String type) {
+            super();
+            this.data = data;
+            this.type = type;
+        }
+
+        public ByteArrayDataSource(byte[] data) {
+            super();
+            this.data = data;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getContentType() {
+            if (type == null)
+                return "application/octet-stream";
+            else
+                return type;
+        }
+
+        public InputStream getInputStream() throws IOException {
+            return new ByteArrayInputStream(data);
+        }
+
+        public String getName() {
+            return "ByteArrayDataSource";
+        }
+
+        public OutputStream getOutputStream() throws IOException {
+            throw new IOException("Not Supported");
+        }
     }
 }

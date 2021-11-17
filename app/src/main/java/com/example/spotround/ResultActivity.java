@@ -7,12 +7,14 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivityResultBinding;
 import com.example.spotround.modle.Application;
+import com.example.spotround.modle.JavaMailAPI;
 import com.example.spotround.modle.Result;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +26,19 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 public class ResultActivity extends AppCompatActivity {
     ActivityResultBinding binding;
     DocumentReference reference;
@@ -32,6 +47,8 @@ public class ResultActivity extends AppCompatActivity {
     Result result;
     ProgressDialog progressDialog;
     Application application;
+
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +150,7 @@ public class ResultActivity extends AppCompatActivity {
                 progressDialog.show();
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                sendMail();
 
                 FirebaseFirestore.getInstance().collection("SeatAccepted")
                         .document(application.getRank() + "").set(result)
@@ -200,4 +218,24 @@ public class ResultActivity extends AppCompatActivity {
         });
     }
 
+    private void sendMail() {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                String from = "spotroundapp@gmail.com";
+                String password = "jcdinstcslswlnzi";
+                String mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                String message = "You accepted " + result.getChoiceCode() + " seat";
+                String subject = "Spot round Seat Allotment";
+                String date = "Nov 17, 2021";
+
+                try {
+                    JavaMailAPI sender = new JavaMailAPI(getBaseContext(), from, password);
+                    sender.sendSeatAcceptedMail(subject,"Hi",date,application.getApplicationId() ,from, mail, result);
+                } catch (Exception e) {
+                    Log.e("SendMail", e.getMessage(), e);
+                }
+            }
+        });
+    }
 }

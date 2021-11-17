@@ -20,11 +20,23 @@ import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 
 public class PaymentActivity extends AppCompatActivity implements PaymentResultListener {
     ActivityPaymentBinding binding;
     String paymentEmail, paymentPhoneNo;
     Application application;
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +97,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
     @Override
     public void onPaymentSuccess(String s) {
         Toast.makeText(this, "Payment Successful & Payment ID is " + s, Toast.LENGTH_LONG).show();
-        sendMail();
+        sendMail(s);
         //send email
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -105,16 +117,31 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
         Toast.makeText(this, "Payment failed due to" + s, Toast.LENGTH_LONG).show();
     }
 
+    private void sendMail(String id) {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                String from = "spotroundapp@gmail.com";
+                String password = "jcdinstcslswlnzi";
+                String mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                String date = "Nov 21, 2021";
+                String subject = "Spot round Payment("+ id +") is successful";
 
-    private void sendMail() {
-    String mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-    String message = "Payment is successful";
-    String subject = "Spot round Payment";
-    //Send Mail
-    JavaMailAPI javaMailAPI = new JavaMailAPI(this, mail, subject, message);
-
-    javaMailAPI.execute();
-
+                try {
+                    JavaMailAPI sender = new JavaMailAPI(getBaseContext(), from, password);
+                    /*sender.sendMail(subject,
+                            message,
+                            from,
+                            mail);*/
+                    sender.sendPaymentMail(subject, "Hi",
+                            date, id, application.getApplicationId(),
+                            from,
+                            mail);
+                } catch (Exception e) {
+                    Log.e("SendMail", e.getMessage(), e);
+                }
+            }
+        });
     }
 
     @Override

@@ -55,8 +55,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.razorpay:checkout:1.6.12'
     implementation 'com.tom-roush:pdfbox-android:2.0.6.0'
-    implementation files('libs/mail.jar')
-    implementation files('libs/activation.jar')
-    implementation files('libs/additionnal.jar')
+    implementation 'com.sun.mail:android-mail:1.6.0'
+    implementation 'com.sun.mail:android-activation:1.6.0'
 
 }
