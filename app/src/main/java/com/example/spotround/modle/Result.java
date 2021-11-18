@@ -35,6 +35,15 @@ public class Result {
         this.choiceCode = choiceCode;
     }
 
+    @Override
+    public String toString() {
+        return "Result{" +
+                "preferenceNo='" + preferenceNo + '\'' +
+                ", seatType='" + seatType + '\'' +
+                ", choiceCode='" + choiceCode + '\'' +
+                '}';
+    }
+
     public String checkType() {
         int size = seatType.length() - 1;
         return seatType.substring(0, size);
