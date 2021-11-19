@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -84,7 +83,41 @@
                     android:text="OPEN"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/seat"
+                    style="bold"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="Computer Science and Engineering"
+                    android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/seat_type"
+                    style="bold"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="GOPEN"
+                    android:textSize="16sp"></TextView>
+
+                <TextView
+                    android:id="@+id/preference7"
+                    style="bold"
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="1"
+                    android:textSize="16sp"></TextView>
             </LinearLayout>
         </LinearLayout>
     </HorizontalScrollView>

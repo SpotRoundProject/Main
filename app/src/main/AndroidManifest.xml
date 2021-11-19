@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotround">
         <activity
+            android:name=".ShowResult"
+            android:exported="false" />
+        <activity
             android:name=".ComputeResult"
             android:exported="false" />
         <activity android:name=".setSchedule" />

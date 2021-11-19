@@ -40,7 +40,7 @@ public class candidate_list_recycler_view extends RecyclerView.Adapter<candidate
         holder.name.setText(candidate.getName());
         holder.cetPercentage.setText(candidate.getCetPercentage());
         holder.caste.setText(candidate.getCaste());
-        holder.seat.setText(candidate.getSeat());
+
 
     }
 
@@ -50,7 +50,7 @@ public class candidate_list_recycler_view extends RecyclerView.Adapter<candidate
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView rank, applicationId, name, cetPercentage, caste, seat;
+        TextView rank, applicationId, name, cetPercentage, caste;
         public ViewHolder(@NonNull  View itemView) {
             super(itemView);
             rank = itemView.findViewById(R.id.rank);
@@ -58,7 +58,7 @@ public class candidate_list_recycler_view extends RecyclerView.Adapter<candidate
             name = itemView.findViewById(R.id.name);
             cetPercentage = itemView.findViewById(R.id.cetPercentage);
             caste = itemView.findViewById(R.id.caste);
-            seat = itemView.findViewById(R.id.seat);
+
         }
     }
 }

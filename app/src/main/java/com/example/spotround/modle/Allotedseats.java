@@ -1,18 +1,21 @@
 package com.example.spotround.modle;
 
-import android.widget.TextView;
+public class Allotedseats
+{
+    String rank, applicationId, name, cetPercentage, caste, seat,seat_type,preference;
 
-public class CandidateListObj {
-    String rank, applicationId, name, cetPercentage, caste;
-
-    public CandidateListObj() {}
-
-    public CandidateListObj(String rank, String applicationId, String name, String cetPercentage, String caste, String seat) {
+    public Allotedseats(String rank, String applicationId, String name, String cetPercentage, String caste, String seat, String seat_type, String preference) {
         this.rank = rank;
         this.applicationId = applicationId;
         this.name = name;
         this.cetPercentage = cetPercentage;
         this.caste = caste;
+        this.seat = seat;
+        this.seat_type = seat_type;
+        this.preference = preference;
+    }
+    public Allotedseats()
+    {
 
     }
 
@@ -56,15 +59,27 @@ public class CandidateListObj {
         this.caste = caste;
     }
 
+    public String getSeat() {
+        return seat;
+    }
 
-    @Override
-    public String toString() {
-        return "CandidateListObj{" +
-                "rank='" + rank + '\'' +
-                ", applicationId='" + applicationId + '\'' +
-                ", name='" + name + '\'' +
-                ", cetPercentage='" + cetPercentage + '\'' +
-                ", caste='" + caste + '\'' +
-                '}';
+    public void setSeat(String seat) {
+        this.seat = seat;
+    }
+
+    public String getSeat_type() {
+        return seat_type;
+    }
+
+    public void setSeat_type(String seat_type) {
+        this.seat_type = seat_type;
+    }
+
+    public String getPreference() {
+        return preference;
+    }
+
+    public void setPreference(String preference) {
+        this.preference = preference;
     }
 }
