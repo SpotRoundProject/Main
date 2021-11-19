@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -37,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     boolean flag = false;
     private SharedPreferences prefs = null;
+    boolean flagAutoStart = false;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -235,6 +238,31 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        if(!flagAutoStart) {
+            new AlertDialog.Builder(LoginActivity.this)
+                    .setTitle("Auto Start")
+                    .setMessage("Enable auto start from app setting to get notifications")
+
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                    Uri.fromParts("package", getPackageName(), null));
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            flagAutoStart = true;
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            flagAutoStart = true;
+                            Toast.makeText(LoginActivity.this, "You won't get any notifications", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 
     @Override

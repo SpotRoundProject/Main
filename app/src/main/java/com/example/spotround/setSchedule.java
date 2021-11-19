@@ -1,18 +1,28 @@
  package com.example.spotround;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivitySetScheduleBinding;
 import com.example.spotround.modle.Schedule;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
@@ -25,43 +35,85 @@ public class setSchedule extends AppCompatActivity {
     FirebaseFirestore fireStore;
     DocumentReference reference;
     Schedule schedule;
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySetScheduleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        progressDialog = new ProgressDialog(setSchedule.this);
+        progressDialog.setTitle("Schedule");
+        progressDialog.setMessage("Uploading Schedule");
+
+
+        FirebaseFirestore.getInstance().collection("Schedule").document("Schedule")
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                schedule = documentSnapshot.toObject(Schedule.class);
+                String date = schedule.getDate();
+                binding.date.setText(date);
+                binding.applicationFillingStart.setText(schedule.getApplicationFillingStart());
+                binding.applicationFillingEnd.setText(schedule.getApplicationFillingEnd());
+                binding.round1Start.setText(schedule.getRound1Start());
+                binding.round1End.setText(schedule.getRound1End());
+                binding.R1Result.setText(schedule.getR1Result());
+                binding.round2Start.setText(schedule.getRound2Start());
+                binding.round2End.setText(schedule.getRound2End());
+                binding.R2Result.setText(schedule.getR2Result());
+                binding.round3Start.setText(schedule.getRound3Start());
+                binding.round3End.setText(schedule.getRound3End());
+                binding.R3Result.setText(schedule.getR3Result());
+            }
+        });
+
+
         initDatePicker();
         fireStore = FirebaseFirestore.getInstance();
         reference = fireStore.collection("Schedule").document("schedule");
         binding.updatebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                schedule = new Schedule(binding.date.getText().toString(),binding.applicationFillingStart.getText().toString(),binding.applicationFillingEnd.getText().toString(),binding.round1Start.getText().toString(),binding.round1End.getText().toString(),binding.R1Result.getText().toString(),binding.round2Start.getText().toString(),binding.round2End.getText().toString(),binding.R2Result.getText().toString(),binding.round3Start.getText().toString(),binding.round3End.getText().toString(),binding.R3Result.getText().toString());
+                schedule = new Schedule(binding.date.getText().toString(), binding.applicationFillingStart.getText().toString(),
+                        binding.applicationFillingEnd.getText().toString(), binding.round1Start.getText().toString(),
+                        binding.round1End.getText().toString(), binding.R1Result.getText().toString(),
+                        binding.round2Start.getText().toString(), binding.round2End.getText().toString(),
+                        binding.R2Result.getText().toString(), binding.round3Start.getText().toString(),
+                        binding.round3End.getText().toString(), binding.R3Result.getText().toString());
                 if(check(schedule))
-                reference.set(schedule);
+                    reference.set(schedule).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(@NonNull Void unused) {
+                            progressDialog.hide();
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        }
+                    });
             }
         });
 
 
 
 
-        binding.date.setText("Date: "+getTodaysDate());
+        binding.date.setText(getTodaysDate());
 
         binding.date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 datePickerDialog.show();
-
-
-
             }
         });
         binding.applicationFillingStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popTimePicker( "applicationFillingStart");
-
             }
         });
         binding.applicationFillingEnd.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +251,7 @@ public class setSchedule extends AppCompatActivity {
             {
                 month = month+1;
                 String date = makeDateString(day, month, year);
-                binding.date.setText("Date: "+date);
+                binding.date.setText(date);
 
             }
         } ;
@@ -213,7 +265,7 @@ public class setSchedule extends AppCompatActivity {
 
     private String makeDateString(int day, int month, int year)
     {
-        return getMonthFormat(month)+"/"+day+ "/"+year;
+        return getMonthFormat(month)+","+day+ " "+year;
     }
 
     private String getMonthFormat(int month)
@@ -229,9 +281,9 @@ public class setSchedule extends AppCompatActivity {
         if(month == 5)
             return "MAY";
         if(month == 6)
-            return "JUNE";
+            return "JUN";
         if(month == 7)
-            return "JULY";
+            return "JUL";
         if(month == 8)
             return "AUG";
         if(month == 9)

@@ -46,7 +46,7 @@ public class ScheduleActivity extends AppCompatActivity {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                reference = fireStore.collection("Schedule").document("Schedule");
+                reference = fireStore.collection("Schedule").document("schedule");
 
                 reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override

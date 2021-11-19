@@ -12,8 +12,9 @@ import java.util.TimeZone;
 public class DateTime {
     static int hr, min, sec, year, month, date;
     static LocalDate dateTime;
-    static {initilize();}
-    static void initilize() {
+    static {
+        initialize();}
+    public static void initialize() {
         SNTPClient.getDate(TimeZone.getTimeZone("Asia/Colombo"), new SNTPClient.Listener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -37,25 +38,25 @@ public class DateTime {
         });
     }
 
-    static int getHr() {
+    public static int getHr() {
         return hr;
     }
-    static int getMin() {
+    public static int getMin() {
         return min;
     }
-    static int getSec() {
+    public static int getSec() {
         return sec;
     }
-    static int getYear() {
+    public static int getYear() {
         return  year;
     }
-    static int getMonth() {
+    public static int getMonth() {
         return month;
     }
-    static int getDate() {
+    public static int getDate() {
         return date;
     }
-    static LocalDate getLocalDate () {
+    public static LocalDate getLocalDate () {
         return  dateTime;
     }
 

@@ -30,16 +30,31 @@
             android:textColor="#000"
             android:textSize="35sp" />
 
-        <TextView
-            android:id="@+id/date"
+        <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:layout_weight="0"
-            android:gravity="center"
-            android:paddingBottom="5dp"
-            android:text="Date: DD/MM/YYYY"
-            android:textAlignment="center"
-            android:textSize="25sp" />
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView27"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:text="Date:"
+                android:textAlignment="center"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:text="DD/MM/YYYY"
+                android:textAlignment="center"
+                android:textSize="25sp" />
+        </TableRow>
 
         <TableRow
             android:background="#0079D6"
@@ -138,7 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Round 1 Result "
+                android:text="Round 1 Result"
                 android:textSize="15sp" />
 
             <TextView
@@ -205,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Result of round 2"
+                android:text="Round 2 Result"
                 android:textSize="15sp" />
 
             <TextView
@@ -272,7 +287,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Result Of  Round 3"
+                android:text="Round 3 Result"
                 android:textSize="15sp" />
 
             <TextView

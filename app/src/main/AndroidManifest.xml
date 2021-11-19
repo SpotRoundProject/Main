@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:allowBackup="true"
@@ -28,6 +31,7 @@
         <activity android:name=".SignUpActivity" />
         <activity
             android:name=".SplashActivity"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,6 +60,17 @@
             android:name=".LoginActivity"
             android:label="Student Login"
             android:parentActivityName=".StartActivity" />
+
+        <receiver
+            android:name=".notification.MyReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <!--<intent-filter>
+                <action android:name="com.example.helloandroid.alarms" />
+            </intent-filter>-->
+        </receiver>
     </application>
+
+
 
 </manifest>
