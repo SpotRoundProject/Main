@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Candidate List"
-        android:textSize="20dp"
+        android:text="Candidates"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -39,7 +39,8 @@
 
             <HorizontalScrollView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -49,11 +50,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="140dp"
                         android:layout_marginTop="20dp"
                         android:text="Candidate List"
-                        android:textSize="20dp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
-                        tools:ignore="UnknownId"></TextView>
+                        tools:ignore="UnknownId" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -91,6 +93,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:background="@drawable/textviewborder"
+                            android:gravity="center"
                             android:paddingStart="2dp"
                             android:paddingEnd="2dp"
                             android:text="Name"
@@ -103,6 +106,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:background="@drawable/textviewborder"
+                            android:gravity="center"
                             android:paddingStart="2dp"
                             android:paddingEnd="2dp"
                             android:text="CET %"
@@ -134,20 +138,24 @@
 
             <HorizontalScrollView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/as"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginLeft="140dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
                         android:text="Alloted seats"
-                        android:textSize="20dp"
-                        android:textStyle="bold"></TextView>
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -185,6 +193,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:background="@drawable/textviewborder"
+                            android:gravity="center"
                             android:paddingStart="2dp"
                             android:paddingEnd="2dp"
                             android:text="Name"
@@ -197,6 +206,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:background="@drawable/textviewborder"
+                            android:gravity="center"
                             android:paddingStart="2dp"
                             android:paddingEnd="2dp"
                             android:text="CET %"
@@ -222,6 +232,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:background="@drawable/textviewborder"
+                            android:gravity="center"
                             android:paddingStart="2dp"
                             android:paddingEnd="2dp"
                             android:text="Seat"
@@ -243,7 +254,7 @@
 
                         <TextView
                             android:id="@+id/preference"
-                            android:layout_width="130dp"
+                            android:layout_width="140dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
@@ -277,10 +288,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginLeft="140dp"
                         android:layout_marginTop="20dp"
                         android:text="Confirmed seats"
-                        android:textSize="20dp"
-                        android:textStyle="bold"></TextView>
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -318,6 +330,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:background="@drawable/textviewborder"
+                            android:gravity="center"
                             android:paddingStart="2dp"
                             android:paddingEnd="2dp"
                             android:text="Name"
@@ -330,6 +343,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:background="@drawable/textviewborder"
+                            android:gravity="center"
                             android:paddingStart="2dp"
                             android:paddingEnd="2dp"
                             android:text="CET %"
@@ -355,6 +369,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:background="@drawable/textviewborder"
+                            android:gravity="center"
                             android:paddingStart="2dp"
                             android:paddingEnd="2dp"
                             android:text="Seat"
@@ -376,7 +391,7 @@
 
                         <TextView
                             android:id="@+id/preference2"
-                            android:layout_width="130dp"
+                            android:layout_width="140dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
