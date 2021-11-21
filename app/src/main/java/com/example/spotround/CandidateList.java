@@ -206,7 +206,6 @@ import java.util.concurrent.Executors;
                            public void run() {
                                adapter1.notifyDataSetChanged();
                               adapter.notifyDataSetChanged();
-                              adapter2.notifyDataSetChanged();
                            }
                        });
                    }

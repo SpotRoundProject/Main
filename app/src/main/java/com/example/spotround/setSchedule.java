@@ -25,7 +25,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class setSchedule extends AppCompatActivity {
@@ -182,6 +185,107 @@ public class setSchedule extends AppCompatActivity {
 
     private boolean check(Schedule schedule)
     {
+        SimpleDateFormat stf=new SimpleDateFormat("HH:mm");
+        try {
+            Date appstart=stf.parse(schedule.getApplicationFillingStart());
+            Date appEnd=stf.parse(schedule.getApplicationFillingEnd());
+            Date round1start=stf.parse(schedule.getRound1Start());
+            Date round3start=stf.parse(schedule.getRound3Start());
+            Date round2start=stf.parse(schedule.getRound2Start());
+            Date round1end=stf.parse(schedule.getRound1End());
+            Date round2end=stf.parse(schedule.getRound2End());
+            Date round3end=stf.parse(schedule.getRound3End());
+            Date round1result=stf.parse(schedule.getR1Result());
+            Date round2result=stf.parse(schedule.getR2Result());
+            Date round3result=stf.parse(schedule.getR3Result());
+            long a=round1result.getTime();
+            if((appEnd.getTime()-appstart.getTime())>0)
+            {
+                if(round1start.getTime()-appEnd.getTime()>540000)
+                {
+                    if(round1end.getTime()-round1start.getTime()>0)
+                    {
+                        if(round1result.getTime()-round1end.getTime()>540000)
+                        {
+                            if(round2start.getTime()-round1result.getTime()>540000)
+                            {
+                                if(round2end.getTime()-round2start.getTime()>0)
+                                {
+                                    if(round2result.getTime()-round2end.getTime()>540000)
+                                    {
+                                        if(round3start.getTime()-round2result.getTime()>540000)
+                                        {
+                                            if(round3end.getTime()-round3start.getTime()>0)
+                                            {
+                                                if(round3result.getTime()-round3end.getTime()>540000)
+                                                {
+                                                    return true;
+                                                }
+                                                else
+                                                {
+                                                    Toast.makeText(getApplicationContext(),"Reound3Result must be  10 min after Round3End",Toast.LENGTH_LONG).show();
+                                                    return false;
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                Toast.makeText(getApplicationContext(),"Reound3End  must be after  Round3start",Toast.LENGTH_LONG).show();
+                                                return false;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Toast.makeText(getApplicationContext(),"Reound3Start must be  10 min after Round2Result",Toast.LENGTH_LONG).show();
+                                            return false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(getApplicationContext(),"Reound2Result must be  10 min after Round2End",Toast.LENGTH_LONG).show();
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+                                    Toast.makeText(getApplicationContext(),"Round2End must be after Round2Start",Toast.LENGTH_LONG).show();
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(),"Reound2Start must be  10 min after Round1Result",Toast.LENGTH_LONG).show();
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(),"Reound1Result must be  10 min after Round1End",Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"Round1End must be after Round1Start",Toast.LENGTH_LONG).show();
+                        return false;
+                    }
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Round1Start must be  10 min after ApplicationEnd",Toast.LENGTH_LONG).show();
+                    return false;
+                }
+
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),"ApplincationEnd must be after ApplicationStart",Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
