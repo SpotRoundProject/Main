@@ -16,10 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Spotround">
-        
-        <activity
-            android:name=".ShowResult"
-            android:exported="false" />
+
         <activity
             android:name=".ComputeResult"
             android:exported="false" />
@@ -69,12 +66,6 @@
             android:name=".notification.MyReceiver"
             android:enabled="true"
             android:exported="true">
-
-            <!--
-            <intent-filter>
-                <action android:name="com.example.helloandroid.alarms" />
-            </intent-filter>
-            -->
         </receiver>
     </application>
 
