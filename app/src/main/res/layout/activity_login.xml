@@ -116,20 +116,6 @@
         app:srcCompat="@drawable/walchand" />
 
     <TextView
-        android:id="@+id/LoginActivityForgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Forgot Password?"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.238"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LoginActivitybtnLogin"
-        app:layout_constraintVertical_bias="0.163" />
-
-    <TextView
         android:id="@+id/LoginActivityRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -138,9 +124,8 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.42"
-        app:layout_constraintStart_toEndOf="@+id/LoginActivityForgotPassword"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LoginActivitybtnLogin"
-        app:layout_constraintVertical_bias="0.163" />
+        app:layout_constraintVertical_bias="0.188" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

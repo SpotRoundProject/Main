@@ -3,6 +3,7 @@ package com.example.spotround;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,13 @@ public class StartActivity extends AppCompatActivity {
 
         binding.StartActivitybtnLogin.setOnClickListener(v -> startActivity(new Intent(StartActivity.this , LoginActivity.class)));
         
-       /* binding.StartActivitybtnInstituteLogin.setOnClickListener(v -> startActivity(new Intent(StartActivity.this , ILoginActivity.class)));*/
+        binding.helpurl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://abhishekaru.github.io/documentationapp.github.io/"); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
     }
 }

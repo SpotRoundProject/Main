@@ -61,24 +61,31 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getSchedule() {
-        executorService.execute(new Runnable() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                FirebaseFirestore.getInstance().collection("Schedule").document("schedule")
-                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                executorService.execute(new Runnable() {
                     @Override
-                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                        Schedule schedule = documentSnapshot.toObject(Schedule.class);
-                        Log.d("    Schedule", schedule.toString());
-                        SharedPreferences.Editor prefsEditor = schedulePref.edit();
-                        Gson gson = new Gson();
-                        String json = gson.toJson(schedule);
-                        prefsEditor.putString("Schedule", json);
-                        prefsEditor.putBoolean("flagSchedule", true);
-                        prefsEditor.apply();
+                    public void run() {
+                        FirebaseFirestore.getInstance().collection("Schedule").document("schedule")
+                                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                Schedule schedule = documentSnapshot.toObject(Schedule.class);
+                                Log.d("    Schedule", schedule.toString());
+                                SharedPreferences.Editor prefsEditor = schedulePref.edit();
+                                Gson gson = new Gson();
+                                String json = gson.toJson(schedule);
+                                prefsEditor.putString("Schedule", json);
+                                prefsEditor.putBoolean("flagSchedule", true);
+                                prefsEditor.apply();
+                            }
+                        });
                     }
                 });
             }
-        });
+        }, 60000);
+
     }
 }

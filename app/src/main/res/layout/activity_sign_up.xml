@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:backgroundTint="#1762E4"
     tools:context=".SignUpActivity">
 
 
@@ -20,6 +18,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="cursive"
+            android:text="Spot Round"
+            android:textColor="#EC1313"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/textView4"
             style="@style/Widget.AppCompat.TextView"
             android:layout_width="wrap_content"
@@ -29,7 +37,7 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="New Account"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textSize="30sp"
             android:textStyle="bold" />
 

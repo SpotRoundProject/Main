@@ -11,6 +11,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
@@ -28,19 +29,23 @@ import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivityUpdateVacancyBinding;
 import com.example.spotround.databinding.ProgressBarDialogBinding;
+import com.example.spotround.datetime.DateTime;
 import com.example.spotround.modle.NewCategory;
+import com.example.spotround.modle.Schedule;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.text.PDFTextStripper;
 import com.tom_roush.pdfbox.text.PDFTextStripperByArea;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -54,6 +59,10 @@ public class UpdateVacancy extends AppCompatActivity {
     private static boolean read_permission_flag = false;
     String fileName;
     ProgressDialog progressDialog;
+    Schedule schedule;
+    Calendar local, r1S, r1E, r2S, r2E, r3S, r3E, appE;
+    SharedPreferences mPrefs;
+    String round;
 
     Map<String, NewCategory> vacancy;
     NewCategory cse, it, me, el, en, cv;
@@ -62,118 +71,157 @@ public class UpdateVacancy extends AppCompatActivity {
 
         @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityUpdateVacancyBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+            super.onCreate(savedInstanceState);
+            binding = ActivityUpdateVacancyBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
 
-        progressDialog = new ProgressDialog(UpdateVacancy.this);
-        progressDialog.setTitle("Updating");
-        progressDialog.setMessage("Uploading Vacancies");
+            mPrefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
+            Gson gson = new Gson();
+            String json = mPrefs.getString("Schedule", "");
+            schedule = gson.fromJson(json, Schedule.class);
 
-        progressDialog.show();
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        binding.bs.setEnabled(false);
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
+            local = Calendar.getInstance();
+            local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+            r1S = Calendar.getInstance();
+            r1E = Calendar.getInstance();
+            r2S = Calendar.getInstance();
+            r2E = Calendar.getInstance();
+            r3S = Calendar.getInstance();
+            r3E = Calendar.getInstance();
+            appE = Calendar.getInstance();
+            r1S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound1Start().substring(0, 2)), Integer.parseInt(schedule.getRound1Start().substring(3, 5)));
+            r1E.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound1End().substring(0, 2)), Integer.parseInt(schedule.getRound1End().substring(3, 5)));
+            r2S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound2Start().substring(0, 2)), Integer.parseInt(schedule.getRound2Start().substring(3, 5)));
+            r2E.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound2End().substring(0, 2)), Integer.parseInt(schedule.getRound2End().substring(3, 5)));
+            r3S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound3Start().substring(0, 2)), Integer.parseInt(schedule.getRound3Start().substring(3, 5)));
+            r3E.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound3End().substring(0, 2)), Integer.parseInt(schedule.getRound3End().substring(3, 5)));
+            appE.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getApplicationFillingEnd().substring(0,2)), Integer.parseInt(schedule.getApplicationFillingEnd().substring(3, 5)));
 
-                FirebaseFirestore.getInstance().collection("Vacancy/Round/Round 1").get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful() && task.getResult().size() == 6) {
-                                    FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
-                                            .collection("Round 1").document("Information Technology").get()
-                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                    it = documentSnapshot.toObject(NewCategory.class);
-                                                    FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
-                                                            .collection("Round 1").document("Computer Science and Engineering").get()
-                                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                @Override
-                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                    cse = documentSnapshot.toObject(NewCategory.class);
-                                                                    FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
-                                                                            .collection("Round 1").document("Civil Engineering").get()
-                                                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                                @Override
-                                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                                    cv = documentSnapshot.toObject(NewCategory.class);
-                                                                                    FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
-                                                                                            .collection("Round 1").document("Electrical Engineering").get()
-                                                                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                                                @Override
-                                                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                                                    el = documentSnapshot.toObject(NewCategory.class);
-                                                                                                    FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
-                                                                                                            .collection("Round 1").document("Electronics Engineering").get()
-                                                                                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                                                                @Override
-                                                                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                                                                    en = documentSnapshot.toObject(NewCategory.class);
-                                                                                                                    FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
-                                                                                                                            .collection("Round 1").document("Mechanical Engineering").get()
-                                                                                                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                                                                                @Override
-                                                                                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                                                                                    me = documentSnapshot.toObject(NewCategory.class);
-                                                                                                                                    setVacancy();
-                                                                                                                                    binding.bs.setEnabled(true);
-                                                                                                                                    progressDialog.hide();
-                                                                                                                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                                                                                                }
-                                                                                                                            });
-                                                                                                                }
-                                                                                                            });
-                                                                                                }
-                                                                                            });
-                                                                                }
-                                                                            });
-                                                                }
-                                                            });
-                                                }
-                                            });
-                                }
-                                else {
-                                    progressDialog.hide();
-                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                }
-                            }
-                        });
+            if (local.after(r1S) && local.before(r1E)) {
+                round = "Round 1";
+                binding.round.setText(round);
+            } else if (local.after(r2S) && local.before(r2E)) {
+                round = "Round 2";
+                binding.round.setText(round);
+            } else if (local.after(r3S) && local.before(r3E)) {
+                round = "Round 3";
+                binding.round.setText(round);
+            } else if (local.before(r1S) || local.after(r3E)) {
+                round = "None";
+                binding.round.setText(round);
             }
-        });
 
-        binding.bs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vacancy = new HashMap<>();
-                cse = new NewCategory();
-                it = new NewCategory();
-                el = new NewCategory();
-                en = new NewCategory();
-                cv = new NewCategory();
-                me = new NewCategory();
-                vacancy.put("Computer Science and Engineering", cse);
-                vacancy.put("Information Technology", it);
-                vacancy.put("Mechanical Engineering", me);
-                vacancy.put("Electrical Engineering", el);
-                vacancy.put("Electronics Engineering", en);
-                vacancy.put("Civil Engineering", cv);
+            progressDialog = new ProgressDialog(UpdateVacancy.this);
+            progressDialog.setTitle("Updating");
+            progressDialog.setMessage("Uploading Vacancies");
 
-                checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
-                if(!read_permission_flag)
-                    Toast.makeText(UpdateVacancy.this, "Can't access storage", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("application/pdf");
-                startActivityForResult(Intent.createChooser(intent, "Select Pdf"), SELECT_PDF);
-            }
-        });
-    }
+            progressDialog.show();
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            binding.bs.setEnabled(false);
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+
+                    FirebaseFirestore.getInstance().collection("Vacancy/Round/" + round).get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful() && task.getResult().size() == 6) {
+                                        FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
+                                                .collection(round).document("Information Technology").get()
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                        it = documentSnapshot.toObject(NewCategory.class);
+                                                        FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
+                                                                .collection(round).document("Computer Science and Engineering").get()
+                                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                    @Override
+                                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                        cse = documentSnapshot.toObject(NewCategory.class);
+                                                                        FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
+                                                                                .collection(round).document("Civil Engineering").get()
+                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                    @Override
+                                                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                                        cv = documentSnapshot.toObject(NewCategory.class);
+                                                                                        FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
+                                                                                                .collection(round).document("Electrical Engineering").get()
+                                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                                    @Override
+                                                                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                                                        el = documentSnapshot.toObject(NewCategory.class);
+                                                                                                        FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
+                                                                                                                .collection(round).document("Electronics Engineering").get()
+                                                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                                                    @Override
+                                                                                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                                                                        en = documentSnapshot.toObject(NewCategory.class);
+                                                                                                                        FirebaseFirestore.getInstance().collection("Vacancy").document("Round")
+                                                                                                                                .collection(round).document("Mechanical Engineering").get()
+                                                                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                                                                    @Override
+                                                                                                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                                                                                        me = documentSnapshot.toObject(NewCategory.class);
+                                                                                                                                        setVacancy();
+                                                                                                                                        binding.bs.setEnabled(true);
+                                                                                                                                        progressDialog.hide();
+                                                                                                                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                                                                                                    }
+                                                                                                                                });
+                                                                                                                    }
+                                                                                                                });
+                                                                                                    }
+                                                                                                });
+                                                                                    }
+                                                                                });
+                                                                    }
+                                                                });
+                                                    }
+                                                });
+                                    } else {
+                                        binding.bs.setEnabled(true);
+                                        progressDialog.hide();
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    }
+                                }
+                            });
+                }
+            });
+
+            if (local.after(appE))
+                binding.bs.setEnabled(false);
+
+            binding.bs.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    vacancy = new HashMap<>();
+                    cse = new NewCategory();
+                    it = new NewCategory();
+                    el = new NewCategory();
+                    en = new NewCategory();
+                    cv = new NewCategory();
+                    me = new NewCategory();
+                    vacancy.put("Computer Science and Engineering", cse);
+                    vacancy.put("Information Technology", it);
+                    vacancy.put("Mechanical Engineering", me);
+                    vacancy.put("Electrical Engineering", el);
+                    vacancy.put("Electronics Engineering", en);
+                    vacancy.put("Civil Engineering", cv);
+
+                    checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
+                    if (!read_permission_flag)
+                        Toast.makeText(UpdateVacancy.this, "Can't access storage", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("application/pdf");
+                    startActivityForResult(Intent.createChooser(intent, "Select Pdf"), SELECT_PDF);
+                }
+            });
+        }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -411,591 +459,591 @@ public class UpdateVacancy extends AppCompatActivity {
 
         //IT
         category = it;
-        binding.text3.setText(category.getGopens() + "");
+        binding.ITGopen.setText(category.getGopens() + "");
         if (!(category.getGopens() == 0))
-            binding.text3.setTextColor(Color.GREEN);
+            binding.ITGopen.setTextColor(Color.GREEN);
         else
-            binding.text3.setTextColor(Color.RED);
+            binding.ITGopen.setTextColor(Color.RED);
 
-        binding.text8.setText(category.getLopens() + "");
+        binding.ITLopen.setText(category.getLopens() + "");
         if (!(category.getLopens() == 0))
-            binding.text8.setTextColor(Color.GREEN);
+            binding.ITLopen.setTextColor(Color.GREEN);
         else
-            binding.text8.setTextColor(Color.RED);
+            binding.ITLopen.setTextColor(Color.RED);
 
-        binding.text9.setText(category.getGobcs() + "");
+        binding.ITGobc.setText(category.getGobcs() + "");
         if (!(category.getGobcs() == 0))
-            binding.text9.setTextColor(Color.GREEN);
+            binding.ITGobc.setTextColor(Color.GREEN);
         else
-            binding.text9.setTextColor(Color.RED);
+            binding.ITGobc.setTextColor(Color.RED);
 
-        binding.text10.setText(category.getLobcs() + "");
+        binding.ITLobc.setText(category.getLobcs() + "");
         if (!(category.getLobcs() == 0))
-            binding.text10.setTextColor(Color.GREEN);
+            binding.ITLobc.setTextColor(Color.GREEN);
         else
-            binding.text10.setTextColor(Color.RED);
+            binding.ITLobc.setTextColor(Color.RED);
 
-        binding.text11.setText(category.getGnt1s() + "");
+        binding.ITGnt1.setText(category.getGnt1s() + "");
         if (!(category.getGnt1s() == 0))
-            binding.text11.setTextColor(Color.GREEN);
+            binding.ITGnt1.setTextColor(Color.GREEN);
         else
-            binding.text11.setTextColor(Color.RED);
+            binding.ITGnt1.setTextColor(Color.RED);
 
-        binding.text16.setText(category.getLnt1s() + "");
+        binding.ITLnt1.setText(category.getLnt1s() + "");
         if (!(category.getLnt1s() == 0))
-            binding.text16.setTextColor(Color.GREEN);
+            binding.ITLnt1.setTextColor(Color.GREEN);
         else
-            binding.text16.setTextColor(Color.RED);
+            binding.ITLnt1.setTextColor(Color.RED);
 
-        binding.text17.setText(category.getGnt2s() + "");
+        binding.ITGnt2.setText(category.getGnt2s() + "");
         if (!(category.getGnt2s() == 0))
-            binding.text17.setTextColor(Color.GREEN);
+            binding.ITGnt2.setTextColor(Color.GREEN);
         else
-            binding.text17.setTextColor(Color.RED);
+            binding.ITGnt2.setTextColor(Color.RED);
 
-        binding.text18.setText(category.getLnt2s() + "");
+        binding.ITLnt2.setText(category.getLnt2s() + "");
         if (!(category.getLnt2s() == 0))
-            binding.text18.setTextColor(Color.GREEN);
+            binding.ITLnt2.setTextColor(Color.GREEN);
         else
-            binding.text18.setTextColor(Color.RED);
+            binding.ITLnt2.setTextColor(Color.RED);
 
-        binding.text23.setText(category.getGnt3s() + "");
+        binding.ITGnt3.setText(category.getGnt3s() + "");
         if (!(category.getGnt3s() == 0))
-            binding.text23.setTextColor(Color.GREEN);
+            binding.ITGnt3.setTextColor(Color.GREEN);
         else
-            binding.text23.setTextColor(Color.RED);
+            binding.ITGnt3.setTextColor(Color.RED);
 
-        binding.text24.setText(category.getLnt3s() + "");
+        binding.ITLnt3.setText(category.getLnt3s() + "");
         if (!(category.getLnt3s() == 0))
-            binding.text24.setTextColor(Color.GREEN);
+            binding.ITLnt3.setTextColor(Color.GREEN);
         else
-            binding.text24.setTextColor(Color.RED);
+            binding.ITLnt3.setTextColor(Color.RED);
 
-        binding.text25.setText(category.getGvjs() + "");
+        binding.ITGvj.setText(category.getGvjs() + "");
         if (!(category.getGvjs() == 0))
-            binding.text25.setTextColor(Color.GREEN);
+            binding.ITGvj.setTextColor(Color.GREEN);
         else
-            binding.text25.setTextColor(Color.RED);
+            binding.ITGvj.setTextColor(Color.RED);
 
-        binding.text26.setText(category.getLvjs() + "");
+        binding.ITLvj.setText(category.getLvjs() + "");
         if (!(category.getLvjs() == 0))
-            binding.text26.setTextColor(Color.GREEN);
+            binding.ITLvj.setTextColor(Color.GREEN);
         else
-            binding.text26.setTextColor(Color.RED);
+            binding.ITLvj.setTextColor(Color.RED);
 
-        binding.text31.setText(category.getGsts() + "");
+        binding.ITGst.setText(category.getGsts() + "");
         if (!(category.getGsts() == 0))
-            binding.text31.setTextColor(Color.GREEN);
+            binding.ITGst.setTextColor(Color.GREEN);
         else
-            binding.text31.setTextColor(Color.RED);
+            binding.ITGst.setTextColor(Color.RED);
 
-        binding.text32.setText(category.getLsts() + "");
+        binding.ITLst.setText(category.getLsts() + "");
         if (!(category.getLsts() == 0))
-            binding.text32.setTextColor(Color.GREEN);
+            binding.ITLst.setTextColor(Color.GREEN);
         else
-            binding.text32.setTextColor(Color.RED);
+            binding.ITLst.setTextColor(Color.RED);
 
-        binding.text33.setText(category.getGscs() + "");
+        binding.ITGsc.setText(category.getGscs() + "");
         if (!(category.getGscs() == 0))
-            binding.text33.setTextColor(Color.GREEN);
+            binding.ITGsc.setTextColor(Color.GREEN);
         else
-            binding.text33.setTextColor(Color.RED);
+            binding.ITGsc.setTextColor(Color.RED);
 
-        binding.text29.setText(category.getLscs() + "");
+        binding.ITLsc.setText(category.getLscs() + "");
         if (!(category.getLscs() == 0))
-            binding.text29.setTextColor(Color.GREEN);
+            binding.ITLsc.setTextColor(Color.GREEN);
         else
-            binding.text29.setTextColor(Color.RED);
+            binding.ITLsc.setTextColor(Color.RED);
 
         //cse
         category = cse;
-        binding.csetext3.setText(category.getGopens() + "");
+        binding.CSEGopen.setText(category.getGopens() + "");
         if (!(category.getGopens() == 0))
-            binding.csetext3.setTextColor(Color.GREEN);
+            binding.CSEGopen.setTextColor(Color.GREEN);
         else
-            binding.csetext3.setTextColor(Color.RED);
+            binding.CSEGopen.setTextColor(Color.RED);
 
-        binding.csetext8.setText(category.getLopens() + "");
+        binding.CSELopen.setText(category.getLopens() + "");
         if (!(category.getLopens() == 0))
-            binding.csetext8.setTextColor(Color.GREEN);
+            binding.CSELopen.setTextColor(Color.GREEN);
         else
-            binding.csetext8.setTextColor(Color.RED);
+            binding.CSELopen.setTextColor(Color.RED);
 
-        binding.csetext9.setText(category.getGobcs() + "");
+        binding.CSEGobc.setText(category.getGobcs() + "");
         if (!(category.getGobcs() == 0))
-            binding.csetext9.setTextColor(Color.GREEN);
+            binding.CSEGobc.setTextColor(Color.GREEN);
         else
-            binding.csetext9.setTextColor(Color.RED);
+            binding.CSEGobc.setTextColor(Color.RED);
 
-        binding.csetext10.setText(category.getLobcs() + "");
+        binding.CSELobc.setText(category.getLobcs() + "");
         if (!(category.getLobcs() == 0))
-            binding.csetext10.setTextColor(Color.GREEN);
+            binding.CSELobc.setTextColor(Color.GREEN);
         else
-            binding.csetext10.setTextColor(Color.RED);
+            binding.CSELobc.setTextColor(Color.RED);
 
-        binding.csetext11.setText(category.getGnt1s() + "");
+        binding.CSEGnt1.setText(category.getGnt1s() + "");
         if (!(category.getGnt1s() == 0))
-            binding.csetext11.setTextColor(Color.GREEN);
+            binding.CSEGnt1.setTextColor(Color.GREEN);
         else
-            binding.csetext11.setTextColor(Color.RED);
+            binding.CSEGnt1.setTextColor(Color.RED);
 
-        binding.csetext16.setText(category.getLnt1s() + "");
+        binding.CSELnt1.setText(category.getLnt1s() + "");
         if (!(category.getLnt1s() == 0))
-            binding.csetext16.setTextColor(Color.GREEN);
+            binding.CSELnt1.setTextColor(Color.GREEN);
         else
-            binding.csetext16.setTextColor(Color.RED);
+            binding.CSELnt1.setTextColor(Color.RED);
 
-        binding.csetext17.setText(category.getGnt2s() + "");
+        binding.CSEGnt2.setText(category.getGnt2s() + "");
         if (!(category.getGnt2s() == 0))
-            binding.csetext17.setTextColor(Color.GREEN);
+            binding.CSEGnt2.setTextColor(Color.GREEN);
         else
-            binding.csetext17.setTextColor(Color.RED);
+            binding.CSEGnt2.setTextColor(Color.RED);
 
-        binding.csetext18.setText(category.getLnt2s() + "");
+        binding.CSELnt2.setText(category.getLnt2s() + "");
         if (!(category.getLnt2s() == 0))
-            binding.csetext18.setTextColor(Color.GREEN);
+            binding.CSELnt2.setTextColor(Color.GREEN);
         else
-            binding.csetext18.setTextColor(Color.RED);
+            binding.CSELnt2.setTextColor(Color.RED);
 
-        binding.csetext23.setText(category.getGnt3s() + "");
+        binding.CSEGnt3.setText(category.getGnt3s() + "");
         if (!(category.getGnt3s() == 0))
-            binding.csetext23.setTextColor(Color.GREEN);
+            binding.CSEGnt3.setTextColor(Color.GREEN);
         else
-            binding.csetext23.setTextColor(Color.RED);
+            binding.CSEGnt3.setTextColor(Color.RED);
 
-        binding.csetext24.setText(category.getLnt3s() + "");
+        binding.CSELnt3.setText(category.getLnt3s() + "");
         if (!(category.getLnt3s() == 0))
-            binding.csetext24.setTextColor(Color.GREEN);
+            binding.CSELnt3.setTextColor(Color.GREEN);
         else
-            binding.csetext24.setTextColor(Color.RED);
+            binding.CSELnt3.setTextColor(Color.RED);
 
-        binding.csetext25.setText(category.getGvjs() + "");
+        binding.CSEGvj.setText(category.getGvjs() + "");
         if (!(category.getGvjs() == 0))
-            binding.csetext25.setTextColor(Color.GREEN);
+            binding.CSEGvj.setTextColor(Color.GREEN);
         else
-            binding.csetext25.setTextColor(Color.RED);
+            binding.CSEGvj.setTextColor(Color.RED);
 
-        binding.csetext26.setText(category.getLvjs() + "");
+        binding.CSELvj.setText(category.getLvjs() + "");
         if (!(category.getLvjs() == 0))
-            binding.csetext26.setTextColor(Color.GREEN);
+            binding.CSELvj.setTextColor(Color.GREEN);
         else
-            binding.csetext26.setTextColor(Color.RED);
+            binding.CSELvj.setTextColor(Color.RED);
 
-        binding.csetext31.setText(category.getGsts() + "");
+        binding.CSEGst.setText(category.getGsts() + "");
         if (!(category.getGsts() == 0))
-            binding.csetext31.setTextColor(Color.GREEN);
+            binding.CSEGst.setTextColor(Color.GREEN);
         else
-            binding.csetext31.setTextColor(Color.RED);
+            binding.CSEGst.setTextColor(Color.RED);
 
-        binding.csetext32.setText(category.getLsts() + "");
+        binding.CSELst.setText(category.getLsts() + "");
         if (!(category.getLsts() == 0))
-            binding.csetext32.setTextColor(Color.GREEN);
+            binding.CSELst.setTextColor(Color.GREEN);
         else
-            binding.csetext32.setTextColor(Color.RED);
+            binding.CSELst.setTextColor(Color.RED);
 
-        binding.csetext33.setText(category.getGscs() + "");
+        binding.CSEGsc.setText(category.getGscs() + "");
         if (!(category.getGscs() == 0))
-            binding.csetext33.setTextColor(Color.GREEN);
+            binding.CSEGsc.setTextColor(Color.GREEN);
         else
-            binding.csetext33.setTextColor(Color.RED);
+            binding.CSEGsc.setTextColor(Color.RED);
 
-        binding.csetext29.setText(category.getLscs() + "");
+        binding.CSELsc.setText(category.getLscs() + "");
         if (!(category.getLscs() == 0))
-            binding.csetext29.setTextColor(Color.GREEN);
+            binding.CSELsc.setTextColor(Color.GREEN);
         else
-            binding.csetext29.setTextColor(Color.RED);
-
-        //el
-        category = el;
-        binding.eltext3.setText(category.getGopens() + "");
-        if (!(category.getGopens() == 0))
-            binding.eltext3.setTextColor(Color.GREEN);
-        else
-            binding.eltext3.setTextColor(Color.RED);
-
-        binding.eltext8.setText(category.getLopens() + "");
-        if (!(category.getLopens() == 0))
-            binding.eltext8.setTextColor(Color.GREEN);
-        else
-            binding.eltext8.setTextColor(Color.RED);
-
-        binding.eltext9.setText(category.getGobcs() + "");
-        if (!(category.getGobcs() == 0))
-            binding.eltext9.setTextColor(Color.GREEN);
-        else
-            binding.eltext9.setTextColor(Color.RED);
-
-        binding.eltext10.setText(category.getLobcs() + "");
-        if (!(category.getLobcs() == 0))
-            binding.eltext10.setTextColor(Color.GREEN);
-        else
-            binding.eltext10.setTextColor(Color.RED);
-
-        binding.eltext11.setText(category.getGnt1s() + "");
-        if (!(category.getGnt1s() == 0))
-            binding.eltext11.setTextColor(Color.GREEN);
-        else
-            binding.eltext11.setTextColor(Color.RED);
-
-        binding.eltext16.setText(category.getLnt1s() + "");
-        if (!(category.getLnt1s() == 0))
-            binding.eltext16.setTextColor(Color.GREEN);
-        else
-            binding.eltext16.setTextColor(Color.RED);
-
-        binding.eltext17.setText(category.getGnt2s() + "");
-        if (!(category.getGnt2s() == 0))
-            binding.eltext17.setTextColor(Color.GREEN);
-        else
-            binding.eltext17.setTextColor(Color.RED);
-
-        binding.eltext18.setText(category.getLnt2s() + "");
-        if (!(category.getLnt2s() == 0))
-            binding.eltext18.setTextColor(Color.GREEN);
-        else
-            binding.eltext18.setTextColor(Color.RED);
-
-        binding.eltext23.setText(category.getGnt3s() + "");
-        if (!(category.getGnt3s() == 0))
-            binding.eltext23.setTextColor(Color.GREEN);
-        else
-            binding.eltext23.setTextColor(Color.RED);
-
-        binding.eltext24.setText(category.getLnt3s() + "");
-        if (!(category.getLnt3s() == 0))
-            binding.eltext24.setTextColor(Color.GREEN);
-        else
-            binding.eltext24.setTextColor(Color.RED);
-
-        binding.eltext25.setText(category.getGvjs() + "");
-        if (!(category.getGvjs() == 0))
-            binding.eltext25.setTextColor(Color.GREEN);
-        else
-            binding.eltext25.setTextColor(Color.RED);
-
-        binding.eltext26.setText(category.getLvjs() + "");
-        if (!(category.getLvjs() == 0))
-            binding.eltext26.setTextColor(Color.GREEN);
-        else
-            binding.eltext26.setTextColor(Color.RED);
-
-        binding.eltext31.setText(category.getGsts() + "");
-        if (!(category.getGsts() == 0))
-            binding.eltext31.setTextColor(Color.GREEN);
-        else
-            binding.eltext31.setTextColor(Color.RED);
-
-        binding.eltext32.setText(category.getLsts() + "");
-        if (!(category.getLsts() == 0))
-            binding.eltext32.setTextColor(Color.GREEN);
-        else
-            binding.eltext32.setTextColor(Color.RED);
-
-        binding.eltext33.setText(category.getGscs() + "");
-        if (!(category.getGscs() == 0))
-            binding.eltext33.setTextColor(Color.GREEN);
-        else
-            binding.eltext33.setTextColor(Color.RED);
-
-        binding.eltext29.setText(category.getLscs() + "");
-        if (!(category.getLscs() == 0))
-            binding.eltext29.setTextColor(Color.GREEN);
-        else
-            binding.eltext29.setTextColor(Color.RED);
-
-        //cv
-        category = cv;
-        binding.cvtext3.setText(category.getGopens() + "");
-        if (!(category.getGopens() == 0))
-            binding.cvtext3.setTextColor(Color.GREEN);
-        else
-            binding.cvtext3.setTextColor(Color.RED);
-
-        binding.cvtext8.setText(category.getLopens() + "");
-        if (!(category.getLopens() == 0))
-            binding.cvtext8.setTextColor(Color.GREEN);
-        else
-            binding.cvtext8.setTextColor(Color.RED);
-
-        binding.cvtext9.setText(category.getGobcs() + "");
-        if (!(category.getGobcs() == 0))
-            binding.cvtext9.setTextColor(Color.GREEN);
-        else
-            binding.cvtext9.setTextColor(Color.RED);
-
-        binding.cvtext10.setText(category.getLobcs() + "");
-        if (!(category.getLobcs() == 0))
-            binding.cvtext10.setTextColor(Color.GREEN);
-        else
-            binding.cvtext10.setTextColor(Color.RED);
-
-        binding.cvtext11.setText(category.getGnt1s() + "");
-        if (!(category.getGnt1s() == 0))
-            binding.cvtext11.setTextColor(Color.GREEN);
-        else
-            binding.cvtext11.setTextColor(Color.RED);
-
-        binding.cvtext16.setText(category.getLnt1s() + "");
-        if (!(category.getLnt1s() == 0))
-            binding.cvtext16.setTextColor(Color.GREEN);
-        else
-            binding.cvtext16.setTextColor(Color.RED);
-
-        binding.cvtext17.setText(category.getGnt2s() + "");
-        if (!(category.getGnt2s() == 0))
-            binding.cvtext17.setTextColor(Color.GREEN);
-        else
-            binding.cvtext17.setTextColor(Color.RED);
-
-        binding.cvtext18.setText(category.getLnt2s() + "");
-        if (!(category.getLnt2s() == 0))
-            binding.cvtext18.setTextColor(Color.GREEN);
-        else
-            binding.cvtext18.setTextColor(Color.RED);
-
-        binding.cvtext23.setText(category.getGnt3s() + "");
-        if (!(category.getGnt3s() == 0))
-            binding.cvtext23.setTextColor(Color.GREEN);
-        else
-            binding.cvtext23.setTextColor(Color.RED);
-
-        binding.cvtext24.setText(category.getLnt3s() + "");
-        if (!(category.getLnt3s() == 0))
-            binding.cvtext24.setTextColor(Color.GREEN);
-        else
-            binding.cvtext24.setTextColor(Color.RED);
-
-        binding.cvtext25.setText(category.getGvjs() + "");
-        if (!(category.getGvjs() == 0))
-            binding.cvtext25.setTextColor(Color.GREEN);
-        else
-            binding.cvtext25.setTextColor(Color.RED);
-
-        binding.cvtext26.setText(category.getLvjs() + "");
-        if (!(category.getLvjs() == 0))
-            binding.cvtext26.setTextColor(Color.GREEN);
-        else
-            binding.cvtext26.setTextColor(Color.RED);
-
-        binding.cvtext31.setText(category.getGsts() + "");
-        if (!(category.getGsts() == 0))
-            binding.cvtext31.setTextColor(Color.GREEN);
-        else
-            binding.cvtext31.setTextColor(Color.RED);
-
-        binding.cvtext32.setText(category.getLsts() + "");
-        if (!(category.getLsts() == 0))
-            binding.cvtext32.setTextColor(Color.GREEN);
-        else
-            binding.cvtext32.setTextColor(Color.RED);
-
-        binding.cvtext33.setText(category.getGscs() + "");
-        if (!(category.getGscs() == 0))
-            binding.cvtext33.setTextColor(Color.GREEN);
-        else
-            binding.cvtext33.setTextColor(Color.RED);
-
-        binding.cvtext29.setText(category.getLscs() + "");
-        if (!(category.getLscs() == 0))
-            binding.cvtext29.setTextColor(Color.GREEN);
-        else
-            binding.cvtext29.setTextColor(Color.RED);
-
-        //me
-        category = me;
-        binding.metext3.setText(category.getGopens() + "");
-        if (!(category.getGopens() == 0))
-            binding.metext3.setTextColor(Color.GREEN);
-        else
-            binding.metext3.setTextColor(Color.RED);
-
-        binding.metext8.setText(category.getLopens() + "");
-        if (!(category.getLopens() == 0))
-            binding.metext8.setTextColor(Color.GREEN);
-        else
-            binding.metext8.setTextColor(Color.RED);
-
-        binding.metext9.setText(category.getGobcs() + "");
-        if (!(category.getGobcs() == 0))
-            binding.metext9.setTextColor(Color.GREEN);
-        else
-            binding.metext9.setTextColor(Color.RED);
-
-        binding.metext10.setText(category.getLobcs() + "");
-        if (!(category.getLobcs() == 0))
-            binding.metext10.setTextColor(Color.GREEN);
-        else
-            binding.metext10.setTextColor(Color.RED);
-
-        binding.metext11.setText(category.getGnt1s() + "");
-        if (!(category.getGnt1s() == 0))
-            binding.metext11.setTextColor(Color.GREEN);
-        else
-            binding.metext11.setTextColor(Color.RED);
-
-        binding.metext16.setText(category.getLnt1s() + "");
-        if (!(category.getLnt1s() == 0))
-            binding.metext16.setTextColor(Color.GREEN);
-        else
-            binding.metext16.setTextColor(Color.RED);
-
-        binding.metext17.setText(category.getGnt2s() + "");
-        if (!(category.getGnt2s() == 0))
-            binding.metext17.setTextColor(Color.GREEN);
-        else
-            binding.metext17.setTextColor(Color.RED);
-
-        binding.metext18.setText(category.getLnt2s() + "");
-        if (!(category.getLnt2s() == 0))
-            binding.metext18.setTextColor(Color.GREEN);
-        else
-            binding.metext18.setTextColor(Color.RED);
-
-        binding.metext23.setText(category.getGnt3s() + "");
-        if (!(category.getGnt3s() == 0))
-            binding.metext23.setTextColor(Color.GREEN);
-        else
-            binding.metext23.setTextColor(Color.RED);
-
-        binding.metext24.setText(category.getLnt3s() + "");
-        if (!(category.getLnt3s() == 0))
-            binding.metext24.setTextColor(Color.GREEN);
-        else
-            binding.metext24.setTextColor(Color.RED);
-
-        binding.metext25.setText(category.getGvjs() + "");
-        if (!(category.getGvjs() == 0))
-            binding.metext25.setTextColor(Color.GREEN);
-        else
-            binding.metext25.setTextColor(Color.RED);
-
-        binding.metext26.setText(category.getLvjs() + "");
-        if (!(category.getLvjs() == 0))
-            binding.metext26.setTextColor(Color.GREEN);
-        else
-            binding.metext26.setTextColor(Color.RED);
-
-        binding.metext31.setText(category.getGsts() + "");
-        if (!(category.getGsts() == 0))
-            binding.metext31.setTextColor(Color.GREEN);
-        else
-            binding.metext31.setTextColor(Color.RED);
-
-        binding.metext32.setText(category.getLsts() + "");
-        if (!(category.getLsts() == 0))
-            binding.metext32.setTextColor(Color.GREEN);
-        else
-            binding.metext32.setTextColor(Color.RED);
-
-        binding.metext33.setText(category.getGscs() + "");
-        if (!(category.getGscs() == 0))
-            binding.metext33.setTextColor(Color.GREEN);
-        else
-            binding.metext33.setTextColor(Color.RED);
-
-        binding.metext29.setText(category.getLscs() + "");
-        if (!(category.getLscs() == 0))
-            binding.metext29.setTextColor(Color.GREEN);
-        else
-            binding.metext29.setTextColor(Color.RED);
+            binding.CSELsc.setTextColor(Color.RED);
 
         //en
         category = en;
-        binding.entext3.setText(category.getGopens() + "");
+        binding.ENGopen.setText(category.getGopens() + "");
         if (!(category.getGopens() == 0))
-            binding.entext3.setTextColor(Color.GREEN);
+            binding.ENGopen.setTextColor(Color.GREEN);
         else
-            binding.entext3.setTextColor(Color.RED);
+            binding.ENGopen.setTextColor(Color.RED);
 
-        binding.entext8.setText(category.getLopens() + "");
+        binding.ENLopen.setText(category.getLopens() + "");
         if (!(category.getLopens() == 0))
-            binding.entext8.setTextColor(Color.GREEN);
+            binding.ENLopen.setTextColor(Color.GREEN);
         else
-            binding.entext8.setTextColor(Color.RED);
+            binding.ENLopen.setTextColor(Color.RED);
 
-        binding.entext9.setText(category.getGobcs() + "");
+        binding.ENGobc.setText(category.getGobcs() + "");
         if (!(category.getGobcs() == 0))
-            binding.entext9.setTextColor(Color.GREEN);
+            binding.ENGobc.setTextColor(Color.GREEN);
         else
-            binding.entext9.setTextColor(Color.RED);
+            binding.ENGobc.setTextColor(Color.RED);
 
-        binding.entext10.setText(category.getLobcs() + "");
+        binding.ENLobc.setText(category.getLobcs() + "");
         if (!(category.getLobcs() == 0))
-            binding.entext10.setTextColor(Color.GREEN);
+            binding.ENLobc.setTextColor(Color.GREEN);
         else
-            binding.entext10.setTextColor(Color.RED);
+            binding.ENLobc.setTextColor(Color.RED);
 
-        binding.entext11.setText(category.getGnt1s() + "");
+        binding.ENGnt1.setText(category.getGnt1s() + "");
         if (!(category.getGnt1s() == 0))
-            binding.entext11.setTextColor(Color.GREEN);
+            binding.ENGnt1.setTextColor(Color.GREEN);
         else
-            binding.entext11.setTextColor(Color.RED);
+            binding.ENGnt1.setTextColor(Color.RED);
 
-        binding.entext16.setText(category.getLnt1s() + "");
+        binding.ENLnt1.setText(category.getLnt1s() + "");
         if (!(category.getLnt1s() == 0))
-            binding.entext16.setTextColor(Color.GREEN);
+            binding.ENLnt1.setTextColor(Color.GREEN);
         else
-            binding.entext16.setTextColor(Color.RED);
+            binding.ENLnt1.setTextColor(Color.RED);
 
-        binding.entext17.setText(category.getGnt2s() + "");
+        binding.ENGnt2.setText(category.getGnt2s() + "");
         if (!(category.getGnt2s() == 0))
-            binding.entext17.setTextColor(Color.GREEN);
+            binding.ENGnt2.setTextColor(Color.GREEN);
         else
-            binding.entext17.setTextColor(Color.RED);
+            binding.ENGnt2.setTextColor(Color.RED);
 
-        binding.entext18.setText(category.getLnt2s() + "");
+        binding.ENLnt2.setText(category.getLnt2s() + "");
         if (!(category.getLnt2s() == 0))
-            binding.entext18.setTextColor(Color.GREEN);
+            binding.ENLnt2.setTextColor(Color.GREEN);
         else
-            binding.entext18.setTextColor(Color.RED);
+            binding.ENLnt2.setTextColor(Color.RED);
 
-        binding.entext23.setText(category.getGnt3s() + "");
+        binding.ENGnt3.setText(category.getGnt3s() + "");
         if (!(category.getGnt3s() == 0))
-            binding.entext23.setTextColor(Color.GREEN);
+            binding.ENGnt3.setTextColor(Color.GREEN);
         else
-            binding.entext23.setTextColor(Color.RED);
+            binding.ENGnt3.setTextColor(Color.RED);
 
-        binding.entext24.setText(category.getLnt3s() + "");
+        binding.ENLnt3.setText(category.getLnt3s() + "");
         if (!(category.getLnt3s() == 0))
-            binding.entext24.setTextColor(Color.GREEN);
+            binding.ENLnt3.setTextColor(Color.GREEN);
         else
-            binding.entext24.setTextColor(Color.RED);
+            binding.ENLnt3.setTextColor(Color.RED);
 
-        binding.entext25.setText(category.getGvjs() + "");
+        binding.ENGvj.setText(category.getGvjs() + "");
         if (!(category.getGvjs() == 0))
-            binding.entext25.setTextColor(Color.GREEN);
+            binding.ENGvj.setTextColor(Color.GREEN);
         else
-            binding.entext25.setTextColor(Color.RED);
+            binding.ENGvj.setTextColor(Color.RED);
 
-        binding.entext26.setText(category.getLvjs() + "");
+        binding.ENLvj.setText(category.getLvjs() + "");
         if (!(category.getLvjs() == 0))
-            binding.entext26.setTextColor(Color.GREEN);
+            binding.ENLvj.setTextColor(Color.GREEN);
         else
-            binding.entext26.setTextColor(Color.RED);
+            binding.ENLvj.setTextColor(Color.RED);
 
-        binding.entext31.setText(category.getGsts() + "");
+        binding.ENGst.setText(category.getGsts() + "");
         if (!(category.getGsts() == 0))
-            binding.entext31.setTextColor(Color.GREEN);
+            binding.ENGst.setTextColor(Color.GREEN);
         else
-            binding.entext31.setTextColor(Color.RED);
+            binding.ENGst.setTextColor(Color.RED);
 
-        binding.entext32.setText(category.getLsts() + "");
+        binding.ENLst.setText(category.getLsts() + "");
         if (!(category.getLsts() == 0))
-            binding.entext32.setTextColor(Color.GREEN);
+            binding.ENLst.setTextColor(Color.GREEN);
         else
-            binding.entext32.setTextColor(Color.RED);
+            binding.ENLst.setTextColor(Color.RED);
 
-        binding.entext33.setText(category.getGscs() + "");
+        binding.ENGsc.setText(category.getGscs() + "");
         if (!(category.getGscs() == 0))
-            binding.entext33.setTextColor(Color.GREEN);
+            binding.ENGsc.setTextColor(Color.GREEN);
         else
-            binding.entext33.setTextColor(Color.RED);
+            binding.ENGsc.setTextColor(Color.RED);
 
-        binding.entext29.setText(category.getLscs() + "");
+        binding.ENLsc.setText(category.getLscs() + "");
         if (!(category.getLscs() == 0))
-            binding.entext29.setTextColor(Color.GREEN);
+            binding.ENLsc.setTextColor(Color.GREEN);
         else
-            binding.entext29.setTextColor(Color.RED);
+            binding.ENLsc.setTextColor(Color.RED);
+
+        //cv
+        category = cv;
+        binding.CVGopen.setText(category.getGopens() + "");
+        if (!(category.getGopens() == 0))
+            binding.CVGopen.setTextColor(Color.GREEN);
+        else
+            binding.CVGopen.setTextColor(Color.RED);
+
+        binding.CVLopen.setText(category.getLopens() + "");
+        if (!(category.getLopens() == 0))
+            binding.CVLopen.setTextColor(Color.GREEN);
+        else
+            binding.CVLopen.setTextColor(Color.RED);
+
+        binding.CVGobc.setText(category.getGobcs() + "");
+        if (!(category.getGobcs() == 0))
+            binding.CVGobc.setTextColor(Color.GREEN);
+        else
+            binding.CVGobc.setTextColor(Color.RED);
+
+        binding.CVLobc.setText(category.getLobcs() + "");
+        if (!(category.getLobcs() == 0))
+            binding.CVLobc.setTextColor(Color.GREEN);
+        else
+            binding.CVLobc.setTextColor(Color.RED);
+
+        binding.CVGnt1.setText(category.getGnt1s() + "");
+        if (!(category.getGnt1s() == 0))
+            binding.CVGnt1.setTextColor(Color.GREEN);
+        else
+            binding.CVGnt1.setTextColor(Color.RED);
+
+        binding.CVLnt1.setText(category.getLnt1s() + "");
+        if (!(category.getLnt1s() == 0))
+            binding.CVLnt1.setTextColor(Color.GREEN);
+        else
+            binding.CVLnt1.setTextColor(Color.RED);
+
+        binding.CVGnt2.setText(category.getGnt2s() + "");
+        if (!(category.getGnt2s() == 0))
+            binding.CVGnt2.setTextColor(Color.GREEN);
+        else
+            binding.CVGnt2.setTextColor(Color.RED);
+
+        binding.CVLnt2.setText(category.getLnt2s() + "");
+        if (!(category.getLnt2s() == 0))
+            binding.CVLnt2.setTextColor(Color.GREEN);
+        else
+            binding.CVLnt2.setTextColor(Color.RED);
+
+        binding.CVGnt3.setText(category.getGnt3s() + "");
+        if (!(category.getGnt3s() == 0))
+            binding.CVGnt3.setTextColor(Color.GREEN);
+        else
+            binding.CVGnt3.setTextColor(Color.RED);
+
+        binding.CVLnt3.setText(category.getLnt3s() + "");
+        if (!(category.getLnt3s() == 0))
+            binding.CVLnt3.setTextColor(Color.GREEN);
+        else
+            binding.CVLnt3.setTextColor(Color.RED);
+
+        binding.CVGvj.setText(category.getGvjs() + "");
+        if (!(category.getGvjs() == 0))
+            binding.CVGvj.setTextColor(Color.GREEN);
+        else
+            binding.CVGvj.setTextColor(Color.RED);
+
+        binding.CVLvj.setText(category.getLvjs() + "");
+        if (!(category.getLvjs() == 0))
+            binding.CVLvj.setTextColor(Color.GREEN);
+        else
+            binding.CVLvj.setTextColor(Color.RED);
+
+        binding.CVGst.setText(category.getGsts() + "");
+        if (!(category.getGsts() == 0))
+            binding.CVGst.setTextColor(Color.GREEN);
+        else
+            binding.CVGst.setTextColor(Color.RED);
+
+        binding.CVLst.setText(category.getLsts() + "");
+        if (!(category.getLsts() == 0))
+            binding.CVLst.setTextColor(Color.GREEN);
+        else
+            binding.CVLst.setTextColor(Color.RED);
+
+        binding.CVGsc.setText(category.getGscs() + "");
+        if (!(category.getGscs() == 0))
+            binding.CVGsc.setTextColor(Color.GREEN);
+        else
+            binding.CVGsc.setTextColor(Color.RED);
+
+        binding.CVLsc.setText(category.getLscs() + "");
+        if (!(category.getLscs() == 0))
+            binding.CVLsc.setTextColor(Color.GREEN);
+        else
+            binding.CVLsc.setTextColor(Color.RED);
+
+        //me
+        category = me;
+        binding.MEGopen.setText(category.getGopens() + "");
+        if (!(category.getGopens() == 0))
+            binding.MEGopen.setTextColor(Color.GREEN);
+        else
+            binding.MEGopen.setTextColor(Color.RED);
+
+        binding.MELopen.setText(category.getLopens() + "");
+        if (!(category.getLopens() == 0))
+            binding.MELopen.setTextColor(Color.GREEN);
+        else
+            binding.MELopen.setTextColor(Color.RED);
+
+        binding.MEGobc.setText(category.getGobcs() + "");
+        if (!(category.getGobcs() == 0))
+            binding.MEGobc.setTextColor(Color.GREEN);
+        else
+            binding.MEGobc.setTextColor(Color.RED);
+
+        binding.MELobc.setText(category.getLobcs() + "");
+        if (!(category.getLobcs() == 0))
+            binding.MELobc.setTextColor(Color.GREEN);
+        else
+            binding.MELobc.setTextColor(Color.RED);
+
+        binding.MEGnt1.setText(category.getGnt1s() + "");
+        if (!(category.getGnt1s() == 0))
+            binding.MEGnt1.setTextColor(Color.GREEN);
+        else
+            binding.MEGnt1.setTextColor(Color.RED);
+
+        binding.MELnt1.setText(category.getLnt1s() + "");
+        if (!(category.getLnt1s() == 0))
+            binding.MELnt1.setTextColor(Color.GREEN);
+        else
+            binding.MELnt1.setTextColor(Color.RED);
+
+        binding.MEGnt2.setText(category.getGnt2s() + "");
+        if (!(category.getGnt2s() == 0))
+            binding.MEGnt2.setTextColor(Color.GREEN);
+        else
+            binding.MEGnt2.setTextColor(Color.RED);
+
+        binding.MELnt2.setText(category.getLnt2s() + "");
+        if (!(category.getLnt2s() == 0))
+            binding.MELnt2.setTextColor(Color.GREEN);
+        else
+            binding.MELnt2.setTextColor(Color.RED);
+
+        binding.MEGnt3.setText(category.getGnt3s() + "");
+        if (!(category.getGnt3s() == 0))
+            binding.MEGnt3.setTextColor(Color.GREEN);
+        else
+            binding.MEGnt3.setTextColor(Color.RED);
+
+        binding.MELnt3.setText(category.getLnt3s() + "");
+        if (!(category.getLnt3s() == 0))
+            binding.MELnt3.setTextColor(Color.GREEN);
+        else
+            binding.MELnt3.setTextColor(Color.RED);
+
+        binding.MEGvj.setText(category.getGvjs() + "");
+        if (!(category.getGvjs() == 0))
+            binding.MEGvj.setTextColor(Color.GREEN);
+        else
+            binding.MEGvj.setTextColor(Color.RED);
+
+        binding.MELvj.setText(category.getLvjs() + "");
+        if (!(category.getLvjs() == 0))
+            binding.MELvj.setTextColor(Color.GREEN);
+        else
+            binding.MELvj.setTextColor(Color.RED);
+
+        binding.MEGst.setText(category.getGsts() + "");
+        if (!(category.getGsts() == 0))
+            binding.MEGst.setTextColor(Color.GREEN);
+        else
+            binding.MEGst.setTextColor(Color.RED);
+
+        binding.MELst.setText(category.getLsts() + "");
+        if (!(category.getLsts() == 0))
+            binding.MELst.setTextColor(Color.GREEN);
+        else
+            binding.MELst.setTextColor(Color.RED);
+
+        binding.MEGsc.setText(category.getGscs() + "");
+        if (!(category.getGscs() == 0))
+            binding.MEGsc.setTextColor(Color.GREEN);
+        else
+            binding.MEGsc.setTextColor(Color.RED);
+
+        binding.MELsc.setText(category.getLscs() + "");
+        if (!(category.getLscs() == 0))
+            binding.MELsc.setTextColor(Color.GREEN);
+        else
+            binding.MELsc.setTextColor(Color.RED);
+
+        //el
+        category = el;
+        binding.ELGopen.setText(category.getGopens() + "");
+        if (!(category.getGopens() == 0))
+            binding.ELGopen.setTextColor(Color.GREEN);
+        else
+            binding.ELGopen.setTextColor(Color.RED);
+
+        binding.ELLopen.setText(category.getLopens() + "");
+        if (!(category.getLopens() == 0))
+            binding.ELLopen.setTextColor(Color.GREEN);
+        else
+            binding.ELLopen.setTextColor(Color.RED);
+
+        binding.ELGobc.setText(category.getGobcs() + "");
+        if (!(category.getGobcs() == 0))
+            binding.ELGobc.setTextColor(Color.GREEN);
+        else
+            binding.ELGobc.setTextColor(Color.RED);
+
+        binding.ELLobc.setText(category.getLobcs() + "");
+        if (!(category.getLobcs() == 0))
+            binding.ELLobc.setTextColor(Color.GREEN);
+        else
+            binding.ELLobc.setTextColor(Color.RED);
+
+        binding.ELGnt1.setText(category.getGnt1s() + "");
+        if (!(category.getGnt1s() == 0))
+            binding.ELGnt1.setTextColor(Color.GREEN);
+        else
+            binding.ELGnt1.setTextColor(Color.RED);
+
+        binding.ELLnt1.setText(category.getLnt1s() + "");
+        if (!(category.getLnt1s() == 0))
+            binding.ELLnt1.setTextColor(Color.GREEN);
+        else
+            binding.ELLnt1.setTextColor(Color.RED);
+
+        binding.ELGnt2.setText(category.getGnt2s() + "");
+        if (!(category.getGnt2s() == 0))
+            binding.ELGnt2.setTextColor(Color.GREEN);
+        else
+            binding.ELGnt2.setTextColor(Color.RED);
+
+        binding.ELLnt2.setText(category.getLnt2s() + "");
+        if (!(category.getLnt2s() == 0))
+            binding.ELLnt2.setTextColor(Color.GREEN);
+        else
+            binding.ELLnt2.setTextColor(Color.RED);
+
+        binding.ELGnt3.setText(category.getGnt3s() + "");
+        if (!(category.getGnt3s() == 0))
+            binding.ENGnt3.setTextColor(Color.GREEN);
+        else
+            binding.ENGnt3.setTextColor(Color.RED);
+
+        binding.ELLnt3.setText(category.getLnt3s() + "");
+        if (!(category.getLnt3s() == 0))
+            binding.ELGnt3.setTextColor(Color.GREEN);
+        else
+            binding.ELGnt3.setTextColor(Color.RED);
+
+        binding.ELGvj.setText(category.getGvjs() + "");
+        if (!(category.getGvjs() == 0))
+            binding.ELGvj.setTextColor(Color.GREEN);
+        else
+            binding.ELGvj.setTextColor(Color.RED);
+
+        binding.ELLvj.setText(category.getLvjs() + "");
+        if (!(category.getLvjs() == 0))
+            binding.ELLvj.setTextColor(Color.GREEN);
+        else
+            binding.ELLvj.setTextColor(Color.RED);
+
+        binding.ELGst.setText(category.getGsts() + "");
+        if (!(category.getGsts() == 0))
+            binding.ELGst.setTextColor(Color.GREEN);
+        else
+            binding.ELGst.setTextColor(Color.RED);
+
+        binding.ELLst.setText(category.getLsts() + "");
+        if (!(category.getLsts() == 0))
+            binding.ELLst.setTextColor(Color.GREEN);
+        else
+            binding.ELLst.setTextColor(Color.RED);
+
+        binding.ELGsc.setText(category.getGscs() + "");
+        if (!(category.getGscs() == 0))
+            binding.ELGsc.setTextColor(Color.GREEN);
+        else
+            binding.ELGsc.setTextColor(Color.RED);
+
+        binding.ELLsc.setText(category.getLscs() + "");
+        if (!(category.getLscs() == 0))
+            binding.ELLsc.setTextColor(Color.GREEN);
+        else
+            binding.ELLsc.setTextColor(Color.RED);
     }
 
     @Override

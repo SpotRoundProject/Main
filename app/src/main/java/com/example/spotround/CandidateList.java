@@ -144,69 +144,70 @@ import java.util.concurrent.Executors;
         });*/
         readData(new FirebaseCallback() {
             @Override
-            public void onCallback(Map<String, Result> resultMap) {
+            public void onCallback() {
 
-               readData3(new FirebaseCallbak3() {
+               readData3(new FirebaseCallback() {
                    @Override
-                   public void onCallback3() {
+                   public void onCallback() {
 
-                   for(Map.Entry<String,Result>entry:map1.entrySet())
-                   {
-                       Allotedseats allotedseats=new Allotedseats();
-                       allotedseats.setPreference(entry.getValue().getPreferenceNo().toString());
-                       allotedseats.setSeat(entry.getValue().getChoiceCode().toString());
-                       allotedseats.setSeat_type(entry.getValue().getSeatType());
-                       allotedseats.setName(map2.get(entry.getKey().toString()).getName());
-                       allotedseats.setCaste(map3.get(entry.getKey().toString()).getCaste());
-                       allotedseats.setCetPercentage(map3.get(entry.getKey().toString()).getPCMPercentile());
-                       allotedseats.setRank(entry.getKey().toString());
-                       allotedseats.setApplicationId(map3.get(entry.getKey().toString()).getApplicationId());
-                       list1.add(allotedseats);
-
-
-                   }
-                   for(Map.Entry<String,Application>entry:map2.entrySet())
-                   {
-                       CandidateListObj candidateListObj = new CandidateListObj();
-                       candidateListObj.setRank(entry.getValue().getRank()+"");
-                       candidateListObj.setApplicationId(entry.getValue().getApplicationId());
-                       candidateListObj.setName(entry.getValue().getName());
-                       candidateListObj.setCetPercentage(map3.get(entry.getKey().toString()).getPCMPercentile());
-                       candidateListObj.setCaste(map3.get(entry.getKey().toString()).getCaste());
-                       Log.d("CandidateList",candidateListObj.toString());
-                       list.add(candidateListObj);
-
-                   }
-                   readData4(new FirebaseCallbak3() {
-                       @Override
-                       public void onCallback3() {
-                           for(Map.Entry<String,Result>entry:acceptedseat.entrySet())
-                           {
-                               Allotedseats allotedseats=new Allotedseats();
-                               allotedseats.setPreference(entry.getValue().getPreferenceNo().toString());
-                               allotedseats.setSeat(entry.getValue().getChoiceCode().toString());
-                               allotedseats.setSeat_type(entry.getValue().getSeatType());
-                               allotedseats.setName(map2.get(entry.getKey().toString()).getName());
-                               allotedseats.setCaste(map3.get(entry.getKey().toString()).getCaste());
-                               allotedseats.setCetPercentage(map3.get(entry.getKey().toString()).getPCMPercentile());
-                               allotedseats.setRank(entry.getKey().toString());
-                               allotedseats.setApplicationId(map3.get(entry.getKey().toString()).getApplicationId());
-                               list2.add(allotedseats);
-                               adapter2.notifyDataSetChanged();
-                           }
+                       for (Map.Entry<String, Result> entry : map1.entrySet()) {
+                           Allotedseats allotedseats = new Allotedseats();
+                           allotedseats.setPreference(entry.getValue().getPreferenceNo().toString());
+                           allotedseats.setSeat(entry.getValue().getChoiceCode().toString());
+                           allotedseats.setSeat_type(entry.getValue().getSeatType());
+                           allotedseats.setName(map2.get(entry.getKey().toString()).getName());
+                           allotedseats.setCaste(map3.get(entry.getKey().toString()).getCaste());
+                           allotedseats.setCetPercentage(map3.get(entry.getKey().toString()).getPCMPercentile());
+                           allotedseats.setRank(entry.getKey().toString());
+                           allotedseats.setApplicationId(map3.get(entry.getKey().toString()).getApplicationId());
+                           list1.add(allotedseats);
                        }
-                   });
-
-                   Log.d("Application",map2.toString());
-                   Log.d("StudentInfo",map3.toString());
-                   Log.d("Result",map1.toString());
-                   Log.d("HHIIII",list2.toString());
                        runOnUiThread(new Runnable() {
                            @Override
                            public void run() {
                                adapter1.notifyDataSetChanged();
-                              adapter.notifyDataSetChanged();
-                              adapter2.notifyDataSetChanged();
+                           }
+                       });
+
+                       for (Map.Entry<String, Application> entry : map2.entrySet()) {
+                           CandidateListObj candidateListObj = new CandidateListObj();
+                           candidateListObj.setRank(entry.getValue().getRank() + "");
+                           candidateListObj.setApplicationId(entry.getValue().getApplicationId());
+                           candidateListObj.setName(entry.getValue().getName());
+                           candidateListObj.setCetPercentage(map3.get(entry.getKey().toString()).getPCMPercentile());
+                           candidateListObj.setCaste(map3.get(entry.getKey().toString()).getCaste());
+                           Log.d("CandidateList", candidateListObj.toString());
+                           list.add(candidateListObj);
+                       }
+                       runOnUiThread(new Runnable() {
+                           @Override
+                           public void run() {
+                               adapter.notifyDataSetChanged();
+                           }
+                       });
+
+                       readData4(new FirebaseCallback() {
+                           @Override
+                           public void onCallback() {
+                               for (Map.Entry<String, Result> entry : acceptedseat.entrySet()) {
+                                   Allotedseats allotedseats = new Allotedseats();
+                                   allotedseats.setPreference(entry.getValue().getPreferenceNo().toString());
+                                   allotedseats.setSeat(entry.getValue().getChoiceCode().toString());
+                                   allotedseats.setSeat_type(entry.getValue().getSeatType());
+                                   allotedseats.setName(map2.get(entry.getKey().toString()).getName());
+                                   allotedseats.setCaste(map3.get(entry.getKey().toString()).getCaste());
+                                   allotedseats.setCetPercentage(map3.get(entry.getKey().toString()).getPCMPercentile());
+                                   allotedseats.setRank(entry.getKey().toString());
+                                   allotedseats.setApplicationId(map3.get(entry.getKey().toString()).getApplicationId());
+                                   list2.add(allotedseats);
+
+                               }
+                               runOnUiThread(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       adapter2.notifyDataSetChanged();
+                                   }
+                               });
                            }
                        });
                    }
@@ -215,8 +216,7 @@ import java.util.concurrent.Executors;
         });
 
     }
-    private void readData4(FirebaseCallbak3 firebaseCallbak3)
-    {
+    private void readData4(FirebaseCallback firebaseCallbak3) {
         FirebaseFirestore.getInstance().collection("SeatAccepted")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -227,12 +227,11 @@ import java.util.concurrent.Executors;
                             Result result=queryDocumentSnapshot.toObject(Result.class);
                             acceptedseat.put(queryDocumentSnapshot.getId(),result);
                         }
-                        firebaseCallbak3.onCallback3();
+                        firebaseCallbak3.onCallback();
                     }
                 });
     }
-    private void readData3(FirebaseCallbak3 firebaseCallbak3)
-    {
+    private void readData3(FirebaseCallback firebaseCallbak3) {
         currentApplicationSize=0;
         FirebaseFirestore.getInstance().collection("Application")
                 .get()
@@ -265,19 +264,17 @@ import java.util.concurrent.Executors;
                     }
                 });
     }
-    private void check(FirebaseCallbak3 firebaseCallbak3)
-    {
+    private void check(FirebaseCallback firebaseCallbak3) {
         executorService.execute(new Runnable() {
             @Override
             public void run() {
                 while(currentApplicationSize!=applicationsize);
-                firebaseCallbak3.onCallback3();
+                firebaseCallbak3.onCallback();
 
             }
         });
     }
-    private void readData(FirebaseCallback firebaseCallback)
-    {
+    private void readData(FirebaseCallback firebaseCallback) {
         FirebaseFirestore.getInstance().collection("Result")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -288,12 +285,11 @@ import java.util.concurrent.Executors;
                             Result result=queryDocumentSnapshot.toObject(Result.class);
                             map1.put(queryDocumentSnapshot.getId(),result);
                         }
-                        firebaseCallback.onCallback(map1);
+                        firebaseCallback.onCallback();
                     }
                 });
     }
-    public void readData1(FirebaseCallback1 firebaseCallback1)
-    {
+    public void readData1(FirebaseCallback firebaseCallback1) {
         FirebaseFirestore.getInstance().collection("Application")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -306,12 +302,11 @@ import java.util.concurrent.Executors;
                             String rank1=application.getRank()+"";
                             applicationMap2.put(rank1,application);
                         }
-                        firebaseCallback1.onCallback1(applicationMap2);
+                        firebaseCallback1.onCallback();
                     }
                 });
     }
-    public void readData2(FirebaseCallback2 firebaseCallback2)
-    {
+    public void readData2(FirebaseCallback firebaseCallback2) {
         FirebaseFirestore.getInstance().collection("StudentInfo")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -324,24 +319,12 @@ import java.util.concurrent.Executors;
                                  String rank2=studentInfo.getRank()+"";
                                  stringStudentInfoMap1.put(rank2,studentInfo);
                              }
-                             firebaseCallback2.onCallback2(stringStudentInfoMap1);
+                             firebaseCallback2.onCallback();
                     }
                 });
     }
     public interface FirebaseCallback {
-                void onCallback(Map<String, Result>resultMap);
-    }
-    public interface FirebaseCallback1
-    {
-        void onCallback1(Map<String,Application>applicationMap);
-    }
-    public interface FirebaseCallback2
-    {
-        void onCallback2(Map<String,StudentInfo>stringStudentInfoMap);
-    }
-    public interface FirebaseCallbak3
-    {
-        void onCallback3();
+                void onCallback();
     }
     @Override
     public void onBackPressed() {

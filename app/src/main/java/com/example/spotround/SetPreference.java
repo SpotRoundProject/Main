@@ -1,8 +1,10 @@
 package com.example.spotround;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +15,10 @@ import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivitySetPreferenceBinding;
 import com.example.spotround.databinding.ProgressBarDialogBinding;
+import com.example.spotround.datetime.DateTime;
 import com.example.spotround.modle.Application;
 import com.example.spotround.modle.Preference;
+import com.example.spotround.modle.Schedule;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -22,6 +26,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,7 +41,10 @@ public class SetPreference extends AppCompatActivity {
     Preference pre = null;
     ProgressDialog progressDialog;
     Application application;
+    Schedule schedule;
     int clickable = 1;
+    Calendar r1S, r1E, r2S, r2E, r3S, r3E, local;
+    String round = "Round 1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,41 @@ public class SetPreference extends AppCompatActivity {
         progressDialog = new ProgressDialog(SetPreference.this);
 
         application = (Application)getIntent().getSerializableExtra("Application");
+        schedule = (Schedule)getIntent().getSerializableExtra("Schedule");
+        local = Calendar.getInstance();
+        local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+        r1S = Calendar.getInstance();
+        r1E = Calendar.getInstance();
+        r2S = Calendar.getInstance();
+        r2E = Calendar.getInstance();
+        r3S = Calendar.getInstance();
+        r3E = Calendar.getInstance();
+        r1S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound1Start().substring(0, 2)), Integer.parseInt(schedule.getRound1Start().substring(3, 5)));
+        r1E.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound1End().substring(0, 2)), Integer.parseInt(schedule.getRound1End().substring(3, 5)));
+        r2S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound2Start().substring(0, 2)), Integer.parseInt(schedule.getRound2Start().substring(3, 5)));
+        r2E.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound2End().substring(0, 2)), Integer.parseInt(schedule.getRound2End().substring(3, 5)));
+        r3S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound3Start().substring(0, 2)), Integer.parseInt(schedule.getRound3Start().substring(3, 5)));
+        r3E.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound3End().substring(0, 2)), Integer.parseInt(schedule.getRound3End().substring(3, 5)));
+
+
+        if(local.after(r1S) && local.before(r1E)) {
+            round = "Round 1";
+            binding.currentRound.setText(round);
+        }
+        else if(local.after(r2S) && local.before(r2E)) {
+            round = "Round 2";
+            binding.currentRound.setText(round);
+        }
+        else if(local.after(r3S) && local.before(r3E)) {
+            round = "Round 3";
+            binding.currentRound.setText(round);
+        }
+        else if(local.before(r1S) ||local.after(r3E)) {
+            binding.btnSubmitPreference.setEnabled(false);
+            round = "Not Started";
+            binding.currentRound.setText(round);
+        }
+
 
         fireStore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -80,7 +124,7 @@ public class SetPreference extends AppCompatActivity {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                reference = fireStore.collection("Preference").document("Round").collection("Round 1").document(application.getRank() + "");
+                reference = fireStore.collection("Preference").document("Round").collection(round).document(application.getRank() + "");
 
                 if(!check()) {
                     Toast.makeText(SetPreference.this, "Select Valid Branch", Toast.LENGTH_SHORT).show();
@@ -94,7 +138,10 @@ public class SetPreference extends AppCompatActivity {
                         binding.Preference6.getSelectedItem().toString(), application.isClgSeat(),application.getSeatType(), application.getSeatCode());
                 reference.set(preference);
 
-                binding.btnSubmitPreference.setText("Submitted");
+                if(round.equals("Round 2") || round.equals("Round 3"))
+                    binding.btnSubmitPreference.setText("Registered");
+                else
+                    binding.btnSubmitPreference.setText("Submitted");
                 binding.btnSubmitPreference.setEnabled(false);
                 progressDialog.hide();
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -252,14 +299,54 @@ public class SetPreference extends AppCompatActivity {
                                     binding.Preference4.setSelection(Arrays.asList(sBranch).indexOf(pre.getPreference4()));
                                     binding.Preference5.setSelection(Arrays.asList(sBranch).indexOf(pre.getPreference5()));
                                     binding.Preference6.setSelection(Arrays.asList(sBranch).indexOf(pre.getPreference6()));
+                                    if(round.equals("Round 2")) {
+                                        FirebaseFirestore.getInstance().collection("Preference").document("Round").collection("Round 2").
+                                                document(application.getRank() + "").get()
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                                if(documentSnapshot.exists()) {
+                                                    binding.btnSubmitPreference.setEnabled(false);
+                                                    binding.btnSubmitPreference.setText("Registered");
+                                                }
+                                                else {
+                                                    binding.btnSubmitPreference.setEnabled(true);
+                                                    binding.btnSubmitPreference.setText("Register");
+                                                }
+                                                progressDialog.hide();
+                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                            }
+                                        });
+                                    }
+                                    else if(round.equals("Round 3")) {
+                                        FirebaseFirestore.getInstance().collection("Preference").document("Round").collection("Round 3").
+                                                document(application.getRank() + "").get()
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                                        if(documentSnapshot.exists()) {
+                                                            binding.btnSubmitPreference.setEnabled(false);
+                                                            binding.btnSubmitPreference.setText("Registered");
+                                                        }
+                                                        else {
+                                                            binding.btnSubmitPreference.setEnabled(true);
+                                                            binding.btnSubmitPreference.setText("Register");
+                                                        }
+                                                        progressDialog.hide();
+                                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                    }
+                                                });
+                                    }
                                 }
                             });
                         }
                         else{
-                            binding.btnSubmitPreference.setEnabled(true);
+                            if(!round.equals("Not Started"))
+                                binding.btnSubmitPreference.setEnabled(true);
+                            progressDialog.hide();
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         }
-                        progressDialog.hide();
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                     }
                 });
             }

@@ -2,12 +2,14 @@ package com.example.spotround;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,10 +17,12 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivityComputeResultBinding;
+import com.example.spotround.datetime.DateTime;
 import com.example.spotround.modle.Application;
 import com.example.spotround.modle.NewCategory;
 import com.example.spotround.modle.Preference;
 import com.example.spotround.modle.Result;
+import com.example.spotround.modle.Schedule;
 import com.example.spotround.modle.StudentInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,7 +35,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -62,72 +68,101 @@ public class ComputeResult extends AppCompatActivity {
     int access=1;
     private long applicationSize, currentApplications;
     ExecutorService executorService = Executors.newSingleThreadExecutor();
+    Schedule schedule;
+    Calendar local, r1R, r2R, r3R, r1R10, r2R10, r3R10;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityComputeResultBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        schedule = (Schedule) getIntent().getSerializableExtra("Schedule");
+        local = Calendar.getInstance();
+        local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+        r1R = Calendar.getInstance();
+        r2R = Calendar.getInstance();
+        r3R = Calendar.getInstance();
+        r1R10 = Calendar.getInstance();
+        r2R10 = Calendar.getInstance();
+        r3R10 = Calendar.getInstance();
+        r1R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR1Result().substring(0, 2)), Integer.parseInt(schedule.getR1Result().substring(3, 5)));
+        r2R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR2Result().substring(0, 2)), Integer.parseInt(schedule.getR2Result().substring(3, 5)));
+        r3R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR3Result().substring(0, 2)), Integer.parseInt(schedule.getR3Result().substring(3, 5)));
+        r1R10.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR1Result().substring(0, 2)), Integer.parseInt(schedule.getR1Result().substring(3, 5)));
+        r1R10.add(Calendar.MINUTE, 10);
+        r2R10.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR2Result().substring(0, 2)), Integer.parseInt(schedule.getR2Result().substring(3, 5)));
+        r2R10.add(Calendar.MINUTE, 10);
+        r3R10.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR3Result().substring(0, 2)), Integer.parseInt(schedule.getR3Result().substring(3, 5)));
+        r3R10.add(Calendar.MINUTE, 10);
+
+
         progressDialog = new ProgressDialog(ComputeResult.this);
         progressDialog.setTitle("Round 1");
         progressDialog.setMessage("Fetching Vacancy");
-        /*Map<String, Boolean> rresult = new HashMap<>();
-        rresult.put("R", false);
-        FirebaseFirestore.getInstance().collection("Round1Result").document("Result").set(rresult);
-        FirebaseFirestore.getInstance().collection("Round2Result").document("Result").set(rresult);
-        FirebaseFirestore.getInstance().collection("Round3Result").document("Result").set(rresult);*/
 
-        FirebaseFirestore.getInstance().collection("RoundResult").document("Round1").
-                get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()) {
-                    boolean result = (boolean) documentSnapshot.get("R");
-                    if(result) {
-                        binding.Round1.setEnabled(false);
-                        binding.Round1.setText("Seats Allotted");
-                    }
-                    else {
-                        binding.Round1.setEnabled(true);
-                    }
-                }
-            }
-        });
+        binding.Round1.setEnabled(true);
+        binding.Round2.setEnabled(true);
+        binding.Round3.setEnabled(true);
 
-        FirebaseFirestore.getInstance().collection("RoundResult").document("Round2").
-                get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()) {
-                    boolean result = (boolean) documentSnapshot.get("R");
-                    if(result) {
-                        binding.Round2.setEnabled(false);
-                        binding.Round2.setText("Seats Allotted");
+        LocalDate scheduleDate = LocalDate.of(schedule.getYear(), schedule.getMonth(), schedule.getDateInt());
+        if(DateTime.getLocalDate().equals(scheduleDate)) {
+            if (local.after(r1R) && local.before(r1R10)) {
+                FirebaseFirestore.getInstance().collection("RoundResult").document("Round1").
+                        get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            boolean result = (boolean) documentSnapshot.get("R");
+                            if (result) {
+                                binding.Round1.setEnabled(false);
+                                binding.Round1.setText("Seats Allotted");
+                            } else {
+                                binding.Round1.setEnabled(true);
+                            }
+                        }
                     }
-                    else {
-                        binding.Round2.setEnabled(true);
-                    }
-                }
+                });
             }
-        });
 
-        FirebaseFirestore.getInstance().collection("RoundResult").document("Round3").
-                get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()) {
-                    boolean result = (boolean) documentSnapshot.get("R");
-                    if(result) {
-                        binding.Round3.setEnabled(false);
-                        binding.Round3.setText("Seats Allotted");
+
+            if (local.after(r2R) && local.before(r2R10)) {
+                FirebaseFirestore.getInstance().collection("RoundResult").document("Round2").
+                        get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            boolean result = (boolean) documentSnapshot.get("R");
+                            if (result) {
+                                binding.Round2.setEnabled(false);
+                                binding.Round2.setText("Seats Allotted");
+                            } else {
+                                binding.Round2.setEnabled(true);
+                            }
+                        }
                     }
-                    else {
-                        binding.Round3.setEnabled(true);
-                    }
-                }
+                });
             }
-        });
+
+            if (local.after(r3R) && local.before(r3R10)) {
+                FirebaseFirestore.getInstance().collection("RoundResult").document("Round3").
+                        get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            boolean result = (boolean) documentSnapshot.get("R");
+                            if (result) {
+                                binding.Round3.setEnabled(false);
+                                binding.Round3.setText("Seats Allotted");
+                            } else {
+                                binding.Round3.setEnabled(true);
+                            }
+                        }
+                    }
+                });
+            }
+        }
 
 
         binding.Round1.setOnClickListener(new View.OnClickListener() {

@@ -58,17 +58,17 @@
 
                 <ImageView
                     android:id="@+id/ApplyIcon"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:contentDescription="Update Profile"/>
-                    <!--android:src="@drawable/update_profile" />-->
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Apply"
+                    android:src="@drawable/icon_applt" />
 
                 <TextView
                     android:id="@+id/ApplyText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
-                    android:contentDescription="Update Profile"
+                    android:contentDescription="Apply"
                     android:text="Apply"
                     android:textColor="#0353F4"
                     android:textSize="17sp" />
@@ -102,17 +102,17 @@
 
                 <ImageView
                     android:id="@+id/ResultIcon"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:contentDescription="Search Donor"/>
-                   <!-- android:src="@drawable/search_donor" />-->
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Result"
+                    android:src="@drawable/icon_result" />
 
                 <TextView
                     android:id="@+id/ResultText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
-                    android:contentDescription="Search Donor"
+                    android:contentDescription="Result"
                     android:text="Result"
                     android:textColor="#0353F4"
                     android:textSize="17sp" />
@@ -145,18 +145,18 @@
 
                 <ImageView
                     android:id="@+id/SeatsIcon"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:contentDescription="Request Blood"/>
-                    <!--android:src="@drawable/request_donor" />-->
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Vacancy"
+                    android:src="@drawable/vacancy" />
 
                 <TextView
                     android:id="@+id/SeatsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
-                    android:contentDescription="Request Blood"
-                    android:text="Vacency"
+                    android:contentDescription="Vacancy"
+                    android:text="Vacancy"
                     android:textColor="#0353F4"
                     android:textSize="17sp" />
 
@@ -189,10 +189,10 @@
 
                 <ImageView
                     android:id="@+id/faqIcon"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:contentDescription="Schedule" />
-                    <!--android:src="@drawable/logout />"-->
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Schedule"
+                    android:src="@drawable/icon_schedule" />
 
                 <TextView
                     android:id="@+id/faqText"

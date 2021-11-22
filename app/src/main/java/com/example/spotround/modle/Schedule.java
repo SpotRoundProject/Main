@@ -1,6 +1,8 @@
 package com.example.spotround.modle;
 
-public class Schedule {
+import java.io.Serializable;
+
+public class Schedule implements Serializable {
     private String date,applicationFillingStart, applicationFillingEnd, round1Start, round1End, R1Result, round2Start, round2End, R2Result, round3Start, round3End, R3Result;
 
     public Schedule(){}

@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     PopupMenu popupMenu;
     SharedPreferences mPrefs;
+    Schedule schedule;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -80,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
                 String item  = (String) menuItem.getTitle();
                 switch (item) {
                     case "Help" :
-                        Toast.makeText(MainActivity.this, "You Clicked help", Toast.LENGTH_SHORT).show();
+                        Uri uri = Uri.parse("https://abhishekaru.github.io/documentationapp.github.io/"); // missing 'http://' will cause crashed
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
                         break;
                     case "Logout" :
                         logout();
@@ -107,15 +111,28 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.setCanceledOnTouchOutside(false);
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                getData();
+                LocalDate scheduleDate = LocalDate.of(schedule.getYear(), schedule.getMonth(), schedule.getDateInt());
+                if(DateTime.getLocalDate().equals(scheduleDate)) {
+                    getData();
+                }
+                else {
+                    progressDialog.hide();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
             }
         });
 
         binding.SeatsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,ShowVacancy2.class);
-                startActivity(intent);
+                LocalDate scheduleDate = LocalDate.of(schedule.getYear(), schedule.getMonth(), schedule.getDateInt());
+                if(DateTime.getLocalDate().equals(scheduleDate)) {
+                    Intent intent = new Intent(MainActivity.this, ShowVacancy2.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Check Schedule", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -142,25 +159,44 @@ public class MainActivity extends AppCompatActivity {
         reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Calendar local = Calendar.getInstance();
+                local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+                Calendar schStart = Calendar.getInstance();
+                schStart.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getApplicationFillingStart().substring(0,2)), Integer.parseInt(schedule.getApplicationFillingStart().substring(3,5)));
+                Calendar schEnd = Calendar.getInstance();
+                schEnd.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getApplicationFillingEnd().substring(0,2)), Integer.parseInt(schedule.getApplicationFillingEnd().substring(3,5)));
+
                 if(documentSnapshot.exists()) {
                     application = documentSnapshot.toObject(Application.class);
 
                     Log.d("OnStart", application.toString());
                     if(!application.isPayment()) {
-                        Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
-                        intent.putExtra("Application", application);
-                        startActivity(intent);
+                        if(local.after(schStart) && local.before(schEnd)) {
+                            Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
+                            intent.putExtra("Application", application);
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "Please Check Schedule", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else {
                         Intent intent = new Intent(MainActivity.this, SetPreference.class);
                         intent.putExtra("Application", application);
+                        intent.putExtra("Schedule", schedule);
                         startActivity(intent);
                     }
                 }
                 else {
-                    Toast.makeText(MainActivity.this, "Register", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(MainActivity.this, Apply.class);
-                    startActivity(intent);
+                    if(local.after(schStart) && local.before(schEnd)) {
+                        Toast.makeText(MainActivity.this, "Register", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, Apply.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "Please Check Schedule", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
                 progressDialog.hide();
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -198,10 +234,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(mPrefs.getBoolean("flagSchedule", false)) {
             String json = mPrefs.getString("Schedule", "");
-            Schedule schedule = gson.fromJson(json, Schedule.class);
+            schedule = gson.fromJson(json, Schedule.class);
             Log.d("schedule",schedule.toString());
             Calendar cal = Calendar.getInstance();
-            DateTime.initialize();
+
             LocalDate scheduleDate = LocalDate.of(schedule.getYear(), schedule.getMonth(), schedule.getDateInt());
             Log.d(DateTime.getLocalDate().toString(), scheduleDate.toString());
             if(DateTime.getLocalDate().equals(scheduleDate)) {

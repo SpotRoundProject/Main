@@ -50,7 +50,7 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:text="Update Vacancy"
-                app:backgroundTint="#009688" />
+                app:backgroundTint="#0072ae" />
 
             <Button
                 android:id="@+id/viewCandidates"
@@ -59,7 +59,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="45dp"
                 android:text="View Candidates"
-                app:backgroundTint="#009688" />
+                app:backgroundTint="#0072ae" />
 
             <Button
                 android:id="@+id/setSchedule"
@@ -68,7 +68,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="45dp"
                 android:text="Set Schedule"
-                app:backgroundTint="#009688" />
+                app:backgroundTint="#0072ae" />
 
             <Button
                 android:id="@+id/generateResult"
@@ -76,7 +76,7 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="45dp"
-                android:backgroundTint="#009688"
+                android:backgroundTint="#0072ae"
                 android:text="Allot Seats" />
 
             <Button
@@ -85,8 +85,17 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="45dp"
-                android:backgroundTint="#009688"
+                android:backgroundTint="#0072ae"
                 android:text="Upload File" />
+
+            <Button
+                android:id="@+id/updateSeats"
+                android:layout_width="300dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="45dp"
+                android:text=" Update Info"
+                app:backgroundTint="#0072ae" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

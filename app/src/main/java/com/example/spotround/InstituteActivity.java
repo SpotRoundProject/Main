@@ -1,6 +1,7 @@
 package com.example.spotround;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -11,8 +12,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -28,16 +31,25 @@ import android.widget.Toast;
 
 import com.example.spotround.databinding.ActivityCandidateListBinding;
 import com.example.spotround.databinding.ActivityInstituteBinding;
+import com.example.spotround.datetime.DateTime;
+import com.example.spotround.modle.Result;
+import com.example.spotround.modle.Schedule;
 import com.example.spotround.modle.StudentInfo;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.text.PDFTextStripper;
 import com.tom_roush.pdfbox.text.PDFTextStripperByArea;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,7 +68,13 @@ public class InstituteActivity extends AppCompatActivity {
     PopupMenu popupMenu;
     String fileName;
 
+    Schedule schedule;
+    Calendar local, r1R, r2S, r2R, r3S;
+    SharedPreferences mPrefs;
+    String round;
+
     ExecutorService executorService = Executors.newSingleThreadExecutor();
+    ExecutorService executorServiceUpdateInfo = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +82,21 @@ public class InstituteActivity extends AppCompatActivity {
         binding = ActivityInstituteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        mPrefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("Schedule", "");
+        schedule = gson.fromJson(json, Schedule.class);
+
+        local = Calendar.getInstance();
+        local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+        r1R = Calendar.getInstance();
+        r2S = Calendar.getInstance();
+        r2R = Calendar.getInstance();
+        r3S = Calendar.getInstance();
+        r1R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR1Result().substring(0, 2)), Integer.parseInt(schedule.getR1Result().substring(3, 5)));
+        r2S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound2Start().substring(0, 2)), Integer.parseInt(schedule.getRound2Start().substring(3, 5)));
+        r2R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR2Result().substring(0, 2)), Integer.parseInt(schedule.getR2Result().substring(3, 5)));
+        r3S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound3Start().substring(0, 2)), Integer.parseInt(schedule.getRound3Start().substring(3, 5)));
 
         dialog = new Dialog(InstituteActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -85,7 +118,9 @@ public class InstituteActivity extends AppCompatActivity {
                 String item  = (String) menuItem.getTitle();
                 switch (item) {
                     case "Help" :
-                        Toast.makeText(InstituteActivity.this, "You Clicked help", Toast.LENGTH_SHORT).show();
+                        Uri uri = Uri.parse("https://abhishekaru.github.io/documentationapp.github.io/"); // missing 'http://' will cause crashed
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
                         break;
                     case "Logout" :
                         logout();
@@ -138,7 +173,45 @@ public class InstituteActivity extends AppCompatActivity {
         binding.generateResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(InstituteActivity.this, ComputeResult.class));
+                Intent intent = new Intent(InstituteActivity.this, ComputeResult.class);
+                intent.putExtra("Schedule", schedule);
+                startActivity(intent);
+            }
+        });
+
+        binding.updateSeats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                executorServiceUpdateInfo.execute(new Runnable() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void run() {
+                        LocalDate scheduleDate = LocalDate.of(schedule.getYear(), schedule.getMonth(), schedule.getDateInt());
+                        if(DateTime.getLocalDate().equals(scheduleDate)) {
+                            if (local.after(r1R) && local.before(r2S))
+                                round = "Round 2";
+                            else if (local.after(r2R) && local.before(r3S))
+                                round = "Round 3";
+                            else
+                                round = "None";
+                            FirebaseFirestore.getInstance().collection("Result").get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
+                                            for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                                                Result result = snapshot.toObject(Result.class);
+                                                FirebaseFirestore.getInstance().collection("Vacancy/Round/" + round).document(result.getChoiceCode())
+                                                        .update(result.getSeatType(), FieldValue.increment(1));
+                                            }
+                                            for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                                                Result result = snapshot.toObject(Result.class);
+                                                FirebaseFirestore.getInstance().collection("Result").document(snapshot.getId()).delete();
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
             }
         });
     }
