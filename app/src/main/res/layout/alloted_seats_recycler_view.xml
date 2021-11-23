@@ -105,7 +105,7 @@
                     android:paddingStart="2dp"
                     android:paddingEnd="2dp"
                     android:text="GOPEN"
-                    android:textSize="16sp"></TextView>
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/preference7"
@@ -117,7 +117,7 @@
                     android:paddingStart="2dp"
                     android:paddingEnd="2dp"
                     android:text="1"
-                    android:textSize="16sp"></TextView>
+                    android:textSize="16sp"/>
             </LinearLayout>
         </LinearLayout>
     </HorizontalScrollView>

@@ -15,7 +15,6 @@
         android:id="@+id/StartActivitybtnRegister"
         android:layout_width="200dp"
         android:layout_height="55dp"
-        android:layout_above="@+id/makePayment"
         android:layout_marginTop="16dp"
         android:text="register"
         app:backgroundTint="#2481F3"

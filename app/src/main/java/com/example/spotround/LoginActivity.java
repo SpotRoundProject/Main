@@ -10,13 +10,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,11 +21,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.spotround.databinding.ActivityLoginBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -194,61 +186,6 @@ public class LoginActivity extends AppCompatActivity {
             }
             return false;
         });
-
-        /*binding.LoginActivityForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText resetMail = new EditText(v.getContext());
-                AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-                passwordResetDialog.setTitle("Reset Password ?");
-                passwordResetDialog.setMessage("Enter your email to receive reset link.");
-                passwordResetDialog.setView(resetMail);
-                resetMail.setInputType(32); //TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-
-                passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //extract the mail and send reset link
-                        ActionCodeSettings actionCodeSettings = ActionCodeSettings.newBuilder()
-                                .setAndroidPackageName(
-                                        getPackageName(),
-                                        false,  install if not available?
-                                        null    minimum app version )
-                                .setHandleCodeInApp(true)
-                                .setUrl("https://spotround.com/emailSignInLink")
-                                .build();
-                        String mail = resetMail.getText().toString();
-                        auth.sendSignInLinkToEmail(mail, actionCodeSettings).
-                                addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful())
-                                            Toast.makeText(LoginActivity.this, "Email send", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                        auth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(LoginActivity.this, "Reset link has been sent to your mail :)", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                                .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(LoginActivity.this, "Error :( Reset link is not sent." + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-                passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //closing dialogue
-                    }
-                });
-                passwordResetDialog.create().show();
-            }
-        });*/
 
         binding.LoginActivityRegister.setOnClickListener(new View.OnClickListener() {
             @Override

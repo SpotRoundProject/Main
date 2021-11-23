@@ -40,8 +40,6 @@ public class candidate_list_recycler_view extends RecyclerView.Adapter<candidate
         holder.name.setText(candidate.getName());
         holder.cetPercentage.setText(candidate.getCetPercentage());
         holder.caste.setText(candidate.getCaste());
-
-
     }
 
     @Override
@@ -58,7 +56,6 @@ public class candidate_list_recycler_view extends RecyclerView.Adapter<candidate
             name = itemView.findViewById(R.id.name);
             cetPercentage = itemView.findViewById(R.id.cetPercentage);
             caste = itemView.findViewById(R.id.caste);
-
         }
     }
 }

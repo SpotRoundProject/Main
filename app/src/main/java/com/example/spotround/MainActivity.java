@@ -5,14 +5,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseFirestore fireStore;
     DocumentReference reference;
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
     String uid;
     Application application = null;
     ProgressDialog progressDialog;
@@ -242,120 +239,73 @@ public class MainActivity extends AppCompatActivity {
             Log.d(DateTime.getLocalDate().toString(), scheduleDate.toString());
             if(DateTime.getLocalDate().equals(scheduleDate)) {
                 Log.d("Notification", "is set");
-                /*Intent notifyIntent = new Intent(this, MyReceiver.class);
-                notifyIntent.setAction("applicationFromFillingStart");
-                PendingIntent pendingIntent = PendingIntent.getBroadcast
-                        (MainActivity.this, 2NOTIFICATION_REMINDER_NIGHT, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                AlarmManager alarmManager = (AlarmManager) MainActivity.this.getSystemService(Context.ALARM_SERVICE);
-                cal.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getApplicationFillingStart().substring(0,2)), Integer.parseInt(schedule.getApplicationFillingStart().substring(3)));
-                cal.set(2021, 11, 18, 11,35 );
-                alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);*/
+
 
                 AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
                 Calendar cal1 = Calendar.getInstance();
                 Intent myIntent1 = new Intent(this, MyReceiver.class);
-                //myIntent1.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 myIntent1.setAction("applicationFromFillingStart");
                 PendingIntent pendingIntent1 = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent1,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                /*cal1.set(Calendar.MONTH,10);
-                cal1.set(Calendar.YEAR,2021);
-                cal1.set(Calendar.DAY_OF_MONTH,19);*/
+
                 cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(schedule.getApplicationFillingStart().substring(0,2)));
                 cal1.set(Calendar.MINUTE, Integer.parseInt(schedule.getApplicationFillingStart().substring(3,5)));
                 Log.d(cal1.getTimeInMillis() +" ", cal.getTimeInMillis() + " ");
-                //alarmManager1.set(AlarmManager.RTC_WAKEUP, cal1.getTimeInMillis(), pendingIntent1);
-
 
                 AlarmManager alarmManager2 = (AlarmManager) getSystemService(ALARM_SERVICE);
                 Calendar cal2 = Calendar.getInstance();
                 Intent myIntent2 = new Intent(this, MyReceiver.class);
-                //myIntent1.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 myIntent1.setAction("Round1Start");
                 PendingIntent pendingIntent2 = PendingIntent.getBroadcast(MainActivity.this, 1, myIntent2,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                /*cal2.set(Calendar.MONTH,10);
-                cal2.set(Calendar.YEAR,2021);
-                cal2.set(Calendar.DAY_OF_MONTH,19);*/
                 cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(schedule.getRound1Start().substring(0,2)));
                 cal2.set(Calendar.MINUTE, Integer.parseInt(schedule.getRound1Start().substring(3,5)));
-
-                //alarmManager2.set(AlarmManager.RTC_WAKEUP, cal2.getTimeInMillis(), pendingIntent2);
 
                 AlarmManager alarmManager3 = (AlarmManager) getSystemService(ALARM_SERVICE);
                 Calendar cal3 = Calendar.getInstance();
                 Intent myIntent3 = new Intent(this, MyReceiver.class);
-                //myIntent1.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 myIntent3.setAction("Round1Result");
                 PendingIntent pendingIntent3 = PendingIntent.getBroadcast(MainActivity.this, 2, myIntent3,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                /*cal3.set(Calendar.MONTH,10);
-                cal3.set(Calendar.YEAR,2021);
-                cal3.set(Calendar.DAY_OF_MONTH,19);*/
                 cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(schedule.getR1Result().substring(0,2)));
                 cal3.set(Calendar.MINUTE, Integer.parseInt(schedule.getR1Result().substring(3,5)));
-
-                //alarmManager3.set(AlarmManager.RTC_WAKEUP, cal3.getTimeInMillis(), pendingIntent3);
 
                 AlarmManager alarmManager4 = (AlarmManager) getSystemService(ALARM_SERVICE);
                 Calendar cal4 = Calendar.getInstance();
                 Intent myIntent4 = new Intent(this, MyReceiver.class);
-                //myIntent1.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 myIntent4.setAction("Round2Start");
                 PendingIntent pendingIntent4 = PendingIntent.getBroadcast(MainActivity.this, 3, myIntent4,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                /*cal4.set(Calendar.MONTH,10);
-                cal4.set(Calendar.YEAR,2021);
-                cal4.set(Calendar.DAY_OF_MONTH,19);*/
                 cal4.set(Calendar.HOUR_OF_DAY, Integer.parseInt(schedule.getRound2Start().substring(0,2)));
                 cal4.set(Calendar.MINUTE, Integer.parseInt(schedule.getRound2Start().substring(3,5)));
-
-                //alarmManager4.set(AlarmManager.RTC_WAKEUP, cal4.getTimeInMillis(), pendingIntent4);
 
                 AlarmManager alarmManager5 = (AlarmManager) getSystemService(ALARM_SERVICE);
                 Calendar cal5 = Calendar.getInstance();
                 Intent myIntent5 = new Intent(this, MyReceiver.class);
-                //myIntent1.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 myIntent5.setAction("Round2Result");
                 PendingIntent pendingIntent5 = PendingIntent.getBroadcast(MainActivity.this, 4, myIntent5,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                /*cal5.set(Calendar.MONTH,10);
-                cal5.set(Calendar.YEAR,2021);
-                cal5.set(Calendar.DAY_OF_MONTH,19);*/
                 cal5.set(Calendar.HOUR_OF_DAY, Integer.parseInt(schedule.getRound2Start().substring(0,2)));
                 cal5.set(Calendar.MINUTE, Integer.parseInt(schedule.getRound2Start().substring(3,5)));
-
-                //alarmManager5.set(AlarmManager.RTC_WAKEUP, cal5.getTimeInMillis(), pendingIntent5);
 
                 AlarmManager alarmManager6 = (AlarmManager) getSystemService(ALARM_SERVICE);
                 Calendar cal6 = Calendar.getInstance();
                 Intent myIntent6 = new Intent(this, MyReceiver.class);
-                //myIntent1.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 myIntent6.setAction("Round3Start");
                 PendingIntent pendingIntent6 = PendingIntent.getBroadcast(MainActivity.this, 5, myIntent6,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                /*cal6.set(Calendar.MONTH,10);
-                cal6.set(Calendar.YEAR,2021);
-                cal6.set(Calendar.DAY_OF_MONTH,19);*/
                 cal6.set(Calendar.HOUR_OF_DAY, Integer.parseInt(schedule.getRound3Start().substring(0,2)));
                 cal6.set(Calendar.MINUTE, Integer.parseInt(schedule.getRound3Start().substring(3,5)));
-
-                //alarmManager6.set(AlarmManager.RTC_WAKEUP, cal6.getTimeInMillis(), pendingIntent6);
 
                 AlarmManager alarmManager7 = (AlarmManager) getSystemService(ALARM_SERVICE);
                 Calendar cal7 = Calendar.getInstance();
                 Intent myIntent7 = new Intent(this, MyReceiver.class);
-                //myIntent1.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 myIntent7.setAction("Round3Result");
                 PendingIntent pendingIntent7 = PendingIntent.getBroadcast(MainActivity.this, 6, myIntent7,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-                /*cal7.set(Calendar.MONTH,10);
-                cal7.set(Calendar.YEAR,2021);
-                cal7.set(Calendar.DAY_OF_MONTH,19);*/
                 cal7.set(Calendar.HOUR_OF_DAY, Integer.parseInt(schedule.getR3Result().substring(0,2)));
                 cal7.set(Calendar.MINUTE, Integer.parseInt(schedule.getR3Result().substring(3,5)));
 
-                //alarmManager7.set(AlarmManager.RTC_WAKEUP, cal7.getTimeInMillis(), pendingIntent7);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if(cal.getTimeInMillis() < cal1.getTimeInMillis())

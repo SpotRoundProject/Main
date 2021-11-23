@@ -23,13 +23,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.spotround.databinding.ActivityCandidateListBinding;
 import com.example.spotround.databinding.ActivityInstituteBinding;
 import com.example.spotround.datetime.DateTime;
 import com.example.spotround.modle.Result;
@@ -333,115 +331,77 @@ public class InstituteActivity extends AppCompatActivity {
             line = scn.nextLine();
 
             line = line.replace(" $", "");
-            line = line.replace("NT 1 (NT-B)","NT1");
-            line = line.replace("NT 2 (NT-C)","NT2");
-            line = line.replace("NT 3 (NT-D)","NT3");
-            line = line.replace("DT/VJ","VJ");
-            line = line.replace(" Yes","");
-            line = line.replace(" PWD","");
-            line = line.replace(" DEF","");
-            /*if (line.contains(" $")) {
-                 line = line.replace(" $", "");
-            }
-            if (line.contains("NT 1 (NT-B)")) {
-                line = line.replace("NT 1 (NT-B)", "NT-B");
-            }
-            if (line.contains("NT 2 (NT-C)")) {
-                line = line.replace("NT 2 (NT-C)", "NT-C");
-            }
-            if (line.contains("NT 3 (NT-D)")) {
-                line = line.replace("NT 3 (NT-D)", "NT-D");
-            }
-            if (line.contains("DJ/VJ")) {
-                line = line.replace("DJ/VJ", "VJNT");
-            }
-            if (line.contains(" Yes")) {
-                line = line.replace(" Yes", "");
-            }
-            if (line.contains(" PWD")) {
-                line = line.replace(" PWD", "");
-            }
-            if (line.contains(" DEF")) {
-                line = line.replace(" DEF", "");
-            }*/
-            /*if (line.contains("State Common Entrance Test Cell, Government of Maharashtra")
-                    || line.contains("Published on 07/07/2019")
-                    || line.contains("First Year Under Graduate Technical Courses in Engineering and Technology Admissions 2019-20 -")
-                    || line.contains("Final Merit List  Maharashtra State Candidates")
-                    || line.contains("Merit No Application ID Candidate's Full Name") || line.contains("Percentile")
-                    || line.contains("/Mark") || line.contains("Merit Exam Category Gender") || line.contains("PWD")
-                    || line.contains("/ Def") || line.contains("EWS TFWS") || line.contains("CET PCM") || line.contains("CET Math")
-                    || line.contains("CET Physics") || line.contains("CET Chemistry") || line.contains("HSC PCM") || line.contains(" %")
-                    || line.contains("HSC Math") || line.contains("HSC") || line.contains("Physics") || line.contains("Total")
-                    || line.contains("SSC") || line.contains("Math") || line.contains("Science") || line.contains("English") || line.contains("%")) {
-                if (line.contains("2063/2072")) {
-                    break;
-                }
-            } else {*/
-                String[] word = line.split(" ");
-                if (word.length == 2 && line.contains("EN19")) {
-                    cover = new StringBuilder(line);
-                    //System.out.println("\n"+cover);
-                } else if (word.length < 20 && !(line.contains("EN19"))) {
-                    int s1;
-                    s1 = cover.length();
-                    if (cover.charAt(s1 - 1) == ' ')
-                        cover.append(line);
-                    else
-                        cover.append(" ").append(line);
-                    if (line.contains("MHT-CET")) {
-                        String[] word1 = cover.toString().split(" ");
-                        int c = 2;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d("Rank : ", word1[0]);
-                            }
-                        });
+            line = line.replace("NT 1 (NT-B)", "NT1");
+            line = line.replace("NT 2 (NT-C)", "NT2");
+            line = line.replace("NT 3 (NT-D)", "NT3");
+            line = line.replace("DT/VJ", "VJ");
+            line = line.replace(" Yes", "");
+            line = line.replace(" PWD", "");
+            line = line.replace(" DEF", "");
 
-                        int g = 0;
-                        StringBuilder name = new StringBuilder();
-                        while (g == 0) {
-                            if (check1(word1[c])) {
-                                g = 1;
-                            } else
-                                name.append(word1[c]).append(" ");
-                            c++;
-                        }
-                        StudentInfo studentInfo = new StudentInfo(Long.parseLong(word1[0].trim()), word1[1], name.toString(), word1[c + 1],
-                                word1[c + 2], word1[c + 3], word1[c + 4], word1[c + 5], word1[c + 6], word1[c + 9], word1[c + 10]);
-                        Log.d("Name : ", name.toString());
-
-                        reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank() + "");
-                        reference.set(studentInfo);
-                    }
-
-                } else {
+            String[] word = line.split(" ");
+            if (word.length == 2 && line.contains("EN19")) {
+                cover = new StringBuilder(line);
+                //System.out.println("\n"+cover);
+            } else if (word.length < 20 && !(line.contains("EN19"))) {
+                int s1;
+                s1 = cover.length();
+                if (cover.charAt(s1 - 1) == ' ')
+                    cover.append(line);
+                else
+                    cover.append(" ").append(line);
+                if (line.contains("MHT-CET")) {
+                    String[] word1 = cover.toString().split(" ");
+                    int c = 2;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Log.d("Rank : ", word[0]);
+                            Log.d("Rank : ", word1[0]);
                         }
                     });
-                    int c1 = 2;
-                    int g1 = 0;
+
+                    int g = 0;
                     StringBuilder name = new StringBuilder();
-                    while (g1 == 0) {
-                        if (check1(word[c1])) {
-                            g1 = 1;
+                    while (g == 0) {
+                        if (check1(word1[c])) {
+                            g = 1;
                         } else
-                            name.append(word[c1]).append(" ");
-                        c1++;
+                            name.append(word1[c]).append(" ");
+                        c++;
                     }
+                    StudentInfo studentInfo = new StudentInfo(Long.parseLong(word1[0].trim()), word1[1], name.toString(), word1[c + 1],
+                            word1[c + 2], word1[c + 3], word1[c + 4], word1[c + 5], word1[c + 6], word1[c + 9], word1[c + 10]);
+                    Log.d("Name : ", name.toString());
 
-                    StudentInfo studentInfo = new StudentInfo(Long.parseLong(word[0].trim()), word[1], name.toString(), word[c1 + 1], word[c1 + 2],
-                            word[c1 + 3], word[c1 + 4], word[c1 + 5], word[c1 + 6], word[c1 + 10], word[c1 + 11]);
-                    //Log.d("Name : ", name.toString());
-
-                    reference  = fireStore.collection("StudentInfo").document(studentInfo.getRank() + "");
+                    reference = fireStore.collection("StudentInfo").document(studentInfo.getRank() + "");
                     reference.set(studentInfo);
                 }
-            //}
+
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("Rank : ", word[0]);
+                    }
+                });
+                int c1 = 2;
+                int g1 = 0;
+                StringBuilder name = new StringBuilder();
+                while (g1 == 0) {
+                    if (check1(word[c1])) {
+                        g1 = 1;
+                    } else
+                        name.append(word[c1]).append(" ");
+                    c1++;
+                }
+
+                StudentInfo studentInfo = new StudentInfo(Long.parseLong(word[0].trim()), word[1], name.toString(), word[c1 + 1], word[c1 + 2],
+                        word[c1 + 3], word[c1 + 4], word[c1 + 5], word[c1 + 6], word[c1 + 10], word[c1 + 11]);
+
+                reference = fireStore.collection("StudentInfo").document(studentInfo.getRank() + "");
+                reference.set(studentInfo);
+            }
+
         }
     }
 

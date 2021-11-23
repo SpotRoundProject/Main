@@ -50,10 +50,6 @@
             android:name=".PaymentActivity"
             android:label="Make Payment" />
         <activity
-            android:name=".UpdVacancyActivity"
-            android:label="Update Vacancy"
-            android:parentActivityName=".InstituteActivity" />
-        <activity
             android:name=".InstituteActivity"
             android:label="Admin Dashboard" />
         <activity android:name=".Apply" />
@@ -65,8 +61,7 @@
         <receiver
             android:name=".notification.MyReceiver"
             android:enabled="true"
-            android:exported="true">
-        </receiver>
+            android:exported="true"/>
     </application>
 
 </manifest>

@@ -20,16 +20,8 @@ import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
-import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.mail.Message;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 
 public class PaymentActivity extends AppCompatActivity implements PaymentResultListener {

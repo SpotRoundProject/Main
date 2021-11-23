@@ -1,7 +1,5 @@
 package com.example.spotround.modle;
 
-import android.widget.TextView;
-
 public class CandidateListObj {
     String rank, applicationId, name, cetPercentage, caste;
 

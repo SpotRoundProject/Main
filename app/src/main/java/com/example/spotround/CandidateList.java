@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.example.spotround.adapter.alloted_seats_recycler_view;
 import com.example.spotround.adapter.candidate_list_recycler_view;
@@ -19,7 +17,6 @@ import com.example.spotround.modle.CandidateListObj;
 import com.example.spotround.modle.Result;
 import com.example.spotround.modle.StudentInfo;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseAppLifecycleListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,9 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -48,9 +43,8 @@ import java.util.concurrent.Executors;
     Map<String,Result>map1;
     Map<String,Application>map2;
     Map<String,StudentInfo>map3;
-    Map<String,Result>acceptedseat;
+    Map<String,Result> acceptedseat;
     FirebaseFirestore fireStore;
-    DocumentReference studentInfoReference, resultReference;
     CollectionReference collectionReference;
     ProgressDialog progressDialog;
       ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -88,60 +82,6 @@ import java.util.concurrent.Executors;
         binding.recyclerView2.setLayoutManager(layoutManager2);
         collectionReference = fireStore.collection("Application");
 
-        /*progressDialog.show();
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);*/
-       /* getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);*/
-
-       /* collectionReference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                    Log.d("Candidate List", "for loop");
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        studentInfoReference = fireStore.document("StudentInfo/" + queryDocumentSnapshot.get("rank"));
-                        studentInfoReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if(documentSnapshot.exists()) {
-
-                                    StudentInfo info = documentSnapshot.toObject(StudentInfo.class);
-                                    CandidateListObj candidateListObj = new CandidateListObj();
-                                    candidateListObj.setRank(info.getRank() + "");
-                                    candidateListObj.setApplicationId(info.getApplicationId());
-                                    candidateListObj.setName(info.getName());
-                                    candidateListObj.setCetPercentage(info.getPCMPercentile());
-                                    candidateListObj.setCaste(info.getCaste());
-                                    candidateListObj.setSeat("Not Allotted");
-
-                                    resultReference = fireStore.document("Result/" + info.getRank());
-                                    resultReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            if (documentSnapshot.exists()) {
-                                                //candidateListObj.setSeat();
-                                            } else {
-
-                                                candidateListObj.setSeat("Not Allotted");
-                                            }
-                                        }
-                                    });
-
-                                    list.add(candidateListObj);
-                                    adapter.notifyDataSetChanged();
-                                    Log.d("Candidate List", list.toString());
-                                }
-                            }
-                        });
-                    }
-                }
-                adapter.notifyDataSetChanged();
-
-                progressDialog.hide();
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-        });*/
         readData(new FirebaseCallback() {
             @Override
             public void onCallback() {
@@ -251,10 +191,6 @@ import java.util.concurrent.Executors;
                                         @Override
                                         public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
                                             info = documentSnapshot.toObject(StudentInfo.class);
-                                           /* if (info.getCaste().equals("SEBC"))
-                                                info.setCaste("Open");
-                                            else if (info.getCaste().equals("SBC"))
-                                                info.setCaste("OBC");*/
                                             map3.put(info.getRank() + "", info);
                                             currentApplicationSize++;
                                         }

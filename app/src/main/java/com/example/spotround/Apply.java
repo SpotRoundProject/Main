@@ -413,12 +413,10 @@ public class Apply extends AppCompatActivity {
 
                     if (!binding.ApplyActivityApplicationId.getText().toString().equals(info.getApplicationId())) {
                         Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
-                        /*binding.ApplyActivityCETRank.setError("Invalid Application ID");*/
                         return;
                     }
                     else if (!binding.ApplyActivityApplicationId.getText().toString().equals(info.getApplicationId())) {
                         Toast.makeText(Apply.this, "Record not found", Toast.LENGTH_SHORT).show();
-                        /*binding.ApplyActivityCETRank.setError("Invalid Application ID");*/
                         return;
                     }
                     String name = binding.ApplyActivityName.getText().toString();
