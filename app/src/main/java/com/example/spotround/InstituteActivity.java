@@ -116,7 +116,7 @@ public class InstituteActivity extends AppCompatActivity {
                 String item  = (String) menuItem.getTitle();
                 switch (item) {
                     case "Help" :
-                        Uri uri = Uri.parse("https://abhishekaru.github.io/documentationapp.github.io/"); // missing 'http://' will cause crashed
+                        Uri uri = Uri.parse("https://spotroundproject.github.io/SpotRoundDocumentation.github.io/"); // missing 'http://' will cause crashed
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
                         break;

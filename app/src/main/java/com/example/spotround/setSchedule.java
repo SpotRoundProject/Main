@@ -47,24 +47,26 @@ public class setSchedule extends AppCompatActivity {
         progressDialog.setMessage("Uploading Schedule");
 
 
-        FirebaseFirestore.getInstance().collection("Schedule").document("Schedule")
+        FirebaseFirestore.getInstance().collection("Schedule").document("schedule")
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                schedule = documentSnapshot.toObject(Schedule.class);
-                String date = schedule.getDate();
-                binding.date.setText(date);
-                binding.applicationFillingStart.setText(schedule.getApplicationFillingStart());
-                binding.applicationFillingEnd.setText(schedule.getApplicationFillingEnd());
-                binding.round1Start.setText(schedule.getRound1Start());
-                binding.round1End.setText(schedule.getRound1End());
-                binding.R1Result.setText(schedule.getR1Result());
-                binding.round2Start.setText(schedule.getRound2Start());
-                binding.round2End.setText(schedule.getRound2End());
-                binding.R2Result.setText(schedule.getR2Result());
-                binding.round3Start.setText(schedule.getRound3Start());
-                binding.round3End.setText(schedule.getRound3End());
-                binding.R3Result.setText(schedule.getR3Result());
+                if(documentSnapshot.exists()) {
+                    schedule = documentSnapshot.toObject(Schedule.class);
+                    String date = schedule.getDate();
+                    binding.date.setText(date);
+                    binding.applicationFillingStart.setText(schedule.getApplicationFillingStart());
+                    binding.applicationFillingEnd.setText(schedule.getApplicationFillingEnd());
+                    binding.round1Start.setText(schedule.getRound1Start());
+                    binding.round1End.setText(schedule.getRound1End());
+                    binding.R1Result.setText(schedule.getR1Result());
+                    binding.round2Start.setText(schedule.getRound2Start());
+                    binding.round2End.setText(schedule.getRound2End());
+                    binding.R2Result.setText(schedule.getR2Result());
+                    binding.round3Start.setText(schedule.getRound3Start());
+                    binding.round3End.setText(schedule.getRound3End());
+                    binding.R3Result.setText(schedule.getR3Result());
+                }
             }
         });
 
@@ -87,7 +89,7 @@ public class setSchedule extends AppCompatActivity {
                         binding.round2Start.getText().toString(), binding.round2End.getText().toString(),
                         binding.R2Result.getText().toString(), binding.round3Start.getText().toString(),
                         binding.round3End.getText().toString(), binding.R3Result.getText().toString());
-                if(check(schedule))
+                if(check(schedule)) {
                     reference.set(schedule).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(@NonNull Void unused) {
@@ -95,6 +97,11 @@ public class setSchedule extends AppCompatActivity {
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         }
                     });
+                }
+                else {
+                    progressDialog.hide();
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
             }
         });
 

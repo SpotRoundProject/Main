@@ -25,7 +25,7 @@ public class StartActivity extends AppCompatActivity {
         binding.helpurl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("https://abhishekaru.github.io/documentationapp.github.io/"); // missing 'http://' will cause crashed
+                Uri uri = Uri.parse("https://spotroundproject.github.io/SpotRoundDocumentation.github.io/"); // missing 'http://' will cause crashed
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }

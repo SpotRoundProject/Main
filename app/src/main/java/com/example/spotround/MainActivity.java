@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 String item  = (String) menuItem.getTitle();
                 switch (item) {
                     case "Help" :
-                        Uri uri = Uri.parse("https://abhishekaru.github.io/documentationapp.github.io/"); // missing 'http://' will cause crashed
+                        Uri uri = Uri.parse("https://spotroundproject.github.io/SpotRoundDocumentation.github.io/"); // missing 'http://' will cause crashed
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
                         break;
@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     getData();
                 }
                 else {
+                    Toast.makeText(MainActivity.this, "Check Schedule", Toast.LENGTH_LONG).show();
                     progressDialog.hide();
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
