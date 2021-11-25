@@ -69,7 +69,7 @@ public class DateTime {
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static LocalDate getLocalDate () {
-        dateTime = LocalDate.of(getYear(), getMonth(), getDate());
+        dateTime = LocalDate.of(getYear(), getMonth()+1, getDate());
         return  dateTime;
     }
 

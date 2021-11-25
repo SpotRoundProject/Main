@@ -60,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("Checking Information");
 
+        mPrefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
+        Gson gson = new Gson();
+        if(mPrefs.getBoolean("flagSchedule", false)) {
+            String json = mPrefs.getString("Schedule", "");
+            schedule = gson.fromJson(json, Schedule.class);
+            Log.d("Schedule Error", schedule.toString());
+        }
+
         fireStore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         uid = auth.getCurrentUser().getUid();
@@ -109,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 LocalDate scheduleDate = LocalDate.of(schedule.getYear(), schedule.getMonth(), schedule.getDateInt());
+                Log.d("Errorrrrrrrrrhewifhiw", DateTime.getLocalDate() +"" + scheduleDate);
                 if(DateTime.getLocalDate().equals(scheduleDate)) {
                     getData();
                 }
@@ -158,10 +167,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Calendar local = Calendar.getInstance();
-                local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+                local.clear();
+                local.set(DateTime.getYear(), DateTime.getMonth()+1, DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
                 Calendar schStart = Calendar.getInstance();
+                schStart.clear();
                 schStart.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getApplicationFillingStart().substring(0,2)), Integer.parseInt(schedule.getApplicationFillingStart().substring(3,5)));
                 Calendar schEnd = Calendar.getInstance();
+                schEnd.clear();
                 schEnd.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getApplicationFillingEnd().substring(0,2)), Integer.parseInt(schedule.getApplicationFillingEnd().substring(3,5)));
 
                 if(documentSnapshot.exists()) {
@@ -169,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d("OnStart", application.toString());
                     if(!application.isPayment()) {
+                        Log.d(local.toString(), schStart.toString()+ " " + schEnd.toString());
                         if(local.after(schStart) && local.before(schEnd)) {
                             Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
                             intent.putExtra("Application", application);
@@ -186,13 +199,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 else {
+                    Log.d("Eoorrrrrr",local.toString() +"\n" + schStart.toString()+ "\n" + schEnd.toString());
                     if(local.after(schStart) && local.before(schEnd)) {
                         Toast.makeText(MainActivity.this, "Register", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, Apply.class);
                         startActivity(intent);
                     }
                     else {
-                        Toast.makeText(MainActivity.this, "Please Check Schedule", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Please Check Schedule .", Toast.LENGTH_SHORT).show();
+                        Log.d("check time", local.after(schStart) +" "+ local.before(schEnd));
                     }
 
                 }
@@ -233,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         if(mPrefs.getBoolean("flagSchedule", false)) {
             String json = mPrefs.getString("Schedule", "");
             schedule = gson.fromJson(json, Schedule.class);
-            Log.d("schedule",schedule.toString());
+
             Calendar cal = Calendar.getInstance();
 
             LocalDate scheduleDate = LocalDate.of(schedule.getYear(), schedule.getMonth(), schedule.getDateInt());

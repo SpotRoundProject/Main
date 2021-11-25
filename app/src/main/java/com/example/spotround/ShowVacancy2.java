@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,11 +43,14 @@ public class ShowVacancy2 extends AppCompatActivity {
 
         mPrefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = mPrefs.getString("Schedule", "");
-        schedule = gson.fromJson(json, Schedule.class);
+        if(mPrefs.getBoolean("flagSchedule", false)) {
+            String json = mPrefs.getString("Schedule", "");
+            schedule = gson.fromJson(json, Schedule.class);
+            Log.d("Schedule Error", schedule.toString());
+        }
 
         local = Calendar.getInstance();
-        local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+        local.set(DateTime.getYear(), DateTime.getMonth() + 1, DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
         r1S = Calendar.getInstance();
         r1E = Calendar.getInstance();
         r2S = Calendar.getInstance();

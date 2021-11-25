@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -54,10 +55,17 @@ public class SetPreference extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(SetPreference.this);
 
+        SharedPreferences mPrefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
+        Gson gson = new Gson();
+        if(mPrefs.getBoolean("flagSchedule", false)) {
+            String json = mPrefs.getString("Schedule", "");
+            schedule = gson.fromJson(json, Schedule.class);
+            Log.d("Schedule Error", schedule.toString());
+        }
+
         application = (Application)getIntent().getSerializableExtra("Application");
-        schedule = (Schedule)getIntent().getSerializableExtra("Schedule");
         local = Calendar.getInstance();
-        local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+        local.set(DateTime.getYear(), DateTime.getMonth() +1, DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
         r1S = Calendar.getInstance();
         r1E = Calendar.getInstance();
         r2S = Calendar.getInstance();

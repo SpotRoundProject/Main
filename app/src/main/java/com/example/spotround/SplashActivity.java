@@ -41,6 +41,23 @@ public class SplashActivity extends AppCompatActivity {
         prefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
         schedulePref = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
 
+        FirebaseFirestore.getInstance().collection("Schedule").document("schedule")
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()) {
+                    Schedule schedule = documentSnapshot.toObject(Schedule.class);
+                    Log.d("    Schedule", schedule.toString());
+                    SharedPreferences.Editor prefsEditor = schedulePref.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(schedule);
+                    prefsEditor.putString("Schedule", json);
+                    prefsEditor.putBoolean("flagSchedule", true);
+                    prefsEditor.apply();
+                }
+            }
+        });
+
         getSchedule();
 
         binding.SplashActivityLogo.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(),R.anim.mainlogoanimation));
@@ -72,14 +89,16 @@ public class SplashActivity extends AppCompatActivity {
                                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                                Schedule schedule = documentSnapshot.toObject(Schedule.class);
-                                Log.d("    Schedule", schedule.toString());
-                                SharedPreferences.Editor prefsEditor = schedulePref.edit();
-                                Gson gson = new Gson();
-                                String json = gson.toJson(schedule);
-                                prefsEditor.putString("Schedule", json);
-                                prefsEditor.putBoolean("flagSchedule", true);
-                                prefsEditor.apply();
+                                if(documentSnapshot.exists()) {
+                                    Schedule schedule = documentSnapshot.toObject(Schedule.class);
+                                    Log.d("    Schedule", schedule.toString());
+                                    SharedPreferences.Editor prefsEditor = schedulePref.edit();
+                                    Gson gson = new Gson();
+                                    String json = gson.toJson(schedule);
+                                    prefsEditor.putString("Schedule", json);
+                                    prefsEditor.putBoolean("flagSchedule", true);
+                                    prefsEditor.apply();
+                                }
                             }
                         });
                     }

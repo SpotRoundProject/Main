@@ -81,7 +81,7 @@ public class UpdateVacancy extends AppCompatActivity {
             schedule = gson.fromJson(json, Schedule.class);
 
             local = Calendar.getInstance();
-            local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+            local.set(DateTime.getYear(), DateTime.getMonth()+1, DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
             r1S = Calendar.getInstance();
             r1E = Calendar.getInstance();
             r2S = Calendar.getInstance();

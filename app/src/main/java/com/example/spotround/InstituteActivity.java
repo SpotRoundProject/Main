@@ -82,19 +82,25 @@ public class InstituteActivity extends AppCompatActivity {
 
         mPrefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = mPrefs.getString("Schedule", "");
-        schedule = gson.fromJson(json, Schedule.class);
+        if(mPrefs.getBoolean("flagSchedule", false)) {
+            String json = mPrefs.getString("Schedule", "");
+            schedule = gson.fromJson(json, Schedule.class);
+            Log.d("Schedule Error", schedule.toString());
+        }
 
         local = Calendar.getInstance();
-        local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+        local.set(DateTime.getYear(), DateTime.getMonth() + 1, DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
         r1R = Calendar.getInstance();
         r2S = Calendar.getInstance();
         r2R = Calendar.getInstance();
         r3S = Calendar.getInstance();
-        r1R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR1Result().substring(0, 2)), Integer.parseInt(schedule.getR1Result().substring(3, 5)));
-        r2S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound2Start().substring(0, 2)), Integer.parseInt(schedule.getRound2Start().substring(3, 5)));
-        r2R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR2Result().substring(0, 2)), Integer.parseInt(schedule.getR2Result().substring(3, 5)));
-        r3S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound3Start().substring(0, 2)), Integer.parseInt(schedule.getRound3Start().substring(3, 5)));
+        try {
+            r1R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR1Result().substring(0, 2)), Integer.parseInt(schedule.getR1Result().substring(3, 5)));
+            r2S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound2Start().substring(0, 2)), Integer.parseInt(schedule.getRound2Start().substring(3, 5)));
+            r2R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR2Result().substring(0, 2)), Integer.parseInt(schedule.getR2Result().substring(3, 5)));
+            r3S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound3Start().substring(0, 2)), Integer.parseInt(schedule.getRound3Start().substring(3, 5)));
+        }
+        catch(Exception e){}
 
         dialog = new Dialog(InstituteActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -450,5 +456,32 @@ public class InstituteActivity extends AppCompatActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         Intent intent = new Intent(InstituteActivity.this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mPrefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
+        Gson gson = new Gson();
+        if(mPrefs.getBoolean("flagSchedule", false)) {
+            String json = mPrefs.getString("Schedule", "");
+            schedule = gson.fromJson(json, Schedule.class);
+            Log.d("Schedule Error", schedule.toString());
+        }
+
+        local = Calendar.getInstance();
+        local.set(DateTime.getYear(), DateTime.getMonth() + 1, DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+        r1R = Calendar.getInstance();
+        r2S = Calendar.getInstance();
+        r2R = Calendar.getInstance();
+        r3S = Calendar.getInstance();
+        try {
+            r1R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR1Result().substring(0, 2)), Integer.parseInt(schedule.getR1Result().substring(3, 5)));
+            r2S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound2Start().substring(0, 2)), Integer.parseInt(schedule.getRound2Start().substring(3, 5)));
+            r2R.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getR2Result().substring(0, 2)), Integer.parseInt(schedule.getR2Result().substring(3, 5)));
+            r3S.set(schedule.getYear(), schedule.getMonth(), schedule.getDateInt(), Integer.parseInt(schedule.getRound3Start().substring(0, 2)), Integer.parseInt(schedule.getRound3Start().substring(3, 5)));
+        }
+        catch(Exception e){}
     }
 }

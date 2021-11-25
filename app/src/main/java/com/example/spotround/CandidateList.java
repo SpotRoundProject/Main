@@ -162,12 +162,13 @@ import java.util.concurrent.Executors;
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
-                        for(QueryDocumentSnapshot queryDocumentSnapshot:queryDocumentSnapshots)
-                        {
-                            Result result=queryDocumentSnapshot.toObject(Result.class);
-                            acceptedseat.put(queryDocumentSnapshot.getId(),result);
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                Result result = queryDocumentSnapshot.toObject(Result.class);
+                                acceptedseat.put(queryDocumentSnapshot.getId(), result);
+                            }
+                            firebaseCallbak3.onCallback();
                         }
-                        firebaseCallbak3.onCallback();
                     }
                 });
     }
@@ -178,25 +179,28 @@ import java.util.concurrent.Executors;
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
-                        applicationsize=queryDocumentSnapshots.size();
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            applicationsize = queryDocumentSnapshots.size();
 
-                        for(QueryDocumentSnapshot queryDocumentSnapshot:queryDocumentSnapshots)
-                        {
-                            Application application=queryDocumentSnapshot.toObject(Application.class);
-                            String rank1=application.getRank()+"";
-                            map2.put(rank1,application);
-                            FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank()+"")
-                                    .get()
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                                            info = documentSnapshot.toObject(StudentInfo.class);
-                                            map3.put(info.getRank() + "", info);
-                                            currentApplicationSize++;
-                                        }
-                                    });
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                Application application = queryDocumentSnapshot.toObject(Application.class);
+                                String rank1 = application.getRank() + "";
+                                map2.put(rank1, application);
+                                FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
+                                        .get()
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                                if(documentSnapshot.exists()) {
+                                                    info = documentSnapshot.toObject(StudentInfo.class);
+                                                    map3.put(info.getRank() + "", info);
+                                                    currentApplicationSize++;
+                                                }
+                                            }
+                                        });
+                            }
+                            check(firebaseCallbak3);
                         }
-                        check(firebaseCallbak3);
                     }
                 });
     }
@@ -216,12 +220,13 @@ import java.util.concurrent.Executors;
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
-                        for(QueryDocumentSnapshot queryDocumentSnapshot:queryDocumentSnapshots)
-                        {
-                            Result result=queryDocumentSnapshot.toObject(Result.class);
-                            map1.put(queryDocumentSnapshot.getId(),result);
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                Result result = queryDocumentSnapshot.toObject(Result.class);
+                                map1.put(queryDocumentSnapshot.getId(), result);
+                            }
+                            firebaseCallback.onCallback();
                         }
-                        firebaseCallback.onCallback();
                     }
                 });
     }
@@ -231,14 +236,15 @@ import java.util.concurrent.Executors;
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
-                        Map<String,Application>applicationMap2=new HashMap<>();
-                        for(QueryDocumentSnapshot queryDocumentSnapshot:queryDocumentSnapshots)
-                        {
-                            Application application=queryDocumentSnapshot.toObject(Application.class);
-                            String rank1=application.getRank()+"";
-                            applicationMap2.put(rank1,application);
+                        if(!queryDocumentSnapshots.isEmpty()) {
+                            Map<String, Application> applicationMap2 = new HashMap<>();
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                Application application = queryDocumentSnapshot.toObject(Application.class);
+                                String rank1 = application.getRank() + "";
+                                applicationMap2.put(rank1, application);
+                            }
+                            firebaseCallback1.onCallback();
                         }
-                        firebaseCallback1.onCallback();
                     }
                 });
     }
@@ -248,14 +254,15 @@ import java.util.concurrent.Executors;
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
-                             Map<String,StudentInfo>stringStudentInfoMap1=new HashMap<>();
-                             for(QueryDocumentSnapshot queryDocumentSnapshot:queryDocumentSnapshots)
-                             {
-                                 StudentInfo studentInfo=queryDocumentSnapshot.toObject(StudentInfo.class);
-                                 String rank2=studentInfo.getRank()+"";
-                                 stringStudentInfoMap1.put(rank2,studentInfo);
-                             }
-                             firebaseCallback2.onCallback();
+                        if(queryDocumentSnapshots.isEmpty()) {
+                            Map<String, StudentInfo> stringStudentInfoMap1 = new HashMap<>();
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                StudentInfo studentInfo = queryDocumentSnapshot.toObject(StudentInfo.class);
+                                String rank2 = studentInfo.getRank() + "";
+                                stringStudentInfoMap1.put(rank2, studentInfo);
+                            }
+                            firebaseCallback2.onCallback();
+                        }
                     }
                 });
     }

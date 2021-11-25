@@ -89,6 +89,7 @@ public class setSchedule extends AppCompatActivity {
                         binding.round2Start.getText().toString(), binding.round2End.getText().toString(),
                         binding.R2Result.getText().toString(), binding.round3Start.getText().toString(),
                         binding.round3End.getText().toString(), binding.R3Result.getText().toString());
+
                 if(check(schedule)) {
                     reference.set(schedule).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

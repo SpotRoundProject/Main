@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -78,9 +80,16 @@ public class ComputeResult extends AppCompatActivity {
         binding = ActivityComputeResultBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        schedule = (Schedule) getIntent().getSerializableExtra("Schedule");
+        SharedPreferences mPrefs = getSharedPreferences("com.example.spotround", MODE_PRIVATE);
+        Gson gson = new Gson();
+        if(mPrefs.getBoolean("flagSchedule", false)) {
+            String json = mPrefs.getString("Schedule", "");
+            schedule = gson.fromJson(json, Schedule.class);
+            Log.d("Schedule Error", schedule.toString());
+        }
+
         local = Calendar.getInstance();
-        local.set(DateTime.getYear(), DateTime.getMonth(), DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
+        local.set(DateTime.getYear(), DateTime.getMonth()+1, DateTime.getDate(), DateTime.getHr(), DateTime.getMin());
         r1R = Calendar.getInstance();
         r2R = Calendar.getInstance();
         r3R = Calendar.getInstance();
@@ -360,33 +369,35 @@ public class ComputeResult extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
                 {
                     @Override
-                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots)
-                    {
-                        applicationSize = queryDocumentSnapshots.size();
-                        for(QueryDocumentSnapshot doc1:queryDocumentSnapshots)
-                        {
-                            application=doc1.toObject(Application.class);
+                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            applicationSize = queryDocumentSnapshots.size();
+                            for (QueryDocumentSnapshot doc1 : queryDocumentSnapshots) {
+                                application = doc1.toObject(Application.class);
 
-                            applicationList.put(application.getRank(), application);
-                            Log.d("application", application.toString());
-                            FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
-                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                                    info = documentSnapshot.toObject(StudentInfo.class);
+                                applicationList.put(application.getRank(), application);
+                                Log.d("application", application.toString());
+                                FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
+                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            info = documentSnapshot.toObject(StudentInfo.class);
 
-                                    if(info.getCaste().equals("SEBC"))
-                                        info.setCaste("Open");
-                                    else if(info.getCaste().equals("SBC"))
-                                        info.setCaste("OBC");
-                                    studentInfoList.put(info.getRank(), info);
-                                    Log.d("Info", info.toString());
-                                    currentApplications ++;
-                                }
-                            });
+                                            if (info.getCaste().equals("SEBC"))
+                                                info.setCaste("Open");
+                                            else if (info.getCaste().equals("SBC"))
+                                                info.setCaste("OBC");
+                                            studentInfoList.put(info.getRank(), info);
+                                            Log.d("Info", info.toString());
+                                            currentApplications++;
+                                        }
+                                    }
+                                });
 
+                            }
+                            untilDataFetch1(firestoreCallback);
                         }
-                        untilDataFetch1(firestoreCallback);
                     }
 
                 }).addOnFailureListener(new OnFailureListener() {
@@ -1156,32 +1167,32 @@ public class ComputeResult extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
                 {
                     @Override
-                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots)
-                    {
-                        applicationSize = queryDocumentSnapshots.size();
-                        for(QueryDocumentSnapshot doc1:queryDocumentSnapshots)
-                        {
-                            application=doc1.toObject(Application.class);
-                            applicationList.put(application.getRank(), application);
-                            Log.d("application", application.toString());
-                            FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
-                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                                    info = documentSnapshot.toObject(StudentInfo.class);
+                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            applicationSize = queryDocumentSnapshots.size();
+                            for (QueryDocumentSnapshot doc1 : queryDocumentSnapshots) {
+                                application = doc1.toObject(Application.class);
+                                applicationList.put(application.getRank(), application);
+                                Log.d("application", application.toString());
+                                FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
+                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                        info = documentSnapshot.toObject(StudentInfo.class);
 
-                                    if(info.getCaste().equals("SEBC"))
-                                        info.setCaste("Open");
-                                    else if(info.getCaste().equals("SBC"))
-                                        info.setCaste("OBC");
-                                    studentInfoList.put(info.getRank(), info);
-                                    Log.d("Info", info.toString());
-                                    currentApplications ++;
-                                }
-                            });
+                                        if (info.getCaste().equals("SEBC"))
+                                            info.setCaste("Open");
+                                        else if (info.getCaste().equals("SBC"))
+                                            info.setCaste("OBC");
+                                        studentInfoList.put(info.getRank(), info);
+                                        Log.d("Info", info.toString());
+                                        currentApplications++;
+                                    }
+                                });
 
+                            }
+                            untilDataFetch2(firestoreCallback);
                         }
-                        untilDataFetch2(firestoreCallback);
                     }
 
                 }).addOnFailureListener(new OnFailureListener() {
@@ -1416,32 +1427,32 @@ public class ComputeResult extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
                 {
                     @Override
-                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots)
-                    {
-                        applicationSize = queryDocumentSnapshots.size();
-                        for(QueryDocumentSnapshot doc1:queryDocumentSnapshots)
-                        {
-                            application=doc1.toObject(Application.class);
-                            applicationList.put(application.getRank(), application);
-                            Log.d("application", application.toString());
-                            FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
-                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
-                                    info = documentSnapshot.toObject(StudentInfo.class);
+                    public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            applicationSize = queryDocumentSnapshots.size();
+                            for (QueryDocumentSnapshot doc1 : queryDocumentSnapshots) {
+                                application = doc1.toObject(Application.class);
+                                applicationList.put(application.getRank(), application);
+                                Log.d("application", application.toString());
+                                FirebaseFirestore.getInstance().collection("StudentInfo").document(application.getRank() + "")
+                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(@NonNull DocumentSnapshot documentSnapshot) {
+                                        info = documentSnapshot.toObject(StudentInfo.class);
 
-                                    if(info.getCaste().equals("SEBC"))
-                                        info.setCaste("Open");
-                                    else if(info.getCaste().equals("SBC"))
-                                        info.setCaste("OBC");
-                                    studentInfoList.put(info.getRank(), info);
-                                    Log.d("Info", info.toString());
-                                    currentApplications ++;
-                                }
-                            });
+                                        if (info.getCaste().equals("SEBC"))
+                                            info.setCaste("Open");
+                                        else if (info.getCaste().equals("SBC"))
+                                            info.setCaste("OBC");
+                                        studentInfoList.put(info.getRank(), info);
+                                        Log.d("Info", info.toString());
+                                        currentApplications++;
+                                    }
+                                });
 
+                            }
+                            untilDataFetch3(firestoreCallback);
                         }
-                        untilDataFetch3(firestoreCallback);
                     }
 
                 }).addOnFailureListener(new OnFailureListener() {

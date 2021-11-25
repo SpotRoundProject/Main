@@ -11,7 +11,7 @@
         android:layout_width="200dp"
         android:layout_height="70dp"
         android:backgroundTint="#0F9E2E"
-        android:text="Upload Vacncy"
+        android:text="Upload Vacancy"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
