@@ -114,7 +114,11 @@ public class InstituteActivity extends AppCompatActivity {
         popupMenu = new PopupMenu(InstituteActivity.this, binding.menu);
 
         // Inflating popup menu from popup_menu.xml file
-        popupMenu.getMenuInflater().inflate(R.menu.mainactivitymenu, popupMenu.getMenu());
+        int mainAdmin = getIntent().getIntExtra("Access", 0);
+        if(mainAdmin == 1 || auth.getCurrentUser().getEmail().equals("omkar.kulkarni@walchandsangli.ac.in"))
+            popupMenu.getMenuInflater().inflate(R.menu.admin_menu, popupMenu.getMenu());
+        else
+            popupMenu.getMenuInflater().inflate(R.menu.mainactivitymenu, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -129,6 +133,12 @@ public class InstituteActivity extends AppCompatActivity {
                     case "Logout" :
                         logout();
                         finish();
+                        break;
+                    case "Give Admin Access":
+                        startActivity(new Intent(InstituteActivity.this, NewAdmin.class));
+                        break;
+                    case "Remove Admin Access":
+                        startActivity(new Intent(InstituteActivity.this, RemoveAdmin.class));
                         break;
                 }
                 return true;

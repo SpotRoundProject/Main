@@ -1168,7 +1168,7 @@ public class ComputeResult extends AppCompatActivity {
                 {
                     @Override
                     public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
-                        if (queryDocumentSnapshots.isEmpty()) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
                             applicationSize = queryDocumentSnapshots.size();
                             for (QueryDocumentSnapshot doc1 : queryDocumentSnapshots) {
                                 application = doc1.toObject(Application.class);
@@ -1428,7 +1428,7 @@ public class ComputeResult extends AppCompatActivity {
                 {
                     @Override
                     public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
-                        if (queryDocumentSnapshots.isEmpty()) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
                             applicationSize = queryDocumentSnapshots.size();
                             for (QueryDocumentSnapshot doc1 : queryDocumentSnapshots) {
                                 application = doc1.toObject(Application.class);

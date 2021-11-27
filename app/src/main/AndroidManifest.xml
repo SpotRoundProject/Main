@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.spotround">
+    package="com.example.spotround" >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,25 +15,56 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Spotround">
-
+        android:theme="@style/Theme.Spotround" >
+        <activity android:name=".RemoveAdmin"
+            android:screenOrientation="portrait"
+            android:label="Admin Access">
+        </activity>
+        <activity android:name=".NewAdmin"
+            android:screenOrientation="portrait"
+            android:label="Admin Access"/>
         <activity
             android:name=".ComputeResult"
-            android:exported="false" />
-        <activity android:name=".setSchedule" />
-        <activity android:name=".CandidateList" />
-        <activity android:name=".SetPreference" />
-        <activity android:name=".ResultActivity" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:label="Allocation"/>
+        <activity
+            android:name=".setSchedule"
+            android:screenOrientation="portrait"
+            android:label="Schedule"/>
+        <activity
+            android:name=".CandidateList"
+            android:screenOrientation="portrait"
+            android:label="Candidate List"/>
+        <activity
+            android:name=".SetPreference"
+            android:screenOrientation="portrait"
+            android:label="Preference"/>
+        <activity
+            android:name=".ResultActivity"
+            android:screenOrientation="portrait"
+            android:label="Result"/>
         <activity
             android:name=".UpdateVacancy"
-            android:exported="false" />
-        <activity android:name=".ScheduleActivity" />
-        <activity android:name=".ShowVacancy2" />
-        <activity android:name=".SignUpActivity" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:label="Vacancy"/>
+        <activity
+            android:name=".ScheduleActivity"
+            android:screenOrientation="portrait"
+            android:label="Schedule"/>
+        <activity
+            android:name=".ShowVacancy2"
+            android:screenOrientation="portrait"
+            android:label="Vacancy"/>
+        <activity
+            android:name=".SignUpActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SplashActivity"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,26 +73,34 @@
         </activity>
         <activity
             android:name=".StartActivity"
-            android:label="Welcome to Spot Round" />
+            android:label="Welcome to Spot Round"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:label="Welcome" />
+            android:label="Welcome"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".PaymentActivity"
-            android:label="Make Payment" />
+            android:label="Make Payment"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".InstituteActivity"
-            android:label="Admin Dashboard" />
-        <activity android:name=".Apply" />
+            android:label="Admin Dashboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Apply"
+            android:screenOrientation="portrait"
+            android:label="Application"/>
         <activity
             android:name=".LoginActivity"
-            android:label="Student Login"
-            android:parentActivityName=".StartActivity" />
+            android:label="Login"
+            android:parentActivityName=".StartActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".notification.MyReceiver"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>

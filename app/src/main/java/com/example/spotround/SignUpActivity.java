@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,6 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase database;
     boolean flag = false;
+    LoginCredentials user;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -51,6 +53,8 @@ public class SignUpActivity extends AppCompatActivity {
                 progressDialog.setCanceledOnTouchOutside(false);
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                user = new LoginCredentials(binding.SignUpActivityEmail.getText().toString(), binding.SignUpActivityPassword.getText().toString());
 
                 if(binding.SignUpActivityEmail.getText().toString().isEmpty()) {
                     binding.SignUpActivityEmail.setError("Enter Email");
@@ -78,14 +82,13 @@ public class SignUpActivity extends AppCompatActivity {
                                 if(task.isSuccessful()) {
                                     String uid = task.getResult().getUser().getUid();
                                     progressDialog.setMessage("Account Created Successfully");
-
+                                    Log.d("User", auth.getCurrentUser().getUid() );
                                     auth.getCurrentUser().sendEmailVerification().
                                             addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()) {
-                                                LoginCredentials user = new LoginCredentials(binding.SignUpActivityEmail.getText().toString(),
-                                                        binding.SignUpActivityPassword.getText().toString());
+
                                                 database.getReference().child("User").child(uid).setValue(user);
                                                 progressDialog.hide();
 

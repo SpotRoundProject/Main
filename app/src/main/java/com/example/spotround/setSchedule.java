@@ -189,7 +189,7 @@ public class setSchedule extends AppCompatActivity {
 
     private boolean check(Schedule schedule)
     {
-        SimpleDateFormat stf=new SimpleDateFormat("HH:mm");
+        /*SimpleDateFormat stf=new SimpleDateFormat("HH:mm");
         try {
             Date appstart=stf.parse(schedule.getApplicationFillingStart());
             Date appEnd=stf.parse(schedule.getApplicationFillingEnd());
@@ -289,7 +289,7 @@ public class setSchedule extends AppCompatActivity {
 
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
         return true;
     }
 

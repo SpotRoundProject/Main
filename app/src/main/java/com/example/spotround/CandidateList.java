@@ -220,7 +220,7 @@ import java.util.concurrent.Executors;
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
-                        if (queryDocumentSnapshots.isEmpty()) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 Result result = queryDocumentSnapshot.toObject(Result.class);
                                 map1.put(queryDocumentSnapshot.getId(), result);
@@ -254,7 +254,7 @@ import java.util.concurrent.Executors;
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(@NonNull QuerySnapshot queryDocumentSnapshots) {
-                        if(queryDocumentSnapshots.isEmpty()) {
+                        if(!queryDocumentSnapshots.isEmpty()) {
                             Map<String, StudentInfo> stringStudentInfoMap1 = new HashMap<>();
                             for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 StudentInfo studentInfo = queryDocumentSnapshot.toObject(StudentInfo.class);

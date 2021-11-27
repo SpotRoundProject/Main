@@ -89,6 +89,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                                     prefs.edit().putBoolean("mode", false).apply();
                                                     Intent intent = new Intent(LoginActivity.this, InstituteActivity.class);
+                                                    if(binding.LoginActivityEmail.getText().toString().equals("omkar.kulkarni@walchandsangli.ac.in"))
+                                                        intent.putExtra("Access", 1);
                                                     startActivity(intent);
                                                     binding.LoginActivityEmail.setText("");
                                                     finish();
